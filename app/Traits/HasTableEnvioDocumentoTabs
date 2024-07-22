@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Traits;
+
+use Filament\Resources\Components\Tab;
+use Illuminate\Database\Eloquent\Builder;
+ 
+trait HasTableEnvioDocumentoTabs{
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make(),
+            'pendentes' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('envio', null)),
+            'concluídos' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('envio', '!=', null)),
+        ];
+    }
+
+}

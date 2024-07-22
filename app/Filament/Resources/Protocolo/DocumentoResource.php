@@ -14,6 +14,7 @@ use Filament\Tables\Actions\{
     ViewAction
 };
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -22,11 +23,22 @@ use Filament\Tables\Actions\{
     DeleteBulkAction
 };
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
+use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PhpParser\Node\Expr\Ternary;
 
 class DocumentoResource extends Resource
 {
@@ -74,6 +86,9 @@ class DocumentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->filtersTriggerAction(fn(Tables\Actions\Action $action) =>
+                $action->slideOver()
+                )
             ->columns([
                 Tables\Columns\TextColumn::make('nro_documento')
                     ->searchable(),
@@ -114,8 +129,26 @@ class DocumentoResource extends Resource
                         'malote' => 'Malote',
                         'email' => 'E-mail'
                     ])
+                    ->default('malote'),
+                TernaryFilter::make('envio')
+                    ->label('Status Envio'),
+                Filter::make('envio')
+                    ->form([
+                        DatePicker::make('envio')->label('Data Envio'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->where(function (Builder $query) use ($data) {
+                            $query->whereNull('envio');
+    
+                            if (!empty($data['envio'])) {
+                                $query->orWhere('envio', $data['envio']);
+                            }
+                        });
+                    }),
+                    
             ])
             ->persistFiltersInSession()
+            ->deselectAllRecordsWhenFiltered(false)
             ->actions([
                 ActionGroup::make([
                     ViewAction::make(),
