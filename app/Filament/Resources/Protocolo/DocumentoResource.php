@@ -138,10 +138,11 @@ class DocumentoResource extends Resource
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->where(function (Builder $query) use ($data) {
-                            $query->whereNull('envio');
-    
+                            
                             if (!empty($data['envio'])) {
-                                $query->orWhere('envio', $data['envio']);
+                                $query->Where('envio', $data['envio']);
+                            } else {
+                                $query->whereNull('envio');
                             }
                         });
                     }),
