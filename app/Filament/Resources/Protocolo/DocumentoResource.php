@@ -6,15 +6,26 @@ use App\Filament\Resources\Protocolo\DocumentoResource\Pages;
 use App\Filament\Resources\Protocolo\DocumentoResource\RelationManagers;
 use App\Filament\Resources\Protocolo\DocumentoResource\RelationManagers\NotasFiscaisRelationManager;
 use App\Models\Protocolo\Documento;
-use Filament\Actions\ReplicateAction;
+use Carbon\Carbon;
+use Filament\Tables\Actions\{
+    ActionGroup,
+    DeleteAction,
+    EditAction,
+    ViewAction
+};
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\{
+    BulkAction, 
+    DeleteBulkAction
+};
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DocumentoResource extends Resource
@@ -28,8 +39,10 @@ class DocumentoResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nro_documento')
+                    ->autocomplete(false)
                     ->required(),
                 Forms\Components\TextInput::make('valor')
+                    ->autocomplete(false)
                     ->prefix('R$')
                     ->required()
                     ->numeric(),
@@ -40,14 +53,17 @@ class DocumentoResource extends Resource
                             ->required()
                             ->maxLength(255),
                             ])
-                    // ->searchable()
-                    // ->preload()
+                    ->searchable()
+                    ->preload()
+                    ->native(false)
                     ->required(),
                 Forms\Components\Select::make('modo_envio')
+                    ->native(false)
                     ->options([
                         'malote' => 'Malote',
                         'email' => 'E-mail'
-                    ]),
+                    ])
+                    ->default('malote'),
                 Forms\Components\DatePicker::make('vencimento')
                     ->required()
                     ->default(now()),
@@ -101,21 +117,31 @@ class DocumentoResource extends Resource
             ])
             ->persistFiltersInSession()
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ReplicateAction::make()
-                    // ->excludeAttributes(['nro_documento', 'valor', 'vencimento', 'envio'])
-                    ->mutateRecordDataUsing(function (array $data): array {
-                        $data['nro_documento'] = 22;
-                 
-                        return $data;
-                    })
-                    ])
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
+                ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                    DeleteBulkAction::make(),
+                    BulkAction::make('confirma_envio')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each(function ($record) {
+                            $record->update(['envio' => Carbon::now()]);
+                        }))
+                        ->icon('heroicon-o-calendar')
+                        ->deselectRecordsAfterCompletion(),
+                    BulkAction::make('cancela_envio')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each(function ($record) {
+                            $record->update(['envio' => null]);
+                        }))
+                        ->icon('heroicon-o-calendar')
+                        ->deselectRecordsAfterCompletion(),
+                    ]),
+                ]);
     }
 
     public static function getRelations(): array
