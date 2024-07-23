@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Protocolo;
 
+use App\Actions\GerarProtocolo;
 use App\Filament\Resources\Protocolo\DocumentoResource\Pages;
 use App\Filament\Resources\Protocolo\DocumentoResource\RelationManagers;
 use App\Filament\Resources\Protocolo\DocumentoResource\RelationManagers\NotasFiscaisRelationManager;
@@ -19,7 +20,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\{
-    BulkAction, 
+    BulkAction,
     DeleteBulkAction
 };
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -64,7 +65,7 @@ class DocumentoResource extends Resource
                         Forms\Components\TextInput::make('nome')
                             ->required()
                             ->maxLength(255),
-                            ])
+                    ])
                     ->searchable()
                     ->preload()
                     ->native(false)
@@ -86,9 +87,10 @@ class DocumentoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->filtersTriggerAction(fn(Tables\Actions\Action $action) =>
+            ->filtersTriggerAction(
+                fn (Tables\Actions\Action $action) =>
                 $action->slideOver()
-                )
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('nro_documento')
                     ->searchable(),
@@ -99,7 +101,8 @@ class DocumentoResource extends Resource
                     ->summarize(
                         Sum::make()
                             ->label('Soma')
-                            ->numeric(decimalPlaces: 2,locale: 'pt-BR')),
+                            ->numeric(decimalPlaces: 2, locale: 'pt-BR')
+                    ),
                 Tables\Columns\TextColumn::make('vencimento')
                     ->date('d/m/Y')
                     ->sortable(),
@@ -108,7 +111,7 @@ class DocumentoResource extends Resource
                 Tables\Columns\TextColumn::make('modo_envio')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                    Tables\Columns\TextColumn::make('envio')
+                Tables\Columns\TextColumn::make('envio')
                     ->date('d/m/Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -130,23 +133,23 @@ class DocumentoResource extends Resource
                         'email' => 'E-mail'
                     ])
                     ->default('malote'),
-                TernaryFilter::make('envio')
-                    ->label('Status Envio'),
-                Filter::make('envio')
+                Filter::make('vencimento')
                     ->form([
-                        DatePicker::make('envio')->label('Data Envio'),
+                        DatePicker::make('vencimento')->label('Data Vencimento'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->where(function (Builder $query) use ($data) {
-                            
-                            if (!empty($data['envio'])) {
-                                $query->Where('envio', $data['envio']);
-                            } else {
-                                $query->whereNull('envio');
+
+                            if (!empty($data['vencimento'])) {
+                                $query->Where('vencimento', $data['vencimento']);
                             }
                         });
                     }),
-                    
+                Filter::make('envio')
+                    ->label('Envio Pendente')
+                    ->toggle()
+                    ->query(fn (Builder $query): Builder => $query->where('envio', null))
+                    ->default()
             ])
             ->persistFiltersInSession()
             ->deselectAllRecordsWhenFiltered(false)
@@ -156,26 +159,26 @@ class DocumentoResource extends Resource
                     EditAction::make(),
                     DeleteAction::make(),
                 ]),
-                ])
+            ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     BulkAction::make('confirma_envio')
+                        ->label('Envio Realizado')
                         ->requiresConfirmation()
-                        ->action(fn (Collection $records) => $records->each(function ($record) {
-                            $record->update(['envio' => Carbon::now()]);
-                        }))
+                        ->action(fn (Collection $records) => GerarProtocolo::exec($records))
                         ->icon('heroicon-o-calendar')
                         ->deselectRecordsAfterCompletion(),
                     BulkAction::make('cancela_envio')
+                        ->label('Envio Pendente')
                         ->requiresConfirmation()
                         ->action(fn (Collection $records) => $records->each(function ($record) {
                             $record->update(['envio' => null]);
                         }))
                         ->icon('heroicon-o-calendar')
                         ->deselectRecordsAfterCompletion(),
-                    ]),
-                ]);
+                ]),
+            ]);
     }
 
     public static function getRelations(): array

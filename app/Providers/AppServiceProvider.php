@@ -5,6 +5,7 @@ namespace App\Providers;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Browsershot\Browsershot;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        
     }
 
     /**
