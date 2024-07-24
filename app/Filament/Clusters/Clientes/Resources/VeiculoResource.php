@@ -5,9 +5,10 @@ namespace App\Filament\Clusters\Clientes\Resources;
 use App\Filament\Clusters\Clientes;
 use App\Filament\Clusters\Clientes\Resources\VeiculoResource\Pages;
 use App\Filament\Clusters\Clientes\Resources\VeiculoResource\RelationManagers;
-use App\Models\Veiculo;
+use App\Models\Parceiro\Veiculo;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -21,6 +22,8 @@ class VeiculoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $cluster = Clientes::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::End;
 
     public static function form(Form $form): Form
     {

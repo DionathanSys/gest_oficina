@@ -145,11 +145,6 @@ class DocumentoResource extends Resource
                             }
                         });
                     }),
-                Filter::make('envio')
-                    ->label('Envio Pendente')
-                    ->toggle()
-                    ->query(fn (Builder $query): Builder => $query->where('envio', null))
-                    ->default()
             ])
             ->persistFiltersInSession()
             ->deselectAllRecordsWhenFiltered(false)
