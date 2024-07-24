@@ -8,7 +8,6 @@
 <body>
     <div class="">
         <p style="text-align: right; padding: 3px;">
-            {{ $data }}
         </p>
     </div>
     <h1>PROTOCOLO</h1>

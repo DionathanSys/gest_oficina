@@ -17,9 +17,6 @@ class GerarProtocolo
             return ['fornecedor' => $record->fornecedor->nome, 'nro_documento' => $record->nro_documento];
         })->toArray();
         
-        
-        // $pdf = Pdf::loadView('protocolo/modelo', ['documentos' => $data, 'data' => Carbon::now()]);
-
         // Storage::put('public/pdfs/teste2.pdf', $pdf->output());
 
         return true;

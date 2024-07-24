@@ -8,6 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
    
-        return view('protocolo.modelo', ['data' => Carbon::now()]);
+        return view('Protocolo.modelo');
 });
 

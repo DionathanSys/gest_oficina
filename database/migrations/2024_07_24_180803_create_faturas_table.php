@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('faturas', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->longText('content')->nullable();
-            $table->string('image')->nullable();
-            $table->boolean('active')->default(0);
+            $table->foreignId('parceiro_id')->constrained('parceiros');
             $table->timestamps();
+
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('faturas');
     }
 };
