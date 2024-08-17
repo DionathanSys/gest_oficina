@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Models\Parceiro;
+namespace App\Models;
 
-use App\Models\PropostaCotacao;
-use App\Models\Protocolo\Documento;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Fornecedor extends Model
+class Cotacao extends Model
 {
     use HasFactory;
 
-    protected $table = 'fornecedores';
+    protected $table = 'cotacoes';
 
-    public function documentos():HasMany
+    public function produto():BelongsTo
     {
-        return $this->hasMany(Documento::class);
+        return $this->belongsTo(Produto::class);
     }
 
     public function propostas():HasMany

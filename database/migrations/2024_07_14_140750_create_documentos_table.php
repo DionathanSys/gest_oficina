@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('fornecedor_id')->constrained('fornecedores');
             $table->string('modo_envio')->default('malote');
             $table->date('envio')->nullable();
+            $table->integer('parcela');
+            $table->integer('parcelas');
             $table->timestamps();
         });
     }

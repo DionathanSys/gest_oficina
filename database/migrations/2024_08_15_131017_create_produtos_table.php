@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dados', function (Blueprint $table) {
+        Schema::create('produtos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parceiro_id')->constrained('parceiros');
-            $table->string('endereco');
-            $table->string('email');
+            $table->unsignedBigInteger('sankhya_id')->nullable();
+            $table->string('descricao');
+            $table->string('complemento');
+            $table->boolean('ativo')->default(1);
             $table->timestamps();
+            
         });
     }
 
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dados');
+        Schema::dropIfExists('produtos');
     }
 };

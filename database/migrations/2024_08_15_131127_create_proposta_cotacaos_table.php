@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('veiculos', function (Blueprint $table) {
+        Schema::create('propostas_cotacao', function (Blueprint $table) {
             $table->id();
-            $table->string('placa');
-            $table->string('modelo');
+            $table->foreignId('cotacao_id')->constrained('cotacoes')->cascadeOnDelete();
+            $table->foreignId('fornecedor_id')->constrained('fornecedores');
+            $table->decimal('valor',10,2);
+            $table->string('status');
+            $table->string('observacao');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('veiculos');
+        Schema::dropIfExists('propostas_cotacao');
     }
 };
