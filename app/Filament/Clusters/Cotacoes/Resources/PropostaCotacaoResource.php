@@ -1,55 +1,53 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Clusters\Cotacoes\Resources;
 
-use App\Filament\Resources\CotacaoResource\Pages;
-use App\Filament\Resources\CotacaoResource\RelationManagers;
-use App\Models\Cotacao;
+use App\Filament\Clusters\Cotacoes;
+use App\Filament\Clusters\Cotacoes\Resources\PropostaCotacaoResource\Pages;
+use App\Filament\Clusters\Cotacoes\Resources\PropostaCotacaoResource\RelationManagers;
+use App\Models\PropostaCotacao;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CotacaoResource extends Resource
+class PropostaCotacaoResource extends Resource
 {
-    protected static ?string $model = Cotacao::class;
+    protected static ?string $model = PropostaCotacao::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $modelLabel = 'Propostas';
+    
+    protected static ?int $navigationSort = 2;
+
+    protected static ?string $cluster = Cotacoes::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('produto_id')
-                    ->relationship('produto.nome')
-                    ->searchable()
-                    ->preload()
+                Forms\Components\Select::make('cotacao_id')
+                    ->relationship('cotacao', 'id')
                     ->required(),
-
-                Forms\Components\TextInput::make('quantidade')
+                Forms\Components\Select::make('fornecedor_id')
+                    ->relationship('fornecedor', 'nome')
+                    ->required(),
+                Forms\Components\TextInput::make('valor')
                     ->required()
                     ->numeric(),
-                
-                    Forms\Components\TextInput::make('prioridade')
-                    ->required()
-                    ->maxLength(255),
-
-                Forms\Components\TextInput::make('setor')
-                    ->required()
-                    ->maxLength(255),
-
-                Forms\Components\DatePicker::make('data')
-                    ->required(),
-
                 Forms\Components\TextInput::make('status')
                     ->required()
                     ->maxLength(255),
-
-                Forms\Components\Textarea::make('observacao')
-                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('observacao')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -57,17 +55,19 @@ class CotacaoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('produto_id')
+                Tables\Columns\TextColumn::make('cotacao.id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('prioridade')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('setor')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('data')
-                    ->date()
+                Tables\Columns\TextColumn::make('fornecedor.nome')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('valor')
+                    ->money('BRL')
+                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('observacao')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -101,9 +101,9 @@ class CotacaoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCotacaos::route('/'),
-            'create' => Pages\CreateCotacao::route('/create'),
-            'edit' => Pages\EditCotacao::route('/{record}/edit'),
+            'index' => Pages\ListPropostaCotacaos::route('/'),
+            'create' => Pages\CreatePropostaCotacao::route('/create'),
+            'edit' => Pages\EditPropostaCotacao::route('/{record}/edit'),
         ];
     }
 }

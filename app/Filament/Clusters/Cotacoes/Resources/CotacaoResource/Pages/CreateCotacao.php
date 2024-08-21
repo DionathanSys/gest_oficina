@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\CotacaoResource\Pages;
+namespace App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\Pages;
 
-use App\Filament\Resources\CotacaoResource;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
