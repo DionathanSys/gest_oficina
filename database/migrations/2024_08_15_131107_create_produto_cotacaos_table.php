@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cotacoes', function (Blueprint $table) {
+        Schema::create('produtos_cotacoes', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao')->nullable();
-            $table->string('setor')->nullable();
-            $table->string('prioridade');
+            $table->foreignId('cotacao_id')->constrained('cotacoes')->cascadeOnDelete();
+            $table->foreignId('produto_id')->constrained('produtos')->cascadeOnDelete();
+            $table->decimal('quantidade');
+            $table->string('unidade')->default('PC');
             $table->string('status');
-            $table->date('data');
+            $table->text('observacao')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cotacoes');
+        Schema::dropIfExists('produtos_cotacoes');
     }
 };

@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('propostas_cotacao', function (Blueprint $table) {
             $table->id();
             $table->foreignId('cotacao_id')->constrained('cotacoes')->cascadeOnDelete();
+            $table->foreignId('produto_id')->constrained('produtos')->cascadeOnDelete();
             $table->foreignId('fornecedor_id')->constrained('fornecedores');
             $table->decimal('valor',10,2);
             $table->string('status');
-            $table->string('observacao');
+            $table->string('observacao')->nullable();
             $table->timestamps();
         });
     }

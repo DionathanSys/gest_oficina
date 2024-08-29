@@ -14,4 +14,9 @@ class Produto extends Model
     {
         return $this->hasMany(Cotacao::class);
     }
+
+    public function produtos_cotacao()
+    {
+        return $this->hasMany(ProdutoCotacao::class);
+    }
 }

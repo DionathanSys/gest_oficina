@@ -5,15 +5,14 @@ namespace App\Models;
 use App\Models\Parceiro\Fornecedor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PropostaCotacao extends Model
+class ProdutoCotacao extends Model
 {
     use HasFactory;
 
-    protected $table = 'propostas_cotacao';
+    protected $table = 'produtos_cotacoes';
 
-    public function cotacao():BelongsTo
+    public function cotacao()
     {
         return $this->belongsTo(Cotacao::class);
     }
@@ -23,8 +22,8 @@ class PropostaCotacao extends Model
         return $this->belongsTo(Produto::class);
     }
 
-    public function fornecedor ():BelongsTo
+    public function proposta()
     {
-        return $this->belongsTo(Fornecedor::class);
+        return $this->hasMany(PropostaCotacao::class);
     }
 }

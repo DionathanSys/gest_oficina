@@ -20,14 +20,14 @@ class PropostaCotacaoResource extends Resource
     protected static ?string $model = PropostaCotacao::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?string $modelLabel = 'Propostas';
     
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Propostas';
 
-    protected static ?string $cluster = Cotacoes::class;
+    protected static ?string $label = 'Propostas Cotações';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;
+
+    protected static ?string $cluster = Cotacoes::class;
 
     public static function form(Form $form): Form
     {
@@ -36,8 +36,11 @@ class PropostaCotacaoResource extends Resource
                 Forms\Components\Select::make('cotacao_id')
                     ->relationship('cotacao', 'id')
                     ->required(),
+                Forms\Components\TextInput::make('produto_id')
+                    ->required()
+                    ->numeric(),
                 Forms\Components\Select::make('fornecedor_id')
-                    ->relationship('fornecedor', 'nome')
+                    ->relationship('fornecedor', 'id')
                     ->required(),
                 Forms\Components\TextInput::make('valor')
                     ->required()
@@ -46,8 +49,8 @@ class PropostaCotacaoResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('observacao')
-                    ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->default(null),
             ]);
     }
 
@@ -58,21 +61,30 @@ class PropostaCotacaoResource extends Resource
                 Tables\Columns\TextColumn::make('cotacao.id')
                     ->numeric()
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('produto.descricao')
+                    ->numeric()
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('fornecedor.nome')
                     ->numeric()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('valor')
                     ->money('BRL')
-                    ->numeric()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('observacao')
                     ->searchable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

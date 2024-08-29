@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sankhya_id')->nullable();
             $table->string('descricao');
-            $table->string('complemento');
+            $table->string('complemento')->nullable();
+            $table->string('unidade')->nullable();
             $table->boolean('ativo')->default(1);
             $table->timestamps();
             

@@ -13,12 +13,12 @@ class Cotacao extends Model
 
     protected $table = 'cotacoes';
 
-    public function produto():BelongsTo
+    public function produtos_cotacao():HasMany
     {
-        return $this->belongsTo(Produto::class);
+        return $this->hasMany(ProdutoCotacao::class);
     }
-
-    public function propostas():HasMany
+   
+    public function propostas_cotacao():HasMany
     {
         return $this->hasMany(PropostaCotacao::class);
     }

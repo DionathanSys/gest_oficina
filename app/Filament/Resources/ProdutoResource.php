@@ -23,6 +23,10 @@ class ProdutoResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('sankhya_id')
+                    ->numeric()
+                    ->default(null),
+
                 Forms\Components\TextInput::make('descricao')
                     ->required()
                     ->maxLength(255),
@@ -31,7 +35,6 @@ class ProdutoResource extends Resource
                     ->maxLength(255),
 
                 Forms\Components\Toggle::make('ativo')
-                    ->default(true)
                     ->required(),
             ]);
     }
@@ -40,6 +43,9 @@ class ProdutoResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('sankhya_id')
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('descricao')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('complemento')
@@ -60,7 +66,6 @@ class ProdutoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -69,10 +74,19 @@ class ProdutoResource extends Resource
             ]);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageProdutos::route('/'),
+            'index' => Pages\ListProdutos::route('/'),
+            'create' => Pages\CreateProduto::route('/create'),
+            'edit' => Pages\EditProduto::route('/{record}/edit'),
         ];
     }
 }

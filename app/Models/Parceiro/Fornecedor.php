@@ -19,7 +19,7 @@ class Fornecedor extends Model
         return $this->hasMany(Documento::class);
     }
 
-    public function propostas():HasMany
+    public function propostas_cotacao():HasMany
     {
         return $this->hasMany(PropostaCotacao::class);
     }
