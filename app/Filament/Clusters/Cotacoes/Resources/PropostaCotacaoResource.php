@@ -64,10 +64,12 @@ class PropostaCotacaoResource extends Resource
 
                 Tables\Columns\TextColumn::make('produto.descricao')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('fornecedor.nome')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('valor')
@@ -90,6 +92,12 @@ class PropostaCotacaoResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->groups([
+                'cotacao.id',
+                'fornecedor.nome',
+            ])
+            ->striped()
+            ->defaultSort('produto.descricao')
             ->filters([
                 //
             ])
@@ -115,7 +123,7 @@ class PropostaCotacaoResource extends Resource
         return [
             'index' => Pages\ListPropostaCotacaos::route('/'),
             'create' => Pages\CreatePropostaCotacao::route('/create'),
-            'edit' => Pages\EditPropostaCotacao::route('/{record}/edit'),
+            // 'edit' => Pages\EditPropostaCotacao::route('/{record}/edit'),
         ];
     }
 }

@@ -113,6 +113,7 @@ class ProdutoCotacaoResource extends Resource
                         'Finalizado' => 'Finalizado',
                         'Cancelado' => 'Cancelado'
                         ])
+                    ->default('pendente')
                     ->required(),
 
                 TextInput::make('observacao')
