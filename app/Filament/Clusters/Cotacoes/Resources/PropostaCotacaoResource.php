@@ -12,6 +12,7 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -101,7 +102,13 @@ class PropostaCotacaoResource extends Resource
             ->striped()
             ->defaultSort('produto.descricao')
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'Pendente' => 'Pendente',
+                        'Reprovado' => 'Reprovado',
+                        'Aprovado' => 'Aprovado',
+                        'Fechado' => 'Fechado',
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

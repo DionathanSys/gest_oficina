@@ -14,6 +14,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\{Action, BulkActionGroup, DeleteAction, DeleteBulkAction, EditAction};
 use Filament\Tables\Columns\{TextColumn};
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -139,11 +141,18 @@ class ProdutoCotacaoResource extends Resource
                     ->badge(),
 
                 TextColumn::make('observacao')
+                    ->label('Observação')
                     ->toggledHiddenByDefault(),
 
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options([
+                        'Pendente' => 'Pendente',
+                        'Aprovado' => 'Aprovado',
+                        'Cancelado' => 'Cancelado',
+                        'Fechado' => 'Fechado',
+                    ])
             ])
             ->actions([
                 EditAction::make(),
