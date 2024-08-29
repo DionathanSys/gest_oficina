@@ -11,6 +11,7 @@ use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -95,6 +96,7 @@ class PropostaCotacaoResource extends Resource
             ->groups([
                 'cotacao.id',
                 'fornecedor.nome',
+                'produto.descricao',
             ])
             ->striped()
             ->defaultSort('produto.descricao')
@@ -103,6 +105,11 @@ class PropostaCotacaoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Action::make('Aprovar')
+                    ->action(function (Action $action, PropostaCotacao $record){
+                        $record->status = 'Aprovado';
+                        $record->save();
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
