@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('motorista');
             $table->foreignId('motorista_dupla_id')->nullable()->constrained('motoristas');
             $table->string('dupla')->nullable();
-            $table->string('frete',10,2);
+            $table->decimal('frete',10,2);
             $table->decimal('comissao');
             $table->decimal('vlr_comissao', 9, 2);
             $table->timestamps();

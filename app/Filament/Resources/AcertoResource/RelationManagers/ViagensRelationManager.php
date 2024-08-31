@@ -30,7 +30,7 @@ class ViagensRelationManager extends RelationManager
             ->recordTitleAttribute('motorista_id')
             ->columns([
                 Tables\Columns\TextColumn::make('nro_nota'),
-                Tables\Columns\TextColumn::make('dupla'),
+                Tables\Columns\TextColumn::make('motorista'),
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL')),
@@ -45,9 +45,9 @@ class ViagensRelationManager extends RelationManager
                     ->summarize(Sum::make()->money('BRL', 100)),
             ])
             ->groups([
-                Group::make('dupla')->collapsible()])
+                Group::make('motorista')->collapsible()])
             // ->groupsOnly()
-            ->defaultGroup('dupla')
+            ->defaultGroup('motorista')
             ->filters([
                 Filter::make('dupla')
                     ->label('Sem Dupla')

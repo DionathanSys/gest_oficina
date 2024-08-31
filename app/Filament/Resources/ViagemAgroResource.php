@@ -9,6 +9,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -77,17 +79,17 @@ class ViagemAgroResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('frete')
-                    ->numeric()
+                    ->money('BRL', 100)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('destino')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('local')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('vlr_cte')
-                    ->numeric()
+                    ->money('BRL', 100)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('vlr_nfs')
-                    ->numeric()
+                    ->money('BRL', 100)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -98,8 +100,12 @@ class ViagemAgroResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->groups([
+                Group::make('placa')->collapsible(),
+                Group::make('destino')->collapsible(),
+                ])
             ->filters([
-                //
+                SelectFilter::make('placa')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
