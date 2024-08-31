@@ -30,6 +30,16 @@ class Acerto extends Model
         return $this->hasOne(PrSeguranca::class);
     }
 
+    public function viagens()
+    {
+        return $this->hasMany(MotoristaViagem::class, 'motorista_id', 'motorista_id')->where('fechamento', $this->fechamento);
+    }
+
+    public function viagens_dupla()
+    {
+        return $this->hasMany(MotoristaViagem::class, 'motorista_dupla_id', 'motorista_id')->where('fechamento', $this->fechamento);
+    }   
+
     public function getSalarioLiquido()
     {
         /**

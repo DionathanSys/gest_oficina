@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcertoResource\Pages;
 use App\Filament\Resources\AcertoResource\RelationManagers;
+use App\Filament\Resources\AcertoResource\RelationManagers\ViagensDuplaRelationManager;
+use App\Filament\Resources\AcertoResource\RelationManagers\ViagensRelationManager;
 use App\Models\Acerto;
 use App\Models\Motorista;
 use Filament\Forms;
@@ -195,7 +197,8 @@ class AcertoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ViagensRelationManager::class,
+            ViagensDuplaRelationManager::class,
         ];
     }
 

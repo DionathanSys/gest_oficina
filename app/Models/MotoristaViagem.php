@@ -17,4 +17,14 @@ class MotoristaViagem extends Model
         'comissao' => MoneyCast::class,
         'vlr_comissao' => MoneyCast::class,
     ];
+
+    public function acerto()
+    {
+        return $this->belongsTo(Acerto::class, 'motorista_id','motorista_id')->where('fechamento', $this->fechamento);
+    }
+
+    public function acerto_dupla()
+    {
+        return $this->belongsTo(Acerto::class, 'motorista_id','motorista_dupla_id')->where('fechamento', $this->fechamento);
+    }
 }
