@@ -32,25 +32,29 @@ class ViagensDuplaRelationManager extends RelationManager
             ->recordTitleAttribute('motorista_id')
             ->columns([
                 Tables\Columns\TextColumn::make('nro_nota'),
-                Tables\Columns\TextColumn::make('motorista'),
+                Tables\Columns\TextColumn::make('dupla'),
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL')),
                 Tables\Columns\TextColumn::make('comissao')
                     ->label('%')
                     ->numeric()
-                    ,
+                    ->state(fn(string $state)=>$state * 100),
+
                 Tables\Columns\TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
                     ->money('BRL')
-                    ->summarize(Sum::make()->money('BRL')),
+                    ->summarize(Sum::make()->money('BRL', 100)),
             ])
-            // ->groups([
-            //     Group::make('motorista')->collapsible()])
-            // // ->groupsOnly()
-            // ->defaultGroup('motorista')
+            ->groups([
+                Group::make('dupla')->collapsible()])
+            // ->groupsOnly()
+            ->defaultGroup('dupla')
+
             ->filters([
-                //
+                Filter::make('dupla')
+                    ->label('Sem Dupla')
+                    ->query(fn(Builder $query):Builder => $query->where('dupla', null))
             ])
             ->headerActions([
             ])
