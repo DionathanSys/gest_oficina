@@ -106,6 +106,8 @@ class ViagemAgroResource extends Resource
                 ])
             ->filters([
                 SelectFilter::make('placa')
+                    ->searchable()
+                    ->preload(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
