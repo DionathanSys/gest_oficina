@@ -106,7 +106,7 @@ class ViagemAgroResource extends Resource
                 ])
             ->filters([
                 SelectFilter::make('placa')
-                    ->options(fn()=> ViagemAgro::select('placa')->distinct()->get())
+                    ->options(fn()=> ViagemAgro::select('placa')->distinct()->pluck('placa', 'id'))
                     ->searchable()
                     ->preload(),
             ])
