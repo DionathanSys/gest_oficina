@@ -38,7 +38,12 @@ class Acerto extends Model
     public function viagens_dupla()
     {
         return $this->hasMany(MotoristaViagem::class, 'motorista_dupla_id', 'motorista_id')->where('fechamento', $this->fechamento);
-    }   
+    }
+    
+    public function valor_ajuda()
+    {
+        return $this->hasMany(ComplementoAcerto::class);
+    }
 
     public function getSalarioLiquido()
     {

@@ -4,11 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AcertoResource\Pages;
 use App\Filament\Resources\AcertoResource\RelationManagers;
+use App\Filament\Resources\AcertoResource\RelationManagers\ValorAjudaRelationManager;
 use App\Filament\Resources\AcertoResource\RelationManagers\ViagensDuplaRelationManager;
 use App\Filament\Resources\AcertoResource\RelationManagers\ViagensRelationManager;
 use App\Models\Acerto;
+use App\Models\ComplementoAcerto;
 use App\Models\Motorista;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,6 +19,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -92,7 +96,7 @@ class AcertoResource extends Resource
                     ->sortable()
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
-                
+
                 TextColumn::make('salario_liq')
                     ->label('S. Líquido')
                     ->money('BRL')
@@ -126,15 +130,14 @@ class AcertoResource extends Resource
                     ->label('Vlr Média')
                     ->summarize(Sum::make()->money('BRL', 100))
                     ->money('BRL'),
+                
+                TextInputColumn::make('vlr_manutencao')
+                    ->label('# Vlr Mant.'),
 
-                TextColumn::make('vlr_manutencao')
-                    ->label('Vlr Mant.')
-                    ->summarize(Sum::make()->money('BRL', 100))
-                    ->copyable()
-                    ->copyableState(function (Acerto $record) {
-                        return number_format($record->vlr_manutencao, 2, ',', '.');
-                    })
-                    ->money('BRL'),
+                TextColumn::make('ajuda')
+                    ->label('Vlr Ajuda')
+                    ->money('BRL')
+                    ->state(fn(Acerto $record) => $record->valor_ajuda->sum('vlr_ajuda')),
 
                 TextColumn::make('seguranca')
                     ->label('Pr. Segurança')
@@ -184,7 +187,34 @@ class AcertoResource extends Resource
                     ->relationship('motorista', 'nome')
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('complemento')
+                    ->action(
+                        function ($data, Acerto $record) {
+                            ComplementoAcerto::create(
+                                [
+                                    'acerto_id' => $record->id,
+                                    'vlr_ajuda' => $data['vlr_ajuda'],
+                                    'motivo' => $data['motivo']
+                                ]
+                            );
+                        }
+                    )
+                    ->form([
+                        Forms\Components\TextInput::make('vlr_ajuda')
+                            ->numeric()
+                            ->prefix('R$')
+                            ->required(),
+                        Forms\Components\Select::make('motivo')
+                            ->required()
+                            ->default('Ref. Aj. Custo')
+                            ->options([
+                                'Ref. Aj. Custo' => 'Ajuda de Custo',
+                                'Ref. Domingo(s)' => 'Domingo',
+                                'Ref. Dias de Base' => 'Dias Base',
+                                'Ref. Manobra' => 'Manobra',
+                                'Ref. Viagens em outro Caminhão' => 'Viagens'
+                            ])
+                    ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -199,6 +229,7 @@ class AcertoResource extends Resource
         return [
             ViagensRelationManager::class,
             ViagensDuplaRelationManager::class,
+            ValorAjudaRelationManager::class,
         ];
     }
 

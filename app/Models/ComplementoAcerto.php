@@ -10,7 +10,14 @@ class ComplementoAcerto extends Model
 {
     use HasFactory;
 
+    protected $table = 'complementos_acerto';
+
     protected $casts = [
         'vlr_ajuda' => MoneyCast::class,
     ];
+
+    public function acerto()
+    {
+        return $this->belongsTo(Acerto::class);
+    }
 }
