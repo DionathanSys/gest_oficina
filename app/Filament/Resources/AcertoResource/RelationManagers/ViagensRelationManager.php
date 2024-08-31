@@ -6,6 +6,9 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -18,9 +21,6 @@ class ViagensRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('fechamento')
-                    ->required()
-                    ->maxLength(255),
             ]);
     }
 
@@ -29,28 +29,36 @@ class ViagensRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('motorista_id')
             ->columns([
-                Tables\Columns\TextColumn::make('fechamento'),
-
                 Tables\Columns\TextColumn::make('nro_nota'),
                 Tables\Columns\TextColumn::make('dupla'),
-                Tables\Columns\TextColumn::make('frete'),
-                Tables\Columns\TextColumn::make('comissao'),
-                Tables\Columns\TextColumn::make('vlr_comissao'),
+                Tables\Columns\TextColumn::make('frete')
+                    ->money('BRL')
+                    ->summarize(Sum::make()->money('BRL')),
+                Tables\Columns\TextColumn::make('comissao')
+                    ->label('%')
+                    ->numeric()
+                    ->state(fn(string $state)=>$state * 100),
+
+                Tables\Columns\TextColumn::make('vlr_comissao')
+                    ->label('Pr. Produtividade')
+                    ->money('BRL')
+                    ->summarize(Sum::make()->money('BRL', 100)),
             ])
+            ->groups([
+                Group::make('dupla')->collapsible()])
+            ->groupsOnly()
+            ->defaultGroup('dupla')
+
             ->filters([
-                //
+                Filter::make('dupla')
+                    ->label('Sem Dupla')
+                    ->query(fn(Builder $query):Builder => $query->where('dupla', null))
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

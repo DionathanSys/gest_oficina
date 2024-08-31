@@ -27,4 +27,9 @@ class MotoristaViagem extends Model
     {
         return $this->belongsTo(Acerto::class, 'motorista_id','motorista_dupla_id')->where('fechamento', $this->fechamento);
     }
+
+    public function viagem()
+    {
+        return $this->belongsTo(ViagemAgro::class, 'viagem_agro_id','id');
+    }
 }

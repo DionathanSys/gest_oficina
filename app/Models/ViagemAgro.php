@@ -17,4 +17,9 @@ class ViagemAgro extends Model
     ];
 
     protected $table = 'viagens_agro';
+
+    public function motoristas()
+    {
+        return $this->hasMany(MotoristaViagem::class, 'viagem_agro_id', 'id');
+    }
 }
