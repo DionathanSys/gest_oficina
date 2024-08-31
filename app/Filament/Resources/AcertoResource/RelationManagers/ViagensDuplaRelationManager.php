@@ -32,7 +32,7 @@ class ViagensDuplaRelationManager extends RelationManager
             ->recordTitleAttribute('motorista_id')
             ->columns([
                 Tables\Columns\TextColumn::make('nro_nota'),
-                Tables\Columns\TextColumn::make('dupla'),
+                Tables\Columns\TextColumn::make('motorista'),
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL')),
