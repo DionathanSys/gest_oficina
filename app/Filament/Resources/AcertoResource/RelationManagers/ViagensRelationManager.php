@@ -46,7 +46,7 @@ class ViagensRelationManager extends RelationManager
             ])
             ->groups([
                 Group::make('dupla')->collapsible()])
-            ->groupsOnly()
+            // ->groupsOnly()
             ->defaultGroup('dupla')
 
             ->filters([
