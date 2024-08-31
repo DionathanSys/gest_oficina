@@ -45,10 +45,10 @@ class ViagensDuplaRelationManager extends RelationManager
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL')),
             ])
-            ->groups([
-                Group::make('motorista')->collapsible()])
-            // ->groupsOnly()
-            ->defaultGroup('motorista')
+            // ->groups([
+            //     Group::make('motorista')->collapsible()])
+            // // ->groupsOnly()
+            // ->defaultGroup('motorista')
             ->filters([
                 //
             ])
