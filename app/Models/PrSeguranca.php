@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use App\Casts\MoneyCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Motorista extends Model
+class PrSeguranca extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'premio' => MoneyCast::class,
+    ];
+
     public function acerto()
     {
-        return $this->hasMany(Acerto::class);
+        return $this->belongsTo(Acerto::class);
     }
 }
