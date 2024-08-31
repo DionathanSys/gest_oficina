@@ -79,17 +79,17 @@ class ViagemAgroResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('frete')
-                    ->money('BRL', 100)
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('destino')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('local')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('vlr_cte')
-                    ->money('BRL', 100)
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('vlr_nfs')
-                    ->money('BRL', 100)
+                    ->money('BRL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
