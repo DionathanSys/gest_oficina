@@ -39,7 +39,7 @@ class ViagensDuplaRelationManager extends RelationManager
                     ->summarize(Sum::make()->money('BRL')),
                     
                 Tables\Columns\TextColumn::make('comissao')
-                    ->label('%')
+                    ->label('% Frete')
                     ->numeric(),
 
                 Tables\Columns\TextColumn::make('vlr_comissao')
