@@ -34,10 +34,10 @@ class ViagensRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL')),
+
                 Tables\Columns\TextColumn::make('comissao')
                     ->label('%')
-                    ->numeric()
-                    ->state(fn(string $state)=>$state * 100),
+                    ->numeric(),
 
                 Tables\Columns\TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
@@ -48,7 +48,6 @@ class ViagensRelationManager extends RelationManager
                 Group::make('dupla')->collapsible()])
             // ->groupsOnly()
             ->defaultGroup('dupla')
-
             ->filters([
                 Filter::make('dupla')
                     ->label('Sem Dupla')
