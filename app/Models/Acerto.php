@@ -56,7 +56,7 @@ class Acerto extends Model
 
         $prSeguranca = $this->PrSeguranca->premio ?? 0;
 
-        $calculo = $this->vlr_fechamento + $this->vlr_media + $this->vlr_manutencao + $prSeguranca;
+        $calculo = $this->vlr_fechamento + $this->vlr_media + $this->vlr_manutencao + $prSeguranca + $this->valor_ajuda->sum('vlr_ajuda');
         $calculo = $calculo - $this->vlr_diferenca;
         return $calculo;
     }
