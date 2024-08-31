@@ -6,9 +6,12 @@ use App\Filament\Resources\ViagemAgroResource\Pages;
 use App\Filament\Resources\ViagemAgroResource\RelationManagers;
 use App\Models\ViagemAgro;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -103,13 +106,21 @@ class ViagemAgroResource extends Resource
             ->groups([
                 Group::make('placa')->collapsible(),
                 Group::make('destino')->collapsible(),
-                ])
-            ->filters([
-                SelectFilter::make('placa')
-                    ->options(fn()=> ViagemAgro::all()->distinct()->pluck('placa', 'id'))
-                    ->searchable()
-                    ->preload(),
             ])
+            ->filters([
+                Filter::make('placa')
+                    ->form([
+                        TextInput::make('placa'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['placa'],
+                                fn(Builder $query, $placa): Builder => $query->where('placa', $placa),
+                            );
+                    })
+            ])
+            ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
