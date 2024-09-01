@@ -15,7 +15,7 @@ class MotoristaViagem extends Model
     protected $casts = [
         'frete' => MoneyCast::class,
         'comissao' => MoneyCast::class,
-        'vlr_comissao' => MoneyCast::class,
+        // 'vlr_comissao' => MoneyCast::class, //! vlr_comissão = frete * (%) comissao -> 1000 * 6,75%
     ];
 
     public function acerto()

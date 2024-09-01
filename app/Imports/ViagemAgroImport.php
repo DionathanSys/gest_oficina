@@ -61,7 +61,7 @@ class ViagemAgroImport
                 }
                 
                 $frete = str_replace(',', '', $row[14]);;
-                $comissao = (int) $row[10];
+                $comissao = (float) $row[10];
                 
                 $motorista_viagem = new MotoristaViagem();
                 $motorista_viagem->create([
@@ -76,6 +76,8 @@ class ViagemAgroImport
                     'comissao' => $row[10],
                     'vlr_comissao' => $frete * $comissao,
                 ]);
+
+                // dd('nota '.$row[6], 'frete '.$frete,'comissao '.$comissao,'calculo '.$frete * ($comissao / 100));
             }
             
         }
