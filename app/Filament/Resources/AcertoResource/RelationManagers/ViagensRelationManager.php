@@ -49,10 +49,6 @@ class ViagensRelationManager extends RelationManager
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL', 100)),
 
-                // Tables\Columns\TextColumn::make('viagem.km')
-                //     ->label('Km')
-                //     ->summarize(Sum::make()),
-
                 Tables\Columns\TextColumn::make('comissao')
                     ->label('%')
                     ->numeric(),

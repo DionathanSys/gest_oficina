@@ -8,6 +8,7 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,13 +33,21 @@ class ViagensDuplaRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('motorista_id')
             ->columns([
+                Tables\Columns\TextColumn::make('viagem.placa')
+                    ->label('Placa'),
+
                 Tables\Columns\TextColumn::make('nro_nota'),
-                Tables\Columns\TextColumn::make('dupla')
-                    ->label('Motorista')
-                    ->placeholder('Sem dupla'),
+
                 Tables\Columns\TextColumn::make('motorista')
                     ->label('Dupla')
-                    ->placeholder('Sem dupla'),
+                    ->placeholder('Sem dupla')
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('dupla')
+                    ->label('Motorista')
+                    ->placeholder('Sem dupla')
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
                     ->summarize(Sum::make()->money('BRL', 100)),
@@ -52,18 +61,29 @@ class ViagensDuplaRelationManager extends RelationManager
                     ->money('BRL')
                     ->formatStateUsing(fn($state)=>'R$'.number_format($state / 100, 2, ',', '.'))
                     ->summarize(Sum::make()->money('BRL', 100)),
+
+                Tables\Columns\TextColumn::make('viagem.destino')
+                    ->label('Destino')
+                    ->toggleable(isToggledHiddenByDefault:true),
             ])
             ->groups([
+                Group::make('viagem.placa')
+                    ->collapsible()
+                    ->label('Placa'),
+                Group::make('viagem.data')
+                    ->collapsible()
+                    ->label('Data'),
                 Group::make('motorista')
                     ->collapsible()
                     ->label('Dupla'),
                     ])
             // ->groupsOnly()
-            ->defaultGroup('motorista')
+            ->defaultGroup('dupla')
             ->filters([
-                Filter::make('dupla')
-                    ->label('Sem Dupla')
-                    ->query(fn(Builder $query):Builder => $query->where('dupla', null))
+                TernaryFilter::make('dupla'),
+                // Filter::make('dupla')
+                //     ->label('Sem Dupla')
+                //     ->query(fn(Builder $query):Builder => $query->where('dupla', null))
             ])
             ->headerActions([
             ])

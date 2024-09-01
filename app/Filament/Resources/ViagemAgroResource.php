@@ -89,7 +89,7 @@ class ViagemAgroResource extends Resource
                     ->sortable()
                     ->summarize(Sum::make()->money('BRL', 100)),
                 Tables\Columns\TextColumn::make('Motoristas')
-                    ->state(fn(ViagemAgro $record)=>$record->motoristas->count())
+                    ->state(fn(ViagemAgro $record)=>$record->motoristas->first()->dupla ? 2 : 1)
                     ->badge(),
                 Tables\Columns\TextColumn::make('destino')
                     ->searchable(),
