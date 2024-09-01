@@ -38,13 +38,13 @@ class ViagensDuplaRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('nro_nota'),
 
-                Tables\Columns\TextColumn::make('motorista')
-                    ->label('Dupla')
+                Tables\Columns\TextColumn::make('dupla')
+                    ->label('Motorista')
                     ->placeholder('Sem dupla')
                     ->toggleable(),
 
-                Tables\Columns\TextColumn::make('dupla')
-                    ->label('Motorista')
+                Tables\Columns\TextColumn::make('motorista')
+                    ->label('Dupla')
                     ->placeholder('Sem dupla')
                     ->toggleable(),
 
@@ -78,7 +78,7 @@ class ViagensDuplaRelationManager extends RelationManager
                     ->label('Dupla'),
                     ])
             // ->groupsOnly()
-            ->defaultGroup('dupla')
+            ->defaultGroup('motorista')
             ->filters([
                 TernaryFilter::make('dupla'),
                 // Filter::make('dupla')
