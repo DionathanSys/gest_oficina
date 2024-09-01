@@ -11,6 +11,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
@@ -80,10 +82,15 @@ class ViagemAgroResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('km')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
                 Tables\Columns\TextColumn::make('frete')
                     ->money('BRL')
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()->money('BRL', 100)),
+                Tables\Columns\TextColumn::make('Motoristas')
+                    ->state(fn(ViagemAgro $record)=>$record->motoristas->count())
+                    ->badge(),
                 Tables\Columns\TextColumn::make('destino')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('local')
@@ -119,7 +126,7 @@ class ViagemAgroResource extends Resource
                                 fn(Builder $query, $placa): Builder => $query->where('placa', $placa),
                             );
                     })
-            ])
+                ],FiltersLayout::Modal)
             ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -56,7 +56,8 @@ class ViagensDuplaRelationManager extends RelationManager
             ->groups([
                 Group::make('motorista')
                     ->collapsible()
-                    ->label('Dupla')])
+                    ->label('Dupla'),
+                    ])
             // ->groupsOnly()
             ->defaultGroup('motorista')
             ->filters([
