@@ -83,7 +83,8 @@ class AcertoResource extends Resource
                 TextColumn::make('nro_acerto')
                     ->label('Acerto')
                     ->sortable()
-                    ->visibleFrom('lg'),
+                    ->visibleFrom('lg')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('motorista')
                     ->searchable()
@@ -106,7 +107,8 @@ class AcertoResource extends Resource
                     ->money('BRL')
                     ->state(function (Acerto $record) {
                         return $record->getSalarioLiquido();
-                    }),
+                    })
+                    ->toggleable(),
 
                 TextColumn::make('produtividade')
                     ->label('Produtividade')
@@ -133,20 +135,24 @@ class AcertoResource extends Resource
                 TextColumn::make('vlr_media')
                     ->label('Vlr Média')
                     ->summarize(Sum::make()->money('BRL', 100))
-                    ->money('BRL'),
+                    ->money('BRL')
+                    ->toggleable(),
                 
                 TextInputColumn::make('vlr_manutencao')
-                    ->label('# Vlr Mant.'),
+                    ->label('# Vlr Mant.')
+                    ->toggleable(),
 
                 TextColumn::make('ajuda')
                     ->label('Vlr Ajuda')
                     ->money('BRL')
-                    ->state(fn(Acerto $record) => $record->valor_ajuda->sum('vlr_ajuda')),
+                    ->state(fn(Acerto $record) => $record->valor_ajuda->sum('vlr_ajuda'))
+                    ->toggleable(),
 
                 TextColumn::make('seguranca')
                     ->label('Pr. Segurança')
                     ->money('BRL')
-                    ->state(fn(Acerto $record) => $record->PrSeguranca->premio ?? 0),
+                    ->state(fn(Acerto $record) => $record->PrSeguranca->premio ?? 0)
+                    ->toggleable(),
 
                 TextColumn::make('vlr_inss')
                     ->label('Vlr INSS')
@@ -168,7 +174,12 @@ class AcertoResource extends Resource
 
                 TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
-                    ->money('BRL'),
+                    ->money('BRL')
+                    ->toggleable(),
+
+                TextColumn::make('complementos')
+                    ->view('tables.columns.complemento-acerto')
+                    ->toggleable(),
 
                 TextColumn::make('created_at')
                     ->dateTime()
