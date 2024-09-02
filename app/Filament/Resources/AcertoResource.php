@@ -120,8 +120,8 @@ class AcertoResource extends Resource
                 TextColumn::make('produtividade')
                     ->label('Produtividade')
                     ->state(function (Acerto $record) {
-                        $imposto = $record->vlr_inss + $record->vlr_irrf;
-                        return $imposto - $record->vlr_diferenca;
+                        
+                        return $record->getProdutividade();
                     })
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
@@ -133,6 +133,13 @@ class AcertoResource extends Resource
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: false),
 
+                TextColumn::make('teste')
+                    ->state(function(Acerto $record){
+              
+                        return $record->diferenca + $record->getProdutividade();
+                    })
+                    ->toggleable(),
+                    
                 TextColumn::make('vlr_fechamento')
                     ->label('Vlr Fechamento')
                     ->money('BRL')

@@ -78,6 +78,15 @@ class Acerto extends Model
                 $obs = $obs . 'R$ ' . number_format($complemento->vlr_ajuda, 2, ',', '.') . ' ' .$complemento->motivo . '; ';
             }
         }
+
         return $obs;
+    }
+
+    public function getProdutividade()
+    {
+        $impostos = $this->vlr_inss + $this->vlr_irrf;
+        $produtividade = $impostos + $this->valor_ajuda->sum('vlr_ajuda') + $this->diferenca;
+
+        return $produtividade;
     }
 }
