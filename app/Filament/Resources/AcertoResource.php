@@ -113,7 +113,7 @@ class AcertoResource extends Resource
                     ->label('S. Líquido')
                     ->money('BRL')
                     ->state(function (Acerto $record) {
-                        return $record->getSalarioLiquido();
+                        return 'R$ '.number_format($record->getSalarioLiquido(), 2, ',', '.');
                     })
                     ->toggleable(),
 
@@ -121,7 +121,7 @@ class AcertoResource extends Resource
                     ->label('Produtividade')
                     ->state(function (Acerto $record) {
                         
-                        return $record->getProdutividade();
+                        return 'R$ '.number_format($record->getProdutividade(), 2, ',', '.');
                     })
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
@@ -133,63 +133,64 @@ class AcertoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('teste')
+                    ->label('Teste Dif.')
                     ->state(function(Acerto $record){
-              
-                        return ($record->vlr_diferenca + $record->getProdutividade());
+                        $valor = $record->vlr_diferenca + $record->getProdutividade();
+                        return 'R$ '. number_format($valor, 2, ',','.');
                     })
                     ->toggleable(),
                     
                 TextColumn::make('vlr_fechamento')
                     ->label('Vlr Fechamento')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_media')
                     ->label('Vlr Média')
                     ->summarize(Sum::make()->money('BRL', 100))
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->toggleable(),
                 
                     TextColumn::make('vlr_manutencao')
                     ->label('Vlr Mant.')
                     ->copyable()
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->toggleable(),
 
                 TextColumn::make('ajuda')
                     ->label('Vlr Ajuda')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->state(fn(Acerto $record) => $record->valor_ajuda->sum('vlr_ajuda'))
                     ->toggleable(),
 
                 TextColumn::make('seguranca')
                     ->label('Pr. Segurança')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->state(fn(Acerto $record) => $record->PrSeguranca->premio ?? 0)
                     ->toggleable(),
 
                 TextColumn::make('vlr_inss')
                     ->label('Vlr INSS')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_irrf')
                     ->label('Vlr IRRF')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_diferenca')
                     ->label('Vlr Diferença')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
-                    ->money('BRL')
+                    ->money('BRL',locale: 'pt_BR')
                     ->toggleable(),
 
                 TextColumn::make('complementos')
