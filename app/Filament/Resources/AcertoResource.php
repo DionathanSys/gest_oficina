@@ -148,7 +148,7 @@ class AcertoResource extends Resource
 
                 TextColumn::make('vlr_media')
                     ->label('Vlr Média')
-                    ->summarize(Sum::make()->money('BRL', 100))
+                    ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->money('BRL',locale: 'pt_BR')
                     ->toggleable(),
                 
@@ -156,6 +156,7 @@ class AcertoResource extends Resource
                     ->label('Vlr Mant.')
                     ->copyable()
                     ->money('BRL',locale: 'pt_BR')
+                    ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->toggleable(),
 
                 TextColumn::make('ajuda')
@@ -191,6 +192,7 @@ class AcertoResource extends Resource
                 TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
                     ->money('BRL',locale: 'pt_BR')
+                    ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->toggleable(),
 
                 TextColumn::make('complementos')
