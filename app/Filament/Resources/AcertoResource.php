@@ -34,40 +34,44 @@ class AcertoResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(6)
             ->schema([
-                Forms\Components\TextInput::make('fechamento')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('nro_acerto')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('motorista_id')
-                    ->required()
-                    ->numeric(),
+                // Forms\Components\TextInput::make('fechamento')
+                //     ->required()
+                //     ->maxLength(255),
+                // Forms\Components\TextInput::make('nro_acerto')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('motorista_id')
+                //     ->required()
+                //     ->numeric(),
                 Forms\Components\TextInput::make('motorista')
+                    ->columnSpan(4)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('vlr_fechamento')
+                    ->columnSpan(1)
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('vlr_media')
+                    ->columnSpan(1)
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('vlr_inss')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('vlr_irrf')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('vlr_manutencao')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('vlr_diferenca')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('vlr_comissao')
-                    ->required()
-                    ->numeric(),
+                // Forms\Components\TextInput::make('vlr_inss')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('vlr_irrf')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('vlr_manutencao')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('vlr_diferenca')
+                //     ->required()
+                //     ->numeric(),
+                // Forms\Components\TextInput::make('vlr_comissao')
+                //     ->required()
+                //     ->numeric(),
             ]);
     }
 
