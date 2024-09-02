@@ -60,4 +60,24 @@ class Acerto extends Model
         $calculo = $calculo - $this->vlr_diferenca;
         return $calculo;
     }
+
+    public function getComplemento()
+    {
+        $obs = '';
+        foreach ($this->valor_ajuda as $complemento){
+            if($complemento->motivo == 'Ref. Aj. Custo'){
+                $obs = $obs . 'R$ ' . number_format($complemento->vlr_ajuda, 2, ',', '.') . ' ' .$complemento->motivo . '; ';
+            }
+            if($complemento->motivo == 'Ref. Manobra'){
+                $obs = $obs . 'R$ ' . number_format($complemento->vlr_ajuda, 2, ',', '.') . ' ' .$complemento->motivo . '; ';
+            }
+            if($complemento->motivo == 'Ref. Dias de Base'){
+                $obs = $obs . 'R$ ' . number_format($complemento->vlr_ajuda, 2, ',', '.') . ' ' .$complemento->motivo . '; ';
+            }
+            if($complemento->motivo == 'Ref. Domingo(s)'){
+                $obs = $obs . 'R$ ' . number_format($complemento->vlr_ajuda, 2, ',', '.') . ' ' .$complemento->motivo . '; ';
+            }
+        }
+        return $obs;
+    }
 }

@@ -102,6 +102,10 @@ class AcertoResource extends Resource
                 TextColumn::make('motorista_id')
                     ->numeric()
                     ->sortable()
+                    ->copyable()
+                    ->copyableState(function (Acerto $record) {
+                        return $record->getComplemento();
+                    })
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
@@ -184,6 +188,7 @@ class AcertoResource extends Resource
 
                 TextColumn::make('complementos')
                     ->view('tables.columns.complemento-acerto')
+                    
                     ->toggleable(),
 
                 TextColumn::make('created_at')
