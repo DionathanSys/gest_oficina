@@ -136,7 +136,7 @@ class AcertoResource extends Resource
                 TextColumn::make('teste')
                     ->state(function(Acerto $record){
               
-                        return $record->diferenca + $record->getProdutividade();
+                        return ($record->vlr_diferenca + $record->getProdutividade());
                     })
                     ->toggleable(),
                     
