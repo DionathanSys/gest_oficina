@@ -42,6 +42,9 @@ class ValorAjudaRelationManager extends RelationManager
             ->recordTitleAttribute('acerto_id')
             ->columns([
                 Tables\Columns\TextColumn::make('acerto_id'),
+                Tables\Columns\TextColumn::make('motivo'),
+                Tables\Columns\TextColumn::make('vlr_ajuda')
+                    ->money('BRL'),
             ])
             ->filters([
                 //
