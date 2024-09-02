@@ -125,8 +125,7 @@ class AcertoResource extends Resource
                     })
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
-                        $imposto = $record->vlr_inss + $record->vlr_irrf;
-                        return number_format($imposto - $record->vlr_diferenca, 2, ',', '.');
+                        return number_format($record->getProdutividade(), 2, ',', '.');
                     })
                     ->money('BRL')
                     ->sortable()

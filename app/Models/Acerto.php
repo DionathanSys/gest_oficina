@@ -87,6 +87,6 @@ class Acerto extends Model
         $impostos = $this->vlr_inss + $this->vlr_irrf;
         $produtividade = $impostos + $this->valor_ajuda->sum('vlr_ajuda') + $this->diferenca;
 
-        return $produtividade;
+        return $produtividade
     }
 }
