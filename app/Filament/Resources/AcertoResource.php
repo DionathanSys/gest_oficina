@@ -78,6 +78,9 @@ class AcertoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function($query){
+                return $query->with(['PrSeguranca', 'valor_ajuda']);
+            })
             ->columns([
 
                 TextColumn::make('nro_acerto')
@@ -138,8 +141,10 @@ class AcertoResource extends Resource
                     ->money('BRL')
                     ->toggleable(),
                 
-                TextInputColumn::make('vlr_manutencao')
-                    ->label('# Vlr Mant.')
+                    TextColumn::make('vlr_manutencao')
+                    ->label('Vlr Mant.')
+                    ->copyable()
+                    ->money('BRL')
                     ->toggleable(),
 
                 TextColumn::make('ajuda')
