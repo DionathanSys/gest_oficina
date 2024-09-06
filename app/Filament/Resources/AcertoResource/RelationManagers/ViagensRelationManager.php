@@ -33,7 +33,8 @@ class ViagensRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('viagem.placa')
                     ->label('Placa'),
 
-                Tables\Columns\TextColumn::make('nro_nota'),
+                Tables\Columns\TextColumn::make('nro_nota')
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('motorista')
                     ->label('Motorista')
@@ -61,6 +62,7 @@ class ViagensRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('viagem.destino')
                     ->label('Destino')
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault:true),
             ])
             ->groups([
@@ -77,10 +79,12 @@ class ViagensRelationManager extends RelationManager
             // ->groupsOnly()
             ->defaultGroup('dupla')
             ->filters([
-                TernaryFilter::make('dupla'),
-                // Filter::make('dupla')
-                //     ->label('Sem Dupla')
-                //     ->query(fn(Builder $query):Builder => $query->where('dupla', null))
+                TernaryFilter::make('dupla')
+                    ->nullable()
+                    ->placeholder('Todos')
+                    ->trueLabel('Com dupla')
+                    ->falseLabel('Sem Dupla'),
+                
             ])
             ->headerActions([
             ])

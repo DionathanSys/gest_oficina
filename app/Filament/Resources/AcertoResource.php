@@ -36,42 +36,75 @@ class AcertoResource extends Resource
         return $form
             ->columns(6)
             ->schema([
-                // Forms\Components\TextInput::make('fechamento')
-                //     ->required()
-                //     ->maxLength(255),
-                // Forms\Components\TextInput::make('nro_acerto')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('motorista_id')
-                //     ->required()
-                //     ->numeric(),
                 Forms\Components\TextInput::make('motorista')
-                    ->columnSpan(4)
+                    ->columnSpan(2)
                     ->required()
                     ->maxLength(255),
+
+                Forms\Components\TextInput::make('fechamento')
+                    ->columnSpan(1)
+                    ->required()
+                    ->maxLength(255),
+
+                Forms\Components\TextInput::make('nro_acerto')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
+                Forms\Components\TextInput::make('motorista_id')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
                 Forms\Components\TextInput::make('vlr_fechamento')
+                    ->label('Vlr. Fechamento')
+                    ->prefix('R$')
                     ->columnSpan(1)
                     ->required()
                     ->numeric(),
+
+                Forms\Components\TextInput::make('vlr_comissao')
+                    ->label('Pr. Produtividade')
+                    ->prefix('R$')
+                    ->columnSpan(1) 
+                    ->required()
+                    ->numeric(),
+
                 Forms\Components\TextInput::make('vlr_media')
+                    ->label('Pr. Média')
+                    ->prefix('R$')
                     ->columnSpan(1)
                     ->required()
                     ->numeric(),
-                // Forms\Components\TextInput::make('vlr_inss')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('vlr_irrf')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('vlr_manutencao')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('vlr_diferenca')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('vlr_comissao')
-                //     ->required()
-                //     ->numeric(),
+
+                Forms\Components\TextInput::make('vlr_manutencao')
+                    ->label('Pr. Manutenção')
+                    ->prefix('R$')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
+                Forms\Components\TextInput::make('vlr_inss')
+                    ->label('INSS')
+                    ->prefix('R$')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
+                Forms\Components\TextInput::make('vlr_irrf')
+                    ->label('IRRF')
+                    ->prefix('R$')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
+                Forms\Components\TextInput::make('vlr_diferenca')
+                    ->label('Vlr. Diferença')
+                    ->prefix('R$')
+                    ->columnSpan(1)
+                    ->required()
+                    ->numeric(),
+
             ]);
     }
 
@@ -118,6 +151,8 @@ class AcertoResource extends Resource
                     ->toggleable(),
 
                 TextColumn::make('produtividade')
+                    ->badge(fn (string $state): string => 'succes' )
+                    // ->color()
                     ->label('Produtividade')
                     ->state(function (Acerto $record) {
                         
@@ -261,9 +296,8 @@ class AcertoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            ViagensRelationManager::class,
-            ViagensDuplaRelationManager::class,
             ValorAjudaRelationManager::class,
+            ViagensRelationManager::class,
         ];
     }
 
