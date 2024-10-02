@@ -253,12 +253,12 @@ class AcertoResource extends Resource
                 SelectFilter::make('fechamento')
                     ->preload()
                     ->options(
-                        function () {
-                            $options = Acerto::query()->select('fechamento')->distinct()->get()->toArray();
-                            return array_column($options, 'fechamento', 'fechamento');
-                        }
+                        [
+                            '202409' => '202409',
+                            '202408' => '202408',
+                        ]
                     )
-                    ->default(fn() => Acerto::orderBy('id', 'desc')->first()->value('fechamento')),
+                    ,
 
                 SelectFilter::make('motorista')
                     ->multiple()
