@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\AcertoResource\RelationManagers;
 
+use App\Models\MotoristaViagem;
+use App\Models\ViagemAgro;
+use Carbon\Carbon;
+use DateTime;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -70,6 +74,10 @@ class ViagensRelationManager extends RelationManager
                     ->collapsible()
                     ->label('Placa'),
                 Group::make('viagem.data')
+                    ->getTitleFromRecordUsing(function (MotoristaViagem $record): string {
+                        $date = Carbon::parse($record->viagem->data);
+                        return $date->format('d/m/Y');
+                    })
                     ->collapsible()
                     ->label('Data'),
                 Group::make('dupla')

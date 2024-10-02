@@ -22,4 +22,9 @@ class Cotacao extends Model
     {
         return $this->hasMany(PropostaCotacao::class);
     }
+
+    public function produto():BelongsTo
+    {
+        return $this->belongsTo();
+    }
 }
