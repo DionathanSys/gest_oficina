@@ -66,7 +66,7 @@ class AcertoResource extends Resource
                 Forms\Components\TextInput::make('vlr_comissao')
                     ->label('Pr. Produtividade')
                     ->prefix('R$')
-                    ->columnSpan(1) 
+                    ->columnSpan(1)
                     ->required()
                     ->numeric(),
 
@@ -111,9 +111,9 @@ class AcertoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(function($query){
-                return $query->with(['PrSeguranca', 'valor_ajuda']);
-            })
+            // ->modifyQueryUsing(function ($query) {
+            //     return $query->with(['PrSeguranca', 'valor_ajuda']);
+            // })
             ->columns([
 
                 TextColumn::make('nro_acerto')
@@ -123,9 +123,10 @@ class AcertoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('motorista')
+                    ->limit(10)
                     ->searchable()
                     ->sortable()
-                    ->wrap(),
+                /* ->wrap() */,
 
                 TextColumn::make('fechamento')
                     ->searchable()
@@ -145,19 +146,19 @@ class AcertoResource extends Resource
                 TextColumn::make('salario_liq')
                     ->label('S. Líquido')
                     ->money('BRL')
-                    ->state(function (Acerto $record) {
-                        return 'R$ '.number_format($record->getSalarioLiquido(), 2, ',', '.');
-                    })
+                    // ->state(function (Acerto $record) {
+                    //     return 'R$ ' . number_format($record->getSalarioLiquido(), 2, ',', '.');
+                    // })
                     ->toggleable(),
 
                 TextColumn::make('produtividade')
-                    ->badge(fn (string $state): string => 'succes' )
+                    ->badge(fn(string $state): string => 'succes')
                     // ->color()
                     ->label('Produtividade')
-                    ->state(function (Acerto $record) {
-                        
-                        return 'R$ '.number_format($record->getProdutividade(), 2, ',', '.');
-                    })
+                    // ->state(function (Acerto $record) {
+
+                    //     return 'R$ ' . number_format($record->getProdutividade(), 2, ',', '.');
+                    // })
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
                         return number_format($record->getProdutividade(), 2, ',', '.');
@@ -168,71 +169,71 @@ class AcertoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('teste')
-                    ->label('Teste Dif.')
-                    ->state(function(Acerto $record){
-                        $valor = $record->vlr_diferenca + $record->getProdutividade();
-                        return 'R$ '. number_format($valor, 2, ',','.');
-                    })
+                    ->label('Validação')
+                    // ->state(function (Acerto $record) {
+                    //     $valor = $record->vlr_diferenca + $record->getProdutividade();
+                    //     return 'R$ ' . number_format($valor, 2, ',', '.');
+                    // })
                     ->toggleable(),
-                    
+
                 TextColumn::make('vlr_fechamento')
                     ->label('Vlr Fechamento')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_media')
-                    ->label('Vlr Média')
+                    ->label('Pr. Média')
                     ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->toggleable(),
-                
-                    TextColumn::make('vlr_manutencao')
-                    ->label('Vlr Mant.')
+
+                TextColumn::make('vlr_manutencao')
+                    ->label('Pr. Mant.')
                     ->copyable()
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->toggleable(),
 
                 TextColumn::make('ajuda')
                     ->label('Vlr Ajuda')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->state(fn(Acerto $record) => $record->valor_ajuda->sum('vlr_ajuda'))
                     ->toggleable(),
 
                 TextColumn::make('seguranca')
                     ->label('Pr. Segurança')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->state(fn(Acerto $record) => $record->PrSeguranca->premio ?? 0)
                     ->toggleable(),
 
                 TextColumn::make('vlr_inss')
                     ->label('Vlr INSS')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_irrf')
                     ->label('Vlr IRRF')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_diferenca')
                     ->label('Vlr Diferença')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->visibleFrom('lg')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('vlr_comissao')
                     ->label('Pr. Produtividade')
-                    ->money('BRL',locale: 'pt_BR')
+                    ->money('BRL', locale: 'pt_BR')
                     ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->toggleable(),
 
                 TextColumn::make('complementos')
                     ->view('tables.columns.complemento-acerto')
-                    
+
                     ->toggleable(),
 
                 TextColumn::make('created_at')
@@ -290,7 +291,7 @@ class AcertoResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->searchOnBlur();
+             ->searchOnBlur();
     }
 
     public static function getRelations(): array

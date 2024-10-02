@@ -115,6 +115,15 @@ class ViagemAgroResource extends Resource
                 Group::make('destino')->collapsible(),
             ])
             ->filters([
+                SelectFilter::make('fechamento')
+                    ->preload()
+                    ->options(
+                        function () {
+                            $options = ViagemAgro::query()->select('fechamento')->distinct()->get()->toArray();
+                            return array_column($options, 'fechamento', 'fechamento');
+                        }
+                    )
+                    ->default(fn() => ViagemAgro::orderBy('id', 'desc')->first()->value('fechamento')),
                 Filter::make('placa')
                     ->form([
                         TextInput::make('placa'),

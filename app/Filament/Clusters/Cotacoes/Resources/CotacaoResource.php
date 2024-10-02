@@ -7,6 +7,7 @@ use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\Pages;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers;
 use App\Models\Cotacao;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
@@ -42,16 +43,31 @@ class CotacaoResource extends Resource
                 Forms\Components\TextInput::make('descricao')
                     ->maxLength(255)
                     ->default(null),
+
                 Forms\Components\TextInput::make('setor')
                     ->maxLength(255)
-                    ->default(null),
-                Forms\Components\TextInput::make('prioridade')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('status')
-                    ->required()
-                    ->maxLength(255),
+                    ->default('Frota Agro'),
+
+                Forms\Components\Select::make('prioridade')
+                    ->default('Media')
+                    ->options([
+                        'Baixa' => 'Baixa',
+                        'Media' => 'Média',
+                        'Alta' => 'Alta',
+                    ])
+                    ->required(),
+
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'Pendente' => 'Pendente',
+                        'Finalizado' => 'Finalizado',
+                        'Cancelado' => 'Cancelado'
+                        ])
+                    ->default('Pendente')
+                    ->required(),
+
                 Forms\Components\DatePicker::make('data')
+                    ->default(now())
                     ->required(),
             ]);
     }
@@ -89,9 +105,22 @@ class CotacaoResource extends Resource
                     EditAction::make(),
                     DeleteAction::make(),
                     Action::make('Fechar')
+                        ->icon('heroicon-o-lock-closed')
                         ->action(fn(Cotacao $record) => $record->update(['status' => 'Fechado']) ),
                     Action::make('Reabrir')
+                        ->icon('heroicon-o-lock-open')
                         ->action(fn(Cotacao $record) => $record->update(['status' => 'Pendente']) ),
+                    Action::make('Item')
+                        ->icon('heroicon-o-plus')
+                        ->action(fn(Cotacao $record ,$data)=> dd($data,$record))
+                        ->form([
+                            Select::make('produto_id')
+                                ->label('Item')
+                                // ->required()
+                                ->preload()
+                                ->searchable()
+                                ->relationship('produto', 'descricao')
+                        ])
 
                 ])->label('Ações')
                 
