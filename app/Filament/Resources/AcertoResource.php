@@ -111,9 +111,9 @@ class AcertoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->modifyQueryUsing(function ($query) {
-            //     return $query->with(['PrSeguranca', 'valor_ajuda']);
-            // })
+            ->modifyQueryUsing(function ($query) {
+                return $query->with(['PrSeguranca', 'valor_ajuda']);
+            })
             ->columns([
 
                 TextColumn::make('nro_acerto')
@@ -146,19 +146,19 @@ class AcertoResource extends Resource
                 TextColumn::make('salario_liq')
                     ->label('S. Líquido')
                     ->money('BRL')
-                    // ->state(function (Acerto $record) {
-                    //     return 'R$ ' . number_format($record->getSalarioLiquido(), 2, ',', '.');
-                    // })
+                    ->state(function (Acerto $record) {
+                        return 'R$ ' . number_format($record->getSalarioLiquido(), 2, ',', '.');
+                    })
                     ->toggleable(),
 
                 TextColumn::make('produtividade')
                     ->badge(fn(string $state): string => 'succes')
                     // ->color()
                     ->label('Produtividade')
-                    // ->state(function (Acerto $record) {
+                    ->state(function (Acerto $record) {
 
-                    //     return 'R$ ' . number_format($record->getProdutividade(), 2, ',', '.');
-                    // })
+                        return 'R$ ' . number_format($record->getProdutividade(), 2, ',', '.');
+                    })
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
                         return number_format($record->getProdutividade(), 2, ',', '.');
@@ -170,10 +170,10 @@ class AcertoResource extends Resource
 
                 TextColumn::make('teste')
                     ->label('Validação')
-                    // ->state(function (Acerto $record) {
-                    //     $valor = $record->vlr_diferenca + $record->getProdutividade();
-                    //     return 'R$ ' . number_format($valor, 2, ',', '.');
-                    // })
+                    ->state(function (Acerto $record) {
+                        $valor = $record->vlr_diferenca + $record->getProdutividade();
+                        return 'R$ ' . number_format($valor, 2, ',', '.');
+                    })
                     ->toggleable(),
 
                 TextColumn::make('vlr_fechamento')
@@ -250,6 +250,14 @@ class AcertoResource extends Resource
 
             ])
             ->filters([
+                SelectFilter::make('fechamento')
+                    ->options(
+                        [
+                            '202409' => '202409',
+                            '202408' => '202408',
+                        ]
+                        )
+                    ->default('202409'),
                 SelectFilter::make('motorista')
                     ->multiple()
                     ->preload()
