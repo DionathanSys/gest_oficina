@@ -250,16 +250,6 @@ class AcertoResource extends Resource
 
             ])
             ->filters([
-                SelectFilter::make('fechamento')
-                    ->preload()
-                    ->options(
-                        [
-                            '202409' => '202409',
-                            '202408' => '202408',
-                        ]
-                    )
-                    ,
-
                 SelectFilter::make('motorista')
                     ->multiple()
                     ->preload()
@@ -301,8 +291,7 @@ class AcertoResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            // ->searchOnBlur()
-        ;
+             ->searchOnBlur();
     }
 
     public static function getRelations(): array
