@@ -258,7 +258,7 @@ class AcertoResource extends Resource
                             '202408' => '202408',
                         ]
                         )
-                    ->default('202409'),
+                    ->default('202410'),
                 SelectFilter::make('motorista')
                     ->multiple()
                     ->preload()
@@ -291,7 +291,8 @@ class AcertoResource extends Resource
                                 'Ref. Domingo(s)' => 'Domingo',
                                 'Ref. Dias de Base' => 'Dias Base',
                                 'Ref. Manobra' => 'Manobra',
-                                'Ref. Viagens em outro Caminhão' => 'Viagens'
+                                'Ref. Viagens em outro Caminhão' => 'Viagens',
+                                'Ref. Ferista' => 'Ferista',
                             ])
                     ]),
             ])
