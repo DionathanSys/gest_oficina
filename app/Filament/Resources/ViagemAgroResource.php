@@ -113,6 +113,7 @@ class ViagemAgroResource extends Resource
             ->groups([
                 Group::make('placa')->collapsible(),
                 Group::make('destino')->collapsible(),
+                Group::make('nro_viagem')->collapsible(),
             ])
             ->filters([
                 SelectFilter::make('fechamento')
@@ -123,7 +124,7 @@ class ViagemAgroResource extends Resource
                             return array_column($options, 'fechamento', 'fechamento');
                         }
                     )
-                    ->default(fn() => ViagemAgro::orderBy('id', 'desc')->first()->value('fechamento')),
+                    ->default(fn() => ViagemAgro::orderBy('id', 'desc')->first()->fechamento),
                 Filter::make('placa')
                     ->form([
                         TextInput::make('placa'),
@@ -134,8 +135,19 @@ class ViagemAgroResource extends Resource
                                 $data['placa'],
                                 fn(Builder $query, $placa): Builder => $query->where('placa', $placa),
                             );
-                    })
-                ],FiltersLayout::Modal)
+                    }),
+                SelectFilter::make('destino')
+                    ->options(
+                        function () {
+                            $options = ViagemAgro::query()->select('destino')->distinct()->get()->toArray();
+                            return array_column($options, 'destino', 'destino');
+                        }
+                    )
+                    ->multiple()
+                    ->searchable()
+
+                ],
+                FiltersLayout::Modal)
             ->deferFilters()
             ->actions([
                 Tables\Actions\EditAction::make(),

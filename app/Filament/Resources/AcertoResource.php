@@ -10,6 +10,7 @@ use App\Filament\Resources\AcertoResource\RelationManagers\ViagensRelationManage
 use App\Models\Acerto;
 use App\Models\ComplementoAcerto;
 use App\Models\Motorista;
+use App\Models\ViagemAgro;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\Layout\Split;
@@ -252,13 +253,12 @@ class AcertoResource extends Resource
             ->filters([
                 SelectFilter::make('fechamento')
                     ->options(
-                        [
-                            '202410' => '202410',
-                            '202409' => '202409',
-                            '202408' => '202408',
-                        ]
-                        )
-                    ->default('202410'),
+                        function () {
+                            $options = ViagemAgro::query()->select('fechamento')->distinct()->get()->toArray();
+                            return array_column($options, 'fechamento', 'fechamento');
+                        }
+                    )
+                    ->default(fn() => ViagemAgro::orderBy('id', 'desc')->first()->fechamento),
                 SelectFilter::make('motorista')
                     ->multiple()
                     ->preload()

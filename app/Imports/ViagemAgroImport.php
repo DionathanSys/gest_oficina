@@ -38,8 +38,8 @@ class ViagemAgroImport
 
             $data->each(function($row) use($motoristas) {
 
-                $dataViagem = DateTime::createFromFormat('d/m/Y', $row[2]);
-
+                $dataViagem = DateTime::createFromFormat('m/d/Y', $row[2]);
+                
                 if ($dataViagem){
 
                     $viagem = (new ViagemAgro())->create([
