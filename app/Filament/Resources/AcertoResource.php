@@ -293,6 +293,8 @@ class AcertoResource extends Resource
                                 'Ref. Manobra' => 'Manobra',
                                 'Ref. Viagens em outro Caminhão' => 'Viagens',
                                 'Ref. Ferista' => 'Ferista',
+                                'Ref. Quebra de caminhão' => 'Quebra de caminhão',
+                                'Ref. Treinamento de motorista' => 'Treinamento de motorista',
                             ])
                     ]),
             ])
