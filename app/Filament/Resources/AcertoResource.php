@@ -188,10 +188,10 @@ class AcertoResource extends Resource
                     ->money('BRL', locale: 'pt_BR')
                     ->toggleable(),
 
-                TextColumn::make('vlr_manutencao')
+                TextInputColumn::make('vlr_manutencao')
                     ->label('Pr. Mant.')
-                    ->copyable()
-                    ->money('BRL', locale: 'pt_BR')
+                    // ->copyable()
+                    // ->money('BRL', locale: 'pt_BR')
                     ->summarize(Sum::make()->money('BRL', 100, 'pt_BR'))
                     ->toggleable(),
 
@@ -233,7 +233,7 @@ class AcertoResource extends Resource
 
                 TextColumn::make('complementos')
                     ->view('tables.columns.complemento-acerto')
-
+                    ->copyable()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
@@ -253,6 +253,7 @@ class AcertoResource extends Resource
                 SelectFilter::make('fechamento')
                     ->options(
                         [
+                            '202410' => '202410',
                             '202409' => '202409',
                             '202408' => '202408',
                         ]
@@ -299,7 +300,8 @@ class AcertoResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-             ->searchOnBlur();
+            //  ->searchOnBlur()
+             ;
     }
 
     public static function getRelations(): array

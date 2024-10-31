@@ -30,7 +30,7 @@ class PrSegurancaImport
             if($row[0]){
                 
                 $acerto_id = (Acerto::where('nro_acerto', $row[0])->first())->id;
-                $premio = str_replace(',', '.', str_replace('R$', '', $row[3]));
+                $premio = str_replace(',', '.', str_replace('R$', '', $row[2]));
 
                 (new PrSeguranca())->firstOrCreate(
                     [

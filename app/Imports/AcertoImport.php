@@ -45,6 +45,7 @@ class AcertoImport
                         'vlr_manutencao' => 0,
                         'vlr_diferenca' => str_replace(',', '', $row[8]) ?? 0,
                         'vlr_comissao' => str_replace(',', '', $row[16]) - str_replace(',', '', $row[5]) ?? 0,
+                        'fechado' => 0,
                         ]
                 );
             }
