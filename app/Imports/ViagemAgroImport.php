@@ -37,7 +37,7 @@ class ViagemAgroImport
             $motoristas = Motorista::whereIn('codigo_sankhya', $data->pluck(8)->merge($data->pluck(11))->filter()->unique())->get()->keyBy('codigo_sankhya');
 
             $data->each(function($row) use($motoristas) {
-
+                
                 $dataViagem = DateTime::createFromFormat('m/d/Y', $row[2]);
                 
                 if ($dataViagem){

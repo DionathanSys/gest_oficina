@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\MotivoAjudaEnum;
 use App\Filament\Resources\AcertoResource\Pages;
 use App\Filament\Resources\AcertoResource\RelationManagers;
 use App\Filament\Resources\AcertoResource\RelationManagers\ValorAjudaRelationManager;
@@ -126,6 +127,10 @@ class AcertoResource extends Resource
                 TextColumn::make('motorista')
                     ->limit(10)
                     ->searchable()
+                    ->copyable()
+                    ->copyableState(function (Acerto $record) {
+                        return $record->getComplemento();
+                    })
                     ->sortable()
                 /* ->wrap() */,
 
@@ -234,7 +239,6 @@ class AcertoResource extends Resource
 
                 TextColumn::make('complementos')
                     ->view('tables.columns.complemento-acerto')
-                    ->copyable()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
@@ -287,14 +291,9 @@ class AcertoResource extends Resource
                             ->required()
                             ->default('Ref. Aj. Custo')
                             ->options([
-                                'Ref. Aj. Custo' => 'Ajuda de Custo',
-                                'Ref. Domingo(s)' => 'Domingo',
-                                'Ref. Dias de Base' => 'Dias Base',
-                                'Ref. Manobra' => 'Manobra',
-                                'Ref. Viagens em outro Caminhão' => 'Viagens',
-                                'Ref. Ferista' => 'Ferista',
-                                'Ref. Quebra de caminhão' => 'Quebra de caminhão',
-                                'Ref. Treinamento de motorista' => 'Treinamento de motorista',
+                                collect(MotivoAjudaEnum::cases())
+                                    ->mapWithKeys(fn($enum) => [$enum->value => $enum->value])
+                                    ->toArray()
                             ])
                     ]),
             ])
