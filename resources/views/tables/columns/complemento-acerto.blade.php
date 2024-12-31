@@ -1,7 +1,7 @@
 <div>
     <ul>
-        @foreach ($getRecord()->valor_ajuda as $complemento)
+        {{-- @foreach ($getRecord()->valor_ajuda as $complemento) --}}
             <li>{{$getRecord()->getComplemento()}}</li>
-        @endforeach
+        {{-- @endforeach --}}
     </ul>
 </div>
