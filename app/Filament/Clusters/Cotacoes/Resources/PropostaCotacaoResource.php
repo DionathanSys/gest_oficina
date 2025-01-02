@@ -2,6 +2,8 @@
 
 namespace App\Filament\Clusters\Cotacoes\Resources;
 
+use App\Actions\AprovarPropostaAction;
+use App\Enums\StatusCotacaoEnum;
 use App\Filament\Clusters\Cotacoes;
 use App\Filament\Clusters\Cotacoes\Resources\PropostaCotacaoResource\Pages;
 use App\Filament\Clusters\Cotacoes\Resources\PropostaCotacaoResource\RelationManagers;
@@ -12,8 +14,10 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -79,9 +83,17 @@ class PropostaCotacaoResource extends Resource
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('status')
+                    ->badge(fn ($state): string => match ($state) {
+                        \App\Enums\StatusCotacaoEnum::PENDENTE => 'primary',
+                        \App\Enums\StatusCotacaoEnum::REPROVADO => 'danger',
+                        \App\Enums\StatusCotacaoEnum::APROVADO => 'info',
+                        \App\Enums\StatusCotacaoEnum::FECHADO => 'success',
+                        default => 'secondary',
+                    })
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('observacao')
+                    ->label('Observação')
                     ->searchable(),
 
                 Tables\Columns\TextColumn::make('created_at')
@@ -104,19 +116,37 @@ class PropostaCotacaoResource extends Resource
             ->filters([
                 SelectFilter::make('status')
                     ->options([
-                        'Pendente' => 'Pendente',
-                        'Reprovado' => 'Reprovado',
-                        'Aprovado' => 'Aprovado',
-                        'Fechado' => 'Fechado',
+                        collect(StatusCotacaoEnum::cases())
+                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->getOptions()])
+                            ->toArray()
                     ])
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Action::make('Aprovar')
-                    ->action(function (Action $action, PropostaCotacao $record){
-                        $record->status = 'Aprovado';
-                        $record->save();
-                    })
+                ActionGroup::make([
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Action::make('Aprovar')
+                        ->icon('heroicon-o-check-circle')
+                        ->action(function (Action $action, PropostaCotacao $record){
+                            AprovarPropostaAction::exec($record);
+                            $record->status = StatusCotacaoEnum::APROVADO;
+                            $record->save();
+                    }),
+                    Action::make('Reprovar')
+                        ->icon('heroicon-o-x-circle')
+                        ->action(function (Action $action, PropostaCotacao $record){
+                            $record->status = StatusCotacaoEnum::REPROVADO;
+                            $record->save();
+                    }),
+                    Action::make('Pendente')
+                        ->icon('heroicon-o-clock')
+                        ->action(function (Action $action, PropostaCotacao $record){
+                            $record->status = StatusCotacaoEnum::PENDENTE;
+                            $record->save();
+                    }),
+                    
+                ]),
+                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -25,6 +25,6 @@ class Cotacao extends Model
 
     public function produto():BelongsTo
     {
-        return $this->belongsTo();
+        return $this->belongsTo(Produto::class);
     }
 }

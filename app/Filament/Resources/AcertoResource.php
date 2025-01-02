@@ -322,4 +322,6 @@ class AcertoResource extends Resource
             'edit' => Pages\EditAcerto::route('/{record}/edit'),
         ];
     }
+
+    
 }

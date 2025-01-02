@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\AcertoResource\Pages;
 
 use App\Filament\Resources\AcertoResource;
+use App\Filament\Resources\AcertoResource\Widgets\Acertos;
+use App\Filament\Resources\AcertoResource\Widgets\StatsOverview;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use JoseEspinal\RecordNavigation\Traits\HasRecordsList;
@@ -17,6 +19,13 @@ class ListAcertos extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            StatsOverview::make(),
         ];
     }
 }

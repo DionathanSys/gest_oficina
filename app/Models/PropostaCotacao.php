@@ -20,7 +20,15 @@ class PropostaCotacao extends Model
 
     public function produto()
     {
-        return $this->belongsTo(Produto::class);
+        return $this->belongsTo(Produto::class);  
+    }
+
+    public function produtoCotacao()
+    {
+        return $this->belongsTo(ProdutoCotacao::class, 'produto_id', 'produto_id')
+                        ->when($this->cotacao_id, function ($query) {
+                            $query->where('cotacao_id', $this->cotacao_id);
+                        });
     }
 
     public function fornecedor ():BelongsTo

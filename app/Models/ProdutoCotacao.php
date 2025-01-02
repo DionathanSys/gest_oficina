@@ -22,8 +22,11 @@ class ProdutoCotacao extends Model
         return $this->belongsTo(Produto::class);
     }
 
-    public function proposta()
+    public function propostas()
     {
-        return $this->hasMany(PropostaCotacao::class);
+        return $this->hasMany(PropostaCotacao::class, 'produto_id', 'produto_id')
+                    ->when($this->cotacao_id, function ($query) {
+                        $query->where('cotacao_id', $this->cotacao_id);
+                    });
     }
 }
