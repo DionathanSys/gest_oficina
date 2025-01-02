@@ -80,8 +80,8 @@ class ProdutoCotacaoResource extends Resource
                                     ->toArray()
 
                             ])
-                            ->default(StatusCotacaoEnum::PENDENTE)
-                            ->readOnly()
+                            ->default(StatusCotacaoEnum::PENDENTE),
+                            
                     ])
                     ->createOptionUsing(function (array $data): int {
                         $cotacao = Cotacao::create($data);
