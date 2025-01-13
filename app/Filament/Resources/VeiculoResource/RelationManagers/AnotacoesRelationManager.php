@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
-use App\Enums\{Prioridade, StatusDiversos};
+use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -29,10 +29,11 @@ class AnotacoesRelationManager extends RelationManager
                     ->columnSpan(2)
                     ->label('Tipo Anotação')
                     ->options(function () {
-                        return collect(Prioridade::cases())
+                        return collect(TipoAnotacao::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
+                    ->default(TipoAnotacao::OBSERVACAO)
                     ->required(),
                 Forms\Components\Select::make('status')
                     ->columnSpan(2)
@@ -41,6 +42,7 @@ class AnotacoesRelationManager extends RelationManager
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
+                    ->default(StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
                     ->columnSpan(2)
@@ -49,7 +51,8 @@ class AnotacoesRelationManager extends RelationManager
                         return collect(Prioridade::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
-                    }),
+                    })
+                    ->default(Prioridade::BAIXA),
                 Forms\Components\Select::make('item_manutencao_id')
                     ->searchable()
                     ->columnSpan(4)
