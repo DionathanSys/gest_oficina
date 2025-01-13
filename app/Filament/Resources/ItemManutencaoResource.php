@@ -81,7 +81,7 @@ class ItemManutencaoResource extends Resource
         return [
             'index' => Pages\ListItemManutencaos::route('/'),
             'create' => Pages\CreateItemManutencao::route('/create'),
-            'edit' => Pages\EditItemManutencao::route('/{record}/edit'),
+            // 'edit' => Pages\EditItemManutencao::route('/{record}/edit'),
         ];
     }
 }
