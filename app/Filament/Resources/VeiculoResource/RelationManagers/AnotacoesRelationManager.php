@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
+use App\Enums\{Prioridade, StatusDiversos};
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -17,10 +18,48 @@ class AnotacoesRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
+            ->columns(12)
             ->schema([
-                Forms\Components\TextInput::make('id')
+                Forms\Components\DatePicker::make('data_referencia')
+                    ->columnSpan(2)
+                    ->default(now())
+                    ->native(false)
+                    ->required(),
+                Forms\Components\Select::make('tipo_anotacao')
+                    ->columnSpan(2)
+                    ->label('Tipo Anotação')
+                    ->options(function () {
+                        return collect(Prioridade::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    })
+                    ->required(),
+                Forms\Components\Select::make('status')
+                    ->columnSpan(2)
+                    ->options(function () {
+                        return collect(StatusDiversos::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    })
+                    ->required(),
+                Forms\Components\Select::make('prioridade')
+                    ->columnSpan(2)
                     ->required()
-                    ->maxLength(255),
+                    ->options(function () {
+                        return collect(Prioridade::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    }),
+                Forms\Components\Select::make('item_manutencao_id')
+                    ->searchable()
+                    ->columnSpan(4)
+                    ->relationship('itemManutencao', 'descricao')
+                    ->default(null),
+                Forms\Components\Textarea::make('observacao')
+                    ->columnSpan(8)
+                    ->label('Observação')
+                    ->maxLength(255)
+                    ->default(null),
             ]);
     }
 
