@@ -7,7 +7,8 @@ enum TipoAnotacao: string
     case MANUTENCAO = 'MANUTENÇÃO';
     case OBSERVACAO = 'OBSERVAÇÃO';
     case ACOMPANHAMENTO = 'ACOMPANHAMENTO';
-    case INSPENCAO = 'INSPENÇÃO';
+    case INSPENCAO_PNEU = 'INSPENÇÃO PNEU';
+    case INSPENCAO_MANT = 'INSPENÇÃO MANT';
     case PNEU = 'PNEU';
 
     
