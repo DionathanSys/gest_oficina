@@ -155,13 +155,12 @@ class AnotacoesRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('prioridade', 'asc')
             ->defaultSort('data_referencia', 'desc')
             ->groups([
                 'tipo_anotacao',
                 'prioridade',
                 'status'
             ])
-            ->defaultGroup('tipo_anotacao');;
+            ->defaultGroup('tipo_anotacao');
     }
 }

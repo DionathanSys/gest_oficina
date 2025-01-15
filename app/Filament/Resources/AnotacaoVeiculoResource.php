@@ -4,10 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\Prioridade;
 use App\Enums\StatusDiversos;
+use App\Enums\TipoAnotacao;
 use App\Filament\Resources\AnotacaoVeiculoResource\Pages;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers;
 use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -40,7 +42,7 @@ class AnotacaoVeiculoResource extends Resource
                     ->columnSpan(2)
                     ->label('Tipo Anotação')
                     ->options(function () {
-                        return collect(Prioridade::cases())
+                        return collect(TipoAnotacao::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
@@ -85,23 +87,40 @@ class AnotacaoVeiculoResource extends Resource
                 return $query->with('veiculo', 'itemManutencao');
             })
             ->columns([
-                Tables\Columns\TextColumn::make('veiculo.id')
+                Tables\Columns\TextColumn::make('veiculo.placa')
+                    ->label('Placa')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('itemManutencao.id')
+                Tables\Columns\TextColumn::make('itemManutencao.descricao')
+                    ->label('Item')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('observacao')
+                    ->label('Observação')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data_referencia')
-                    ->date()
+                    ->label('Data Ref.')
+                    ->date('d/m/Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('tipo_anotacao')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('prioridade')
-                    ->searchable(),
+                Tables\Columns\SelectColumn::make('tipo_anotacao')
+                    ->options(function () {
+                        return collect(TipoAnotacao::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    })
+                    ->label('Tipo'),
+                Tables\Columns\SelectColumn::make('status')
+                    ->options(function () {
+                        return collect(StatusDiversos::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    }),
+                Tables\Columns\SelectColumn::make('prioridade')
+                    ->options(function () {
+                        return collect(Prioridade::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -121,7 +140,13 @@ class AnotacaoVeiculoResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->groups([
+                'tipo_anotacao',
+                'prioridade',
+                'status'
+            ])
+            ->defaultGroup('tipo_anotacao');
     }
 
     public static function getRelations(): array
