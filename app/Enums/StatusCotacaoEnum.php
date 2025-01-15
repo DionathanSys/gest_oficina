@@ -12,16 +12,16 @@ enum StatusCotacaoEnum: string
     case EM_ANDAMENTO = 'Em andamento';
 
     
-    public function getOptions(): string
-    {
-        return match ($this) {
-            self::PENDENTE => 'Pendente',
-            self::APROVADO => 'Aprovado',
-            self::REPROVADO => 'Reprovado',
-            self::CANCELADO => 'Cancelado',
-            self::FECHADO => 'Fechado',
-            self::EM_ANDAMENTO => 'Em andamento',
-        };
-    }
+    // public function getOptions(): string
+    // {
+    //     return match ($this) {
+    //         self::PENDENTE => 'Pendente',
+    //         self::APROVADO => 'Aprovado',
+    //         self::REPROVADO => 'Reprovado',
+    //         self::CANCELADO => 'Cancelado',
+    //         self::FECHADO => 'Fechado',
+    //         self::EM_ANDAMENTO => 'Em andamento',
+    //     };
+    // }
 
 }
