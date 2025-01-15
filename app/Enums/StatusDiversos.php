@@ -4,11 +4,11 @@ namespace App\Enums;
 
 enum StatusDiversos: string
 {
-    case PENDENTE = 'Pendente';
-    case EXECUCAO = 'Execução';
-    case VALIDAR = 'Validar';
-    case CONCLUIDO = 'Concluido';
-    case CANCELADO = 'Cancelado';
+    case PENDENTE = 'PENDENTE';
+    case EXECUCAO = 'EXECUÇÃO';
+    case VALIDAR = 'VALIDAR';
+    case CONCLUIDO = 'CONCLUÍDO';
+    case CANCELADO = 'CANCELADO';
 
     
     // public function getOptions(): string

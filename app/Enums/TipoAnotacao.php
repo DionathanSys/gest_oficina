@@ -8,6 +8,7 @@ enum TipoAnotacao: string
     case OBSERVACAO = 'OBSERVAÇÃO';
     case ACOMPANHAMENTO = 'ACOMPANHAMENTO';
     case INSPENCAO = 'INSPENÇÃO';
+    case PNEU = 'PNEU';
 
     
     // public function getOptions(): string

@@ -10,11 +10,28 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AnotacoesRelationManager extends RelationManager
 {
     protected static string $relationship = 'anotacoes';
+
+    public function getTabs(): array
+    {
+        return [
+            'todos' => Tab::make(),
+            'pendente' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)),
+            'concluído' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '=', StatusDiversos::CONCLUIDO)),
+        ];
+    }
+
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return 'pendente';
+    }
 
     public function form(Form $form): Form
     {
@@ -124,7 +141,8 @@ class AnotacoesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label('Nova Anotação'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -136,6 +154,14 @@ class AnotacoesRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('prioridade', 'asc')
+            ->defaultSort('data_referencia', 'desc')
+            ->groups([
+                'tipo_anotacao',
+                'prioridade',
+                'status'
+            ])
+            ->defaultGroup('tipo_anotacao');;
     }
 }
