@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PhpParser\Node\Expr\FuncCall;
 
 class AnotacaoVeiculoResource extends Resource
 {
@@ -63,6 +64,8 @@ class AnotacaoVeiculoResource extends Resource
                 Forms\Components\Select::make('item_manutencao_id')
                     ->columnSpan(4)
                     ->relationship('itemManutencao', 'descricao')
+                    ->preload()
+                    ->searchable()
                     ->default(null),
                 Forms\Components\TextInput::make('observacao')
                     ->columnSpan(8)
@@ -78,6 +81,9 @@ class AnotacaoVeiculoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function($query) {
+                return $query->with('veiculo', 'itemManutencao');
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('veiculo.id')
                     ->numeric()

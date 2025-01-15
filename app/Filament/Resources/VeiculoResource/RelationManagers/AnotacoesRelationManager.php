@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
 use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
+use App\Filament\Resources\ItemManutencaoResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -23,10 +24,12 @@ class AnotacoesRelationManager extends RelationManager
                 Forms\Components\DatePicker::make('data_referencia')
                     ->columnSpan(2)
                     ->default(now())
+                    ->displayFormat('d/m/Y')
+                    ->closeOnDateSelection()
                     ->native(false)
                     ->required(),
                 Forms\Components\Select::make('tipo_anotacao')
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->label('Tipo Anotação')
                     ->options(function () {
                         return collect(TipoAnotacao::cases())
@@ -36,7 +39,7 @@ class AnotacoesRelationManager extends RelationManager
                     ->default(TipoAnotacao::OBSERVACAO)
                     ->required(),
                 Forms\Components\Select::make('status')
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->options(function () {
                         return collect(StatusDiversos::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
@@ -45,7 +48,7 @@ class AnotacoesRelationManager extends RelationManager
                     ->default(StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->required()
                     ->options(function () {
                         return collect(Prioridade::cases())
@@ -54,12 +57,20 @@ class AnotacoesRelationManager extends RelationManager
                     })
                     ->default(Prioridade::BAIXA),
                 Forms\Components\Select::make('item_manutencao_id')
+                    ->label('Item')
                     ->searchable()
-                    ->columnSpan(4)
+                    ->preload()
+                    ->columnSpan(6)
+                    ->columnStart(1)
                     ->relationship('itemManutencao', 'descricao')
-                    ->default(null),
+                    ->default(null)
+                    ->createOptionForm([
+                        ItemManutencaoResource::getDescricaoFormField(),
+                        ItemManutencaoResource::getComplementoFormField(),
+                        ItemManutencaoResource::getAtivoFormField(),
+                    ]),
                 Forms\Components\Textarea::make('observacao')
-                    ->columnSpan(8)
+                    ->columnSpanFull()
                     ->label('Observação')
                     ->maxLength(255)
                     ->default(null),
@@ -70,17 +81,35 @@ class AnotacoesRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('id')
+            ->modifyQueryUsing(fn($query) => $query->with('veiculo', 'itemManutencao'))
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('itemmanutencao.descricao'),
+                Tables\Columns\TextColumn::make('itemmanutencao.descricao')
+                    ->label('Item'),
                 Tables\Columns\TextColumn::make('observacao')
                     ->label('Observação'),
                 Tables\Columns\TextColumn::make('data_referencia')
-                    ->date(),
-                Tables\Columns\TextColumn::make('tipo_anotacao')
+                    ->label('Data Ref.')
+                    ->date('d/m/Y'),
+                Tables\Columns\SelectColumn::make('tipo_anotacao')
+                    ->options(function () {
+                        return collect(TipoAnotacao::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    })
                     ->label('Tipo'),
-                Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('prioridade'),
+                Tables\Columns\SelectColumn::make('status')
+                    ->options(function () {
+                        return collect(StatusDiversos::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    }),
+                Tables\Columns\SelectColumn::make('prioridade')
+                    ->options(function () {
+                        return collect(Prioridade::cases())
+                            ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
+                            ->toArray();
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -98,8 +127,10 @@ class AnotacoesRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                    ->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

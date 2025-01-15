@@ -23,16 +23,9 @@ class ItemManutencaoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('descricao')
-                    ->label('Descrição')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('complemento')
-                    ->maxLength(255)
-                    ->default(null),
-                Forms\Components\Toggle::make('ativo')
-                    ->required()
-                    ->default(true),
+                static::getDescricaoFormField(),
+                static::getComplementoFormField(),
+                static::getAtivoFormField(),
             ]);
     }
 
@@ -83,5 +76,26 @@ class ItemManutencaoResource extends Resource
             // 'create' => Pages\CreateItemManutencao::route('/create'),
             // 'edit' => Pages\EditItemManutencao::route('/{record}/edit'),
         ];
+    }
+
+    public static function getDescricaoFormField(): Forms\Components\TextInput
+    {
+        return Forms\Components\TextInput::make('descricao')
+            ->label('Descrição')
+                ->autocomplete(false)
+            ->required()
+            ->maxLength(200);
+    }
+    public static function getComplementoFormField(): Forms\Components\TextInput
+    {
+        return Forms\Components\TextInput::make('complemento')
+            ->autocomplete(false)
+            ->maxLength(200);
+    }
+    public static function getAtivoFormField(): Forms\Components\Toggle
+    {
+        return Forms\Components\Toggle::make('ativo')
+            ->default(true)  
+            ->required();
     }
 }
