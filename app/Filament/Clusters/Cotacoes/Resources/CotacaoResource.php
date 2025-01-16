@@ -30,6 +30,10 @@ class CotacaoResource extends Resource
 
     protected static ?string $navigationLabel = 'Cotações';
 
+    protected static ?string $navigationGroup = 'Cotações';
+
+    protected static ?int $navigationSort = null;
+
     protected static ?string $label = 'Cotações';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

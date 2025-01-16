@@ -17,7 +17,13 @@ class ItemManutencaoResource extends Resource
 {
     protected static ?string $model = ItemManutencao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    
+    protected static ?string $navigationGroup = 'Mant.';
+    
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationLabel = 'Itens Mant.';
 
     public static function form(Form $form): Form
     {

@@ -31,7 +31,13 @@ class AcertoResource extends Resource
 {
     protected static ?string $model = Acerto::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
+
+    protected static ?string $navigationGroup = 'Agro';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Acerto Agro';
 
     public static function form(Form $form): Form
     {

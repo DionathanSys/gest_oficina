@@ -22,7 +22,13 @@ class AnotacaoVeiculoResource extends Resource
 {
     protected static ?string $model = AnotacaoVeiculo::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+
+    protected static ?string $navigationGroup = 'Mant.';
+
+    protected static ?int $navigationSort = 3;
+
+    protected static ?string $navigationLabel = 'Acompanhamento Mant.';
 
     public static function form(Form $form): Form
     {

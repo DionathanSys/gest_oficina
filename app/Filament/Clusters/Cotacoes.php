@@ -11,4 +11,6 @@ class Cotacoes extends Cluster
     protected static ?string $navigationLabel = 'Cotações';
 
     protected static ?string $clusterBreadcrumb = 'Cotações';
+
+    protected static ?string $navigationGroup = 'Cotações';
 }

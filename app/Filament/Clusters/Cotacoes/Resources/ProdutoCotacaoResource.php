@@ -29,6 +29,8 @@ class ProdutoCotacaoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'Cotações';
+    
     protected static ?string $navigationLabel = 'Itens';
 
     protected static ?string $label = 'Itens Cotações';
