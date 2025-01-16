@@ -30,7 +30,7 @@ class ProdutoCotacaoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Cotações';
-    
+
     protected static ?string $navigationLabel = 'Itens';
 
     protected static ?string $label = 'Itens Cotações';
@@ -78,7 +78,7 @@ class ProdutoCotacaoResource extends Resource
                         Select::make('status')
                             ->options([
                                 collect(StatusCotacaoEnum::cases())
-                                    ->mapWithKeys(fn($cases) => [$cases->value => $cases->getOptions()])
+                                    ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
                                     ->toArray()
 
                             ])
@@ -126,7 +126,7 @@ class ProdutoCotacaoResource extends Resource
 
                     ->options([
                         collect(StatusCotacaoEnum::cases())
-                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->getOptions()])
+                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
                             ->toArray()
 
                     ])
@@ -172,7 +172,7 @@ class ProdutoCotacaoResource extends Resource
                 SelectFilter::make('status')
                     ->options([
                         collect(StatusCotacaoEnum::cases())
-                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->getOptions()])
+                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
                             ->toArray()
                     ])
             ])

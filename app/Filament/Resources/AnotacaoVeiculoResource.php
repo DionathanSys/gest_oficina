@@ -152,7 +152,8 @@ class AnotacaoVeiculoResource extends Resource
             ->groups([
                 'tipo_anotacao',
                 'prioridade',
-                'status'
+                'status',
+                'veiculo.placa'
             ])
             ->defaultGroup('tipo_anotacao');
     }
