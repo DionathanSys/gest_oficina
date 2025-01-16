@@ -20,10 +20,12 @@ class ItemManutencaoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     
     protected static ?string $navigationGroup = 'Mant.';
-    
+
     protected static ?int $navigationSort = 5;
 
     protected static ?string $navigationLabel = 'Itens Mant.';
+
+    protected static ?string $label = 'Itens Mant.';
 
     public static function form(Form $form): Form
     {

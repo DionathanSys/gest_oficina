@@ -29,6 +29,8 @@ class ViagemAgroResource extends Resource
     protected static ?string $navigationGroup = 'Agro';
 
     protected static ?string $navigationLabel = 'Viagens Agro';
+    
+    protected static ?string $label = 'Viagens Agro';
 
     protected static ?int $navigationSort = 2;
 

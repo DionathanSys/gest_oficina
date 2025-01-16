@@ -30,6 +30,8 @@ class AnotacaoVeiculoResource extends Resource
 
     protected static ?string $navigationLabel = 'Acompanhamento Mant.';
 
+    protected static ?string $label = 'Acompanhamento Mant.';
+
     public static function form(Form $form): Form
     {
         return $form

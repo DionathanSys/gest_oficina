@@ -119,7 +119,7 @@ class PropostaCotacaoResource extends Resource
                 SelectFilter::make('status')
                     ->options([
                         collect(StatusCotacaoEnum::cases())
-                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->getOptions()])
+                            ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
                             ->toArray()
                     ])
             ])

@@ -24,6 +24,8 @@ class FornecedorResource extends Resource
     protected static ?string $navigationGroup = 'Cotações';
 
     protected static ?string $navigationLabel = 'Fornecedores';
+    
+    protected static ?string $label = 'Fornecedores';
 
     public static function form(Form $form): Form
     {
