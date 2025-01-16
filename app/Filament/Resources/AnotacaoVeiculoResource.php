@@ -13,6 +13,7 @@ use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -98,6 +99,7 @@ class AnotacaoVeiculoResource extends Resource
                 Tables\Columns\TextColumn::make('veiculo.placa')
                     ->label('Placa')
                     ->numeric()
+                    ->searchable(isIndividual:true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('itemManutencao.descricao')
                     ->label('Item')
@@ -139,7 +141,12 @@ class AnotacaoVeiculoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('tipo_anotacao')
+                    ->options(function(){
+                        return collect(TipoAnotacao::cases())
+                            ->mapWithKeys(fn($tipo_anotacao) => [$tipo_anotacao->value => $tipo_anotacao->value])
+                            ->toArray();
+                    })
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
