@@ -36,17 +36,14 @@ class AnotacoesRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
-            ->columns(12)
             ->schema([
                 Forms\Components\DatePicker::make('data_referencia')
-                    ->columnSpan(2)
                     ->default(now())
                     ->displayFormat('d/m/Y')
                     ->closeOnDateSelection()
                     ->native(false)
                     ->required(),
                 Forms\Components\Select::make('tipo_anotacao')
-                    ->columnSpan(3)
                     ->label('Tipo Anotação')
                     ->options(function () {
                         return collect(TipoAnotacao::cases())
@@ -56,7 +53,6 @@ class AnotacoesRelationManager extends RelationManager
                     ->default(TipoAnotacao::OBSERVACAO)
                     ->required(),
                 Forms\Components\Select::make('status')
-                    ->columnSpan(3)
                     ->options(function () {
                         return collect(StatusDiversos::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
@@ -65,7 +61,6 @@ class AnotacoesRelationManager extends RelationManager
                     ->default(StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
-                    ->columnSpan(3)
                     ->required()
                     ->options(function () {
                         return collect(Prioridade::cases())
@@ -77,8 +72,6 @@ class AnotacoesRelationManager extends RelationManager
                     ->label('Item')
                     ->searchable()
                     ->preload()
-                    ->columnSpan(6)
-                    ->columnStart(1)
                     ->relationship('itemManutencao', 'descricao')
                     ->default(null)
                     ->createOptionForm([
@@ -87,7 +80,6 @@ class AnotacoesRelationManager extends RelationManager
                         ItemManutencaoResource::getAtivoFormField(),
                     ]),
                 Forms\Components\Textarea::make('observacao')
-                    ->columnSpanFull()
                     ->label('Observação')
                     ->maxLength(255)
                     ->default(null),
