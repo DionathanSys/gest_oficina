@@ -2,12 +2,16 @@
 
 namespace App\Filament\Clusters\Cotacoes\Resources;
 
+use App\Enums\StatusCotacaoEnum;
 use App\Filament\Clusters\Cotacoes;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\Pages;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers\ProdutosCotacaoRelationManager;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers\PropostasCotacaoRelationManager;
 use App\Models\Cotacao;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
@@ -18,6 +22,7 @@ use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -102,8 +107,15 @@ class CotacaoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        collect(StatusCotacaoEnum::cases())
+                                    ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
+                                    ->toArray()
+                    ])
+                    ->multiple()
             ])
+            ->persistFiltersInSession()
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
@@ -120,10 +132,12 @@ class CotacaoResource extends Resource
                         ->form([
                             Select::make('produto_id')
                                 ->label('Item')
-                                // ->required()
+                                ->required()
                                 ->preload()
                                 ->searchable()
-                                ->relationship('produto', 'descricao')
+                                ->relationship('produto', 'descricao'),
+                            TextInput::make('quantidade'),
+                            TextInput::make('observacao'),
                         ])
 
                 ])->label('Ações')
@@ -139,7 +153,8 @@ class CotacaoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ProdutosCotacaoRelationManager::class,
+            PropostasCotacaoRelationManager::class,
         ];
     }
 
@@ -147,8 +162,8 @@ class CotacaoResource extends Resource
     {
         return [
             'index' => Pages\ListCotacaos::route('/'),
-            // 'create' => Pages\CreateCotacao::route('/create'),
-            // 'edit' => Pages\EditCotacao::route('/{record}/edit'),
+            'create' => Pages\CreateCotacao::route('/create'),
+            'edit' => Pages\EditCotacao::route('/{record}/edit'),
         ];
     }
 }
