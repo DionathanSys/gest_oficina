@@ -9,10 +9,13 @@ use App\Filament\Resources\AnotacaoVeiculoResource\Pages;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers;
 use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -92,14 +95,14 @@ class AnotacaoVeiculoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(function($query) {
+            ->modifyQueryUsing(function ($query) {
                 return $query->with('veiculo', 'itemManutencao');
             })
             ->columns([
                 Tables\Columns\TextColumn::make('veiculo.placa')
                     ->label('Placa')
                     ->numeric()
-                    ->searchable(isIndividual:true)
+                    ->searchable(isIndividual: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('itemManutencao.descricao')
                     ->label('Item')
@@ -142,10 +145,46 @@ class AnotacaoVeiculoResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('tipo_anotacao')
-                    ->options(function(){
+                    ->label('Tipo Anotação')
+                    ->multiple()
+                    ->options(function () {
                         return collect(TipoAnotacao::cases())
                             ->mapWithKeys(fn($tipo_anotacao) => [$tipo_anotacao->value => $tipo_anotacao->value])
                             ->toArray();
+                    }),
+                Filter::make('status')
+                    ->form([
+                        Select::make('status')
+                            ->label('Status não é')
+                            ->multiple()
+                            ->options(function () {
+                                return collect(StatusDiversos::cases())
+                                    ->mapWithKeys(fn($status) => [$status->value => $status->value])
+                                    ->toArray();
+                            })
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['status'],
+                                fn(Builder $query, $status): Builder => $query->where('status', '!=', $status)
+                            );
+                    }),
+                Filter::make('data_referencia')
+                    ->form([
+                        DatePicker::make('data_inicio'),
+                        DatePicker::make('data_fim'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['data_inicio'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_referencia', '>=', $date)
+                            )
+                            ->when(
+                                $data['data_fim'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_referencia', '<=', $date)
+                            );
                     })
             ])
             ->actions([
