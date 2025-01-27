@@ -68,6 +68,7 @@ class AnotacaoVeiculoResource extends Resource
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
+                    ->default(StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
                     ->columnSpan(2)
@@ -76,7 +77,8 @@ class AnotacaoVeiculoResource extends Resource
                         return collect(Prioridade::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
-                    }),
+                    })
+                    ->default(Prioridade::BAIXA),
                 Forms\Components\Select::make('item_manutencao_id')
                     ->columnSpan(4)
                     ->relationship('itemManutencao', 'descricao')
