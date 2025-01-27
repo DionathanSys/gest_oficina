@@ -84,7 +84,12 @@ class AnotacaoVeiculoResource extends Resource
                     ->relationship('itemManutencao', 'descricao')
                     ->preload()
                     ->searchable()
-                    ->default(null),
+                    ->default(null)
+                    ->createOptionForm([
+                        ItemManutencaoResource::getDescricaoFormField(),
+                        ItemManutencaoResource::getComplementoFormField(),
+                        ItemManutencaoResource::getAtivoFormField(),
+                    ]),
                 Forms\Components\TextInput::make('observacao')
                     ->columnSpan(8)
                     ->label('Observação')
