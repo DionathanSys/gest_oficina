@@ -42,7 +42,7 @@ class AnotacaoVeiculoResource extends Resource
             ->columns(12)
             ->schema([
                 Forms\Components\Select::make('veiculo_id')
-                    ->columnSpan(2)
+                    ->columnSpan(4)
                     ->relationship('veiculo', 'placa')
                     ->searchable()
                     ->required(),
@@ -54,6 +54,7 @@ class AnotacaoVeiculoResource extends Resource
                 Forms\Components\Select::make('tipo_anotacao')
                     ->columnSpan(2)
                     ->label('Tipo Anotação')
+                    ->default(TipoAnotacao::MANUTENCAO)
                     ->options(function () {
                         return collect(TipoAnotacao::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
