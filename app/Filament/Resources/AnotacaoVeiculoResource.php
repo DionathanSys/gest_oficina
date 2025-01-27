@@ -44,6 +44,7 @@ class AnotacaoVeiculoResource extends Resource
                 Forms\Components\Select::make('veiculo_id')
                     ->columnSpan(2)
                     ->relationship('veiculo', 'placa')
+                    ->searchable()
                     ->required(),
                 Forms\Components\DatePicker::make('data_referencia')
                     ->columnSpan(2)
@@ -190,6 +191,10 @@ class AnotacaoVeiculoResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
+            ->recordUrl(
+                fn (AnotacaoVeiculo $record) => VeiculoResource::getUrl('edit', ['record' => $record->veiculo->id])
+                )
+            
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -215,8 +220,8 @@ class AnotacaoVeiculoResource extends Resource
     {
         return [
             'index' => Pages\ListAnotacaoVeiculos::route('/'),
-            'create' => Pages\CreateAnotacaoVeiculo::route('/create'),
-            'edit' => Pages\EditAnotacaoVeiculo::route('/{record}/edit'),
+            // 'create' => Pages\CreateAnotacaoVeiculo::route('/create'),
+            // 'edit' => Pages\EditAnotacaoVeiculo::route('/{record}/edit'),
         ];
     }
 }

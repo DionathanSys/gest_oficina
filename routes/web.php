@@ -1,6 +1,8 @@
 <?php
 
+use App\Filament\Resources\VeiculoResource;
 use App\Http\Controllers\ImportController;
+use App\Models\AnotacaoVeiculo;
 use App\Models\MotoristaViagem;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -10,8 +12,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-   
-        return view('Protocolo.modelo');
+
+        $var = AnotacaoVeiculo::all()->first();
+        return redirect(VeiculoResource::getUrl('edit', ['record' => $var->veiculo->id]));
+
 });
 
 Route::get('/agro/viagem/import', [ImportController::class, 'index'])->name('file.import');
