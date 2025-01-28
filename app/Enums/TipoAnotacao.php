@@ -4,12 +4,17 @@ namespace App\Enums;
 
 enum TipoAnotacao: string
 {
-    case MANUTENCAO = 'MANUTENÇÃO';
-    case OBSERVACAO = 'OBSERVAÇÃO';
-    case ACOMPANHAMENTO = 'ACOMPANHAMENTO';
-    case INSPENCAO_PNEU = 'INSPENÇÃO PNEU';
-    case INSPENCAO_MANT = 'INSPENÇÃO MANT';
-    case PNEU = 'PNEU';
+    case OBSERVACAO             = 'OBSERVAÇÃO';
+    case ACOMPANHAMENTO         = 'ACOMPANHAMENTO';
+
+    case MANUTENCAO             = 'MANUTENÇÃO';
+    case INSPENCAO_PERIODICA    = 'INSPENÇÃO PERIODICA';
+    case INSPENCAO_MANT         = 'INSPENÇÃO MANT';
+    case INSPENCAO_PREVENTIVA   = 'INSPENÇÃO PREVENTIVA';
+    
+    case PNEU                   = 'PNEU';
+    case MOV_PNEU               = 'MOV PNEU';
+    case INSPENCAO_PNEU         = 'INSPENÇÃO PNEU';
 
     
     // public function getOptions(): string
