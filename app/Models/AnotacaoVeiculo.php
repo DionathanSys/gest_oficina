@@ -6,6 +6,7 @@ use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AnotacaoVeiculo extends Model
 {
@@ -25,5 +26,10 @@ class AnotacaoVeiculo extends Model
     public function itemManutencao(): BelongsTo
     {
         return $this->belongsTo(ItemManutencao::class, 'item_manutencao_id');
+    }
+
+    public function comentarios(): HasMany
+    {
+        return $this->hasMany(ComentarioAnotacao::class);
     }
 }

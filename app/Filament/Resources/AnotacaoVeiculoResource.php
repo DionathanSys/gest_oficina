@@ -7,6 +7,7 @@ use App\Enums\StatusDiversos;
 use App\Enums\TipoAnotacao;
 use App\Filament\Resources\AnotacaoVeiculoResource\Pages;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers;
+use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers\ComentariosRelationManager;
 use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -235,13 +236,14 @@ class AnotacaoVeiculoResource extends Resource
                     ->collapsible()
                     ->date('d/m/Y'),
             ])
+            ->paginated(['25', '50'])
             ->defaultGroup('veiculo.placa');
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            ComentariosRelationManager::class,
         ];
     }
 
