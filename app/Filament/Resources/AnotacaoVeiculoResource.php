@@ -231,8 +231,9 @@ class AnotacaoVeiculoResource extends Resource
                     ->collapsible(),
 
                 Group::make('data_referencia')
+                    ->label('Data Referência')
                     ->collapsible()
-                    ->date(),
+                    ->date('d/m/Y'),
             ])
             ->defaultGroup('veiculo.placa');
     }
