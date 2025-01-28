@@ -17,6 +17,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -209,12 +210,31 @@ class AnotacaoVeiculoResource extends Resource
                 ]),
             ])
             ->groups([
-                'tipo_anotacao',
-                'prioridade',
-                'status',
-                'veiculo.placa'
+                Group::make('tipo_anotacao')
+                    ->label('Tipo Anotação')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('Prioridade')
+                    ->label('Prioridade')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('status')
+                    ->label('Status')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('veiculo.placa')
+                    ->label('Placa')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('data_referencia')
+                    ->collapsible()
+                    ->date(),
             ])
-            ->defaultGroup('tipo_anotacao');
+            ->defaultGroup('veiculo.placa');
     }
 
     public static function getRelations(): array
