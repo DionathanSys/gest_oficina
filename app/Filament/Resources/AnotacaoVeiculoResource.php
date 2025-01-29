@@ -210,8 +210,11 @@ class AnotacaoVeiculoResource extends Resource
                     })
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
                 Tables\Actions\Action::make('comentario')
+                    ->icon('heroicon-o-chat-bubble-bottom-center-text')
+                    ->iconButton()
                     ->form([
                         ComentarioAnotacaoResource::getComentarioFormField(),
                     ])
