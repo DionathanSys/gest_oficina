@@ -126,6 +126,7 @@ class AnotacaoVeiculoResource extends Resource
                     ->searchable(),
                 
                 Tables\Columns\TextColumn::make('comentarios')
+                    ->badge()
                     ->label('Comentários')
                     ->url(fn(AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]))
                     ->openUrlInNewTab()
