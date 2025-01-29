@@ -9,6 +9,7 @@ use App\Filament\Resources\AnotacaoVeiculoResource\Pages;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers\ComentariosRelationManager;
 use App\Models\AnotacaoVeiculo;
+use App\Models\ComentarioAnotacao;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -22,6 +23,7 @@ use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\FuncCall;
 
 class AnotacaoVeiculoResource extends Resource
@@ -122,6 +124,14 @@ class AnotacaoVeiculoResource extends Resource
                 Tables\Columns\TextColumn::make('observacao')
                     ->label('Observação')
                     ->searchable(),
+                
+                Tables\Columns\TextColumn::make('comentarios')
+                    ->label('Comentários')
+                    ->url(fn(AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]))
+                    ->openUrlInNewTab()
+                    ->formatStateUsing(function(AnotacaoVeiculo $record) {
+                        return $record->comentarios->count();
+                    }),
                 Tables\Columns\TextColumn::make('data_referencia')
                     ->label('Data Ref.')
                     ->date('d/m/Y')
@@ -200,6 +210,17 @@ class AnotacaoVeiculoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('comentario')
+                    ->form([
+                        ComentarioAnotacaoResource::getComentarioFormField(),
+                    ])
+                    ->action(function (array $data, AnotacaoVeiculo $record) {
+                        ComentarioAnotacao::create([
+                            'anotacao_veiculo_id' => $record->id,
+                            'user_id' => Auth::id(),
+                            'comentario' => $data['comentario'],
+                        ]);
+                    })
             ])
             ->recordUrl(
                 fn (AnotacaoVeiculo $record) => VeiculoResource::getUrl('edit', ['record' => $record->veiculo->id])
@@ -252,7 +273,7 @@ class AnotacaoVeiculoResource extends Resource
         return [
             'index' => Pages\ListAnotacaoVeiculos::route('/'),
             // 'create' => Pages\CreateAnotacaoVeiculo::route('/create'),
-            // 'edit' => Pages\EditAnotacaoVeiculo::route('/{record}/edit'),
+            'edit' => Pages\EditAnotacaoVeiculo::route('/{record}/edit'),
         ];
     }
 }

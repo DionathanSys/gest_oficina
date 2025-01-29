@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Resources\AnotacaoVeiculoResource;
 use App\Filament\Resources\VeiculoResource;
 use App\Http\Controllers\ImportController;
 use App\Models\AnotacaoVeiculo;
@@ -14,7 +15,10 @@ use Illuminate\Support\Facades\Storage;
 Route::get('/', function () {
 
         $var = AnotacaoVeiculo::all()->first();
-        return redirect(VeiculoResource::getUrl('edit', ['record' => $var->veiculo->id]));
+        // dd($var);
+        return redirect(AnotacaoVeiculoResource::getUrl());
+
+        // AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]);
 
 });
 

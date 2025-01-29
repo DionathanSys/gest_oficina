@@ -14,4 +14,9 @@ class ComentarioAnotacao extends Model
     {
         return $this->belongsTo(AnotacaoVeiculo::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
