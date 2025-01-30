@@ -6,7 +6,9 @@ use App\Enums\Prioridade;
 use App\Enums\StatusDiversos;
 use App\Enums\TipoAnotacao;
 use App\Filament\Resources\AnotacaoVeiculoResource;
+use App\Models\AnotacaoVeiculo;
 use Filament\Actions;
+use Filament\Forms\Components\{Select, DatePicker};
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,6 +22,36 @@ class ListAnotacaoVeiculos extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->keyBindings(['ctrl+n']),
+            Actions\ActionGroup::make([
+                Actions\Action::make('conf-oleo-m')
+                    ->label('Conf. Óleo motor')
+                    ->form([
+                        Select::make('veiculo_id')
+                            ->relationship('veiculo', 'placa')
+                            ->searchable()
+                            ->required(),
+
+                        DatePicker::make('data_referencia')
+                            ->default(now())
+                            ->closeOnDateSelection()
+                            ->native(false)
+                            ->required(),   
+                    ])
+                    ->action(function(array $data){
+                        AnotacaoVeiculo::create([
+                            'veiculo_id' => $data['veiculo_id'],
+                            'data_referencia' => $data['data_referencia'],
+                            'item_manutencao_id' => 56,
+                            'tipo_anotacao' => TipoAnotacao::INSPECAO_PERIODICA,
+                            'status' => StatusDiversos::CONCLUIDO,
+                            'prioridade' => Prioridade::BAIXA,
+                        ]);
+
+                    }),
+            ])
+            ->button()
+            ->label('Ações'),
+
         ];
     }
 
