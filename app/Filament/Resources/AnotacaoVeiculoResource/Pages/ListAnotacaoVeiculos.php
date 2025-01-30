@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AnotacaoVeiculoResource\Pages;
 
 use App\Enums\Prioridade;
 use App\Enums\StatusDiversos;
+use App\Enums\TipoAnotacao;
 use App\Filament\Resources\AnotacaoVeiculoResource;
 use Filament\Actions;
 use Filament\Resources\Components\Tab;
@@ -17,7 +18,8 @@ class ListAnotacaoVeiculos extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->keyBindings(['ctrl+n']),
         ];
     }
 
@@ -27,14 +29,18 @@ class ListAnotacaoVeiculos extends ListRecords
             'todos' => Tab::make(),
             'pendente' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)),
-            'concluído' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '=', StatusDiversos::CONCLUIDO)),
+            'pneus' => Tab::make('Pneus')
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
+                                                            ->whereIn('tipo_anotacao', [TipoAnotacao::PNEU, TipoAnotacao::INSPECAO_PNEU])),
+
             'alta' => Tab::make('Prior. Alta')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
                                                             ->where('prioridade', '=', Prioridade::ALTA)),
             'urgente' => Tab::make('Prior. Urg.')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
                                                             ->where('prioridade', '=', Prioridade::URGENTE)),
+            'concluído' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '=', StatusDiversos::CONCLUIDO)),
             
         ];
     }

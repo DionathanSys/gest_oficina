@@ -46,17 +46,20 @@ class AnotacaoVeiculoResource extends Resource
             ->columns(12)
             ->schema([
                 Forms\Components\Select::make('veiculo_id')
-                    ->columnSpan(4)
+                    ->columnSpan(6)
                     ->relationship('veiculo', 'placa')
                     ->searchable()
                     ->required(),
+
                 Forms\Components\DatePicker::make('data_referencia')
-                    ->columnSpan(2)
+                    ->columnSpan(6)
                     ->default(now())
+                    ->closeOnDateSelection()
                     ->native(false)
                     ->required(),
+
                 Forms\Components\Select::make('tipo_anotacao')
-                    ->columnSpan(2)
+                    ->columnSpan(6)
                     ->label('Tipo Anotação')
                     ->default(TipoAnotacao::MANUTENCAO)
                     ->options(function () {
@@ -66,7 +69,7 @@ class AnotacaoVeiculoResource extends Resource
                     })
                     ->required(),
                 Forms\Components\Select::make('status')
-                    ->columnSpan(2)
+                    ->columnSpan(6)
                     ->options(function () {
                         return collect(StatusDiversos::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
@@ -75,7 +78,7 @@ class AnotacaoVeiculoResource extends Resource
                     ->default(StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
-                    ->columnSpan(2)
+                    ->columnSpan(6)
                     ->required()
                     ->options(function () {
                         return collect(Prioridade::cases())
@@ -84,7 +87,7 @@ class AnotacaoVeiculoResource extends Resource
                     })
                     ->default(Prioridade::BAIXA),
                 Forms\Components\Select::make('item_manutencao_id')
-                    ->columnSpan(4)
+                    ->columnSpan(6)
                     ->relationship('itemManutencao', 'descricao')
                     ->preload()
                     ->searchable()
@@ -94,8 +97,13 @@ class AnotacaoVeiculoResource extends Resource
                         ItemManutencaoResource::getComplementoFormField(),
                         ItemManutencaoResource::getAtivoFormField(),
                     ]),
-                Forms\Components\TextInput::make('observacao')
-                    ->columnSpan(8)
+                Forms\Components\TextInput::make('km')
+                    ->columnSpan(2)
+                    ->numeric(255)
+                    ->default(null),
+
+                Forms\Components\Textarea::make('observacao')
+                    ->columnSpanFull()
                     ->label('Observação')
                     ->maxLength(255)
                     ->default(null),
@@ -118,12 +126,15 @@ class AnotacaoVeiculoResource extends Resource
                     ->searchable(isIndividual: true)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('itemManutencao.descricao')
+                    ->searchable(isIndividual: true)
                     ->label('Item')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('observacao')
                     ->label('Observação')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('km')
+                    ->label('Km'),
                 
                 Tables\Columns\TextColumn::make('comentarios')
                     ->badge()
