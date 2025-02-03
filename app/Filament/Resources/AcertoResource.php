@@ -131,7 +131,7 @@ class AcertoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('motorista')
-                    ->limit(10)
+                    ->limit(20)
                     ->searchable()
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
