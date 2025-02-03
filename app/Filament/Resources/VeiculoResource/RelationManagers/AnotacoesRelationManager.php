@@ -94,8 +94,10 @@ class AnotacoesRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('itemmanutencao.descricao')
+                    ->searchable()
                     ->label('Item'),
                 Tables\Columns\TextColumn::make('observacao')
+                    ->searchable()
                     ->label('Observação'),
                 Tables\Columns\TextColumn::make('data_referencia')
                     ->label('Data Ref.')
