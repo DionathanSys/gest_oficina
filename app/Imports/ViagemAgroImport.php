@@ -49,7 +49,7 @@ class ViagemAgroImport
                         'nro_nota' => $row[6],
                         'data' => $dataViagem->format('Y-m-d'),
                         'placa' => substr($row[4], 1, -1),
-                        'km' => $row[5],
+                        'km' => (float) $row[5],
                         'frete' => str_replace(',', '', $row[14]),
                         'destino' => $row[15],
                         'local' => $row[20],

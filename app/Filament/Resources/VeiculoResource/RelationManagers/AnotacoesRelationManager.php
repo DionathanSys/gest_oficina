@@ -11,6 +11,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Components\Tab;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AnotacoesRelationManager extends RelationManager
@@ -100,6 +101,7 @@ class AnotacoesRelationManager extends RelationManager
                     ->searchable()
                     ->label('Observação'),
                 Tables\Columns\TextColumn::make('data_referencia')
+                    ->sortable()
                     ->label('Data Ref.')
                     ->date('d/m/Y'),
                 Tables\Columns\SelectColumn::make('tipo_anotacao')
@@ -151,9 +153,25 @@ class AnotacoesRelationManager extends RelationManager
             ])
             ->defaultSort('data_referencia', 'desc')
             ->groups([
-                'tipo_anotacao',
-                'prioridade',
-                'status'
+                Group::make('tipo_anotacao')
+                    ->label('Tipo Anotação')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('Prioridade')
+                    ->label('Prioridade')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('status')
+                    ->label('Status')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('data_referencia')
+                    ->label('Data Referência')
+                    ->collapsible()
+                    ->date('d/m/Y'),
             ])
             ->defaultGroup('tipo_anotacao');
     }
