@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
 use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
+use App\Filament\Resources\AnotacaoVeiculoResource;
 use App\Filament\Resources\ItemManutencaoResource;
 use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
@@ -94,7 +95,10 @@ class AnotacoesRelationManager extends RelationManager
             ->recordTitleAttribute('id')
             ->modifyQueryUsing(fn($query) => $query->with('veiculo', 'itemManutencao'))
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                    // ->url(fn(AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]))
+                    // ->openUrlInNewTab()
+                    ,
                 Tables\Columns\TextColumn::make('itemmanutencao.descricao')
                     ->searchable()
                     ->label('Item'),
@@ -153,7 +157,7 @@ class AnotacoesRelationManager extends RelationManager
                 ]),
             ])
             ->recordUrl(
-                fn (AnotacaoVeiculo $record) => AnotacaoVeiculo::getUrl('edit', ['record' => $record->id])
+                fn (AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id])
                 )
             
             ->defaultSort('data_referencia', 'desc')
