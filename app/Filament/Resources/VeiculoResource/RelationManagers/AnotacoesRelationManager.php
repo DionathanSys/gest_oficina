@@ -4,6 +4,7 @@ namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
 use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
 use App\Filament\Resources\ItemManutencaoResource;
+use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -151,6 +152,10 @@ class AnotacoesRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->recordUrl(
+                fn (AnotacaoVeiculo $record) => AnotacaoVeiculo::getUrl('edit', ['record' => $record->id])
+                )
+            
             ->defaultSort('data_referencia', 'desc')
             ->groups([
                 Group::make('tipo_anotacao')
