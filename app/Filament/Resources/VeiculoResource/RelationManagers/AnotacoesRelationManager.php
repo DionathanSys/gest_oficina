@@ -159,7 +159,6 @@ class AnotacoesRelationManager extends RelationManager
             ->recordUrl(
                 fn (AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id])
                 )
-            
             ->defaultSort('data_referencia', 'desc')
             ->groups([
                 Group::make('tipo_anotacao')

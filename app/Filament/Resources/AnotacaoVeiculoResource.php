@@ -21,6 +21,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
@@ -46,22 +47,23 @@ class AnotacaoVeiculoResource extends Resource
             ->columns(12)
             ->schema([
                 Forms\Components\Select::make('veiculo_id')
+                    ->default(fn() => session('veiculo_id') ?? null)
                     ->columnSpan(6)
                     ->relationship('veiculo', 'placa')
                     ->searchable()
                     ->required(),
 
                 Forms\Components\DatePicker::make('data_referencia')
+                    ->default(fn() => session('data_referencia') ?? now())
                     ->columnSpan(6)
-                    ->default(now())
                     ->closeOnDateSelection()
                     ->native(false)
                     ->required(),
 
                 Forms\Components\Select::make('tipo_anotacao')
+                    ->default(fn() => session('tipo_anotacao') ?? TipoAnotacao::MANUTENCAO) 
                     ->columnSpan(6)
                     ->label('Tipo Anotação')
-                    ->default(TipoAnotacao::MANUTENCAO)
                     ->options(function () {
                         return collect(TipoAnotacao::cases())
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
@@ -75,7 +77,7 @@ class AnotacaoVeiculoResource extends Resource
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
-                    ->default(StatusDiversos::PENDENTE)
+                    ->default(fn() => session('status.anotacao') ?? StatusDiversos::PENDENTE)
                     ->required(),
                 Forms\Components\Select::make('prioridade')
                     ->columnSpan(6)
@@ -85,7 +87,8 @@ class AnotacaoVeiculoResource extends Resource
                             ->mapWithKeys(fn($prioridade) => [$prioridade->value => $prioridade->value])
                             ->toArray();
                     })
-                    ->default(Prioridade::BAIXA),
+                    ->default(fn()=> session('prioridade') ?? Prioridade::BAIXA),
+
                 Forms\Components\Select::make('item_manutencao_id')
                     ->columnSpan(6)
                     ->relationship('itemManutencao', 'descricao')
@@ -100,7 +103,7 @@ class AnotacaoVeiculoResource extends Resource
                 Forms\Components\TextInput::make('km')
                     ->columnSpan(2)
                     ->numeric(255)
-                    ->default(null),
+                    ->default(fn() => session('km') ?? null),
 
                 Forms\Components\Textarea::make('observacao')
                     ->columnSpanFull()
