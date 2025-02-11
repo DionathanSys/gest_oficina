@@ -188,7 +188,7 @@ class AnotacaoVeiculoResource extends Resource
                             ->mapWithKeys(fn($tipo_anotacao) => [$tipo_anotacao->value => $tipo_anotacao->value])
                             ->toArray();
                     }),
-                SelectFilter::make('veiculo.placa')
+                SelectFilter::make('veiculo_id')
                     ->label('Placa')
                     ->multiple()
                     ->preload()
