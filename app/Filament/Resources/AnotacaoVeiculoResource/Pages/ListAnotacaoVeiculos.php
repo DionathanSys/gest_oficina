@@ -8,7 +8,7 @@ use App\Enums\TipoAnotacao;
 use App\Filament\Resources\AnotacaoVeiculoResource;
 use App\Models\AnotacaoVeiculo;
 use Filament\Actions;
-use Filament\Forms\Components\{Select, DatePicker};
+use Filament\Forms\Components\{Select, DatePicker, Toggle};
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -37,6 +37,7 @@ class ListAnotacaoVeiculos extends ListRecords
                         Select::make('veiculo_id')
                             ->relationship('veiculo', 'placa')
                             ->searchable()
+                            ->preload()
                             ->required(),
 
                         DatePicker::make('data_referencia')
@@ -52,6 +53,43 @@ class ListAnotacaoVeiculos extends ListRecords
                             'item_manutencao_id' => 56,
                             'tipo_anotacao' => TipoAnotacao::INSPECAO_PERIODICA,
                             'status' => StatusDiversos::CONCLUIDO,
+                            'prioridade' => Prioridade::BAIXA,
+                        ]);
+
+                    }),
+                Actions\Action::make('agendar-lavacao')
+                    ->label('Agendar Lavagem')
+                    ->form([
+                        Select::make('veiculo_id')
+                            ->relationship('veiculo', 'placa')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
+
+                        DatePicker::make('data_referencia')
+                            ->default(now())
+                            ->closeOnDateSelection()
+                            ->native(false)
+                            ->required(),   
+                        Select::make('observacao')
+                            ->label('Posto')
+                            ->options([
+                                'MF'        => 'MF',
+                                'Pacheco'   => 'Pacheco',
+                            ])
+                            ->default('MF'),
+                        Toggle::make('concluido')
+                            ->default(false),
+
+                    ])
+                    ->action(function(array $data){
+                        AnotacaoVeiculo::create([
+                            'veiculo_id' => $data['veiculo_id'],
+                            'data_referencia' => $data['data_referencia'],
+                            'observacao' => 'Posto '.$data['observacao'],
+                            'item_manutencao_id' => 85,
+                            'tipo_anotacao' => TipoAnotacao::OBSERVACAO,
+                            'status' => $data['concluido'] ? StatusDiversos::CONCLUIDO : StatusDiversos::PENDENTE,
                             'prioridade' => Prioridade::BAIXA,
                         ]);
 

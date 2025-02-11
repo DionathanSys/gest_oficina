@@ -10,6 +10,7 @@ use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers;
 use App\Filament\Resources\AnotacaoVeiculoResource\RelationManagers\ComentariosRelationManager;
 use App\Models\AnotacaoVeiculo;
 use App\Models\ComentarioAnotacao;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -18,6 +19,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
@@ -193,6 +195,13 @@ class AnotacaoVeiculoResource extends Resource
                     ->multiple()
                     ->preload()
                     ->relationship('veiculo', 'placa'),
+
+                SelectFilter::make('item_manutencao_id')
+                    ->label('Item')
+                    ->multiple()
+                    ->preload()
+                    ->relationship('itemManutencao', 'descricao'),
+
                 Filter::make('status')
                     ->form([
                         Select::make('status')
@@ -212,6 +221,21 @@ class AnotacaoVeiculoResource extends Resource
                             );
                     }),
                 Filter::make('data_referencia')
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                
+                        if ($data['data_inicio'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Inicio ' . Carbon::parse($data['data_inicio'])->toFormattedDateString())
+                                ->removeField('data_inicio');
+                        }
+                
+                        if ($data['data_fim'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Fim ' . Carbon::parse($data['data_fim'])->toFormattedDateString())
+                                ->removeField('data_fim');
+                        }
+                
+                        return $indicators;
+                    })
                     ->form([
                         DatePicker::make('data_inicio'),
                         DatePicker::make('data_fim'),
@@ -228,6 +252,7 @@ class AnotacaoVeiculoResource extends Resource
                             );
                     })
             ])
+            ->persistFiltersInSession()
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->iconButton(),
@@ -235,8 +260,8 @@ class AnotacaoVeiculoResource extends Resource
                     ->icon('heroicon-o-chat-bubble-bottom-center-text')
                     ->iconButton()
                     ->form([
-                        ComentarioAnotacaoResource::getComentarioFormField(),
-                    ])
+                            ComentarioAnotacaoResource::getComentarioFormField(),
+                        ])
                     ->action(function (array $data, AnotacaoVeiculo $record) {
                         ComentarioAnotacao::create([
                             'anotacao_veiculo_id' => $record->id,
