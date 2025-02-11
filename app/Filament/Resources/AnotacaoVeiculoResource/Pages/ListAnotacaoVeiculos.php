@@ -21,7 +21,15 @@ class ListAnotacaoVeiculos extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->keyBindings(['ctrl+n']),
+                ->keyBindings(['ctrl+n'])
+                ->after(function(AnotacaoVeiculo $record){
+                    session()->put('veiculo_id',       $record->veiculo_id);
+                    session()->put('tipo_anotacao',    $record->tipo_anotacao);
+                    session()->put('status.anotacao',  $record->status);
+                    session()->put('prioridade',       $record->prioridade);
+                    session()->put('data_referencia',  $record->data_referencia);
+                    session()->put('km',               $record->km);
+                }),
             Actions\ActionGroup::make([
                 Actions\Action::make('conf-oleo-m')
                     ->label('Conf. Óleo motor')
