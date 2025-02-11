@@ -70,17 +70,18 @@ class ListAnotacaoVeiculos extends ListRecords
             'pendente' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)),
             'pneus' => Tab::make('Pneus')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', [StatusDiversos::PENDENTE, StatusDiversos::EXECUCAO])
                                                             ->whereIn('tipo_anotacao', [TipoAnotacao::PNEU, TipoAnotacao::INSPECAO_PNEU])),
-
-            'alta' => Tab::make('Prior. Alta')
+            'alta' => Tab::make('Prior. Alta/Urg.')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
-                                                            ->where('prioridade', '=', Prioridade::ALTA)),
-            'urgente' => Tab::make('Prior. Urg.')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
-                                                            ->where('prioridade', '=', Prioridade::URGENTE)),
+                                                            ->whereIn('prioridade', [Prioridade::ALTA, Prioridade::URGENTE])),
+            'validar' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::VALIDAR)),
             'concluído' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '=', StatusDiversos::CONCLUIDO)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)),
+
+            'cancelado' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CANCELADO)),
             
         ];
     }

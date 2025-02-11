@@ -63,6 +63,7 @@ class VeiculoResource extends Resource
             ->filters([
                 //
             ])
+            ->paginated(false)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
