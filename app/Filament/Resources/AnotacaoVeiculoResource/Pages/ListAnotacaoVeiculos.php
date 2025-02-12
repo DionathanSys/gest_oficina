@@ -106,9 +106,9 @@ class ListAnotacaoVeiculos extends ListRecords
         return [
             'todos' => Tab::make(),
             'pendente' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', [StatusDiversos::EXECUCAO, StatusDiversos::EXECUCAO])),
             'pneus' => Tab::make('Pneus')
-                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', [StatusDiversos::PENDENTE, StatusDiversos::EXECUCAO])
+                ->modifyQueryUsing(fn (Builder $query) => $query->whereIn('status', [StatusDiversos::PENDENTE, StatusDiversos::EXECUCAO, StatusDiversos::VALIDAR])
                                                             ->whereIn('tipo_anotacao', [TipoAnotacao::PNEU, TipoAnotacao::INSPECAO_PNEU])),
             'alta' => Tab::make('Prior. Alta/Urg.')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', '<>', StatusDiversos::CONCLUIDO)
