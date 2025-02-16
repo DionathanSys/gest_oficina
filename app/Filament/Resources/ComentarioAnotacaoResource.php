@@ -17,7 +17,9 @@ class ComentarioAnotacaoResource extends Resource
 {
     protected static ?string $model = ComentarioAnotacao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+
+    protected static ?string $navigationGroup = 'Mant.';
 
     public static function form(Form $form): Form
     {

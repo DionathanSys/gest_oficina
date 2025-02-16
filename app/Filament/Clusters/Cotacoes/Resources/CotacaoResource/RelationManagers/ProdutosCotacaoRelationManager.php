@@ -2,6 +2,9 @@
 
 namespace App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers;
 
+use App\Actions\Cotacao\AddItemCotacao;
+use App\Enums\StatusCotacaoEnum;
+use App\Models\Cotacao;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -18,8 +21,17 @@ class ProdutosCotacaoRelationManager extends RelationManager
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
+                Forms\Components\Select::make('produto_id')
+                    ->searchable()
+                    ->relationship('produto','descricao')
+                    ->required(),
+                Forms\Components\TextInput::make('quantidade')
+                    ->numeric()
                     ->required()
+                    ->minValue(1),
+                Forms\Components\Textarea::make('observacao')
+                    ->label('Observações')
+                    ->columnSpanFull()
                     ->maxLength(255),
             ]);
     }
@@ -39,7 +51,10 @@ class ProdutosCotacaoRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->icon('heroicon-o-plus')
+                    ->label('Produto')
+                    ->action(fn(array $data) => (new AddItemCotacao($this->ownerRecord, $data))->handle()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

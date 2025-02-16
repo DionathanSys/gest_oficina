@@ -2,6 +2,7 @@
 
 namespace App\Filament\Clusters\Cotacoes\Resources;
 
+use App\Actions\Cotacao\AddItemCotacao;
 use App\Enums\StatusCotacaoEnum;
 use App\Filament\Clusters\Cotacoes;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\Pages;
@@ -11,6 +12,7 @@ use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers\Pr
 use App\Models\Cotacao;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
@@ -34,8 +36,6 @@ class CotacaoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationLabel = 'Cotações';
-
-    protected static ?string $navigationGroup = 'Cotações';
 
     protected static ?int $navigationSort = null;
 
@@ -71,7 +71,7 @@ class CotacaoResource extends Resource
                         'Pendente' => 'Pendente',
                         'Finalizado' => 'Finalizado',
                         'Cancelado' => 'Cancelado'
-                        ])
+                    ])
                     ->default('Pendente')
                     ->required(),
 
@@ -108,12 +108,13 @@ class CotacaoResource extends Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        collect(StatusCotacaoEnum::cases())
-                                    ->mapWithKeys(fn($cases) => [$cases->value => $cases->value])
-                                    ->toArray()
-                    ])
+                    ->options(function () {
+                        return collect(StatusCotacaoEnum::cases())
+                            ->mapWithKeys(fn($status) => [$status->value => $status->value])
+                            ->toArray();
+                    })
                     ->multiple()
+                    ->default([StatusCotacaoEnum::PENDENTE->value, StatusCotacaoEnum::EM_ANDAMENTO->value])
             ])
             ->persistFiltersInSession()
             ->actions([
@@ -122,13 +123,13 @@ class CotacaoResource extends Resource
                     DeleteAction::make(),
                     Action::make('Fechar')
                         ->icon('heroicon-o-lock-closed')
-                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Fechado']) ),
+                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Fechado'])),
                     Action::make('Reabrir')
                         ->icon('heroicon-o-lock-open')
-                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Pendente']) ),
+                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Pendente'])),
                     Action::make('Item')
                         ->icon('heroicon-o-plus')
-                        ->action(fn(Cotacao $record ,$data)=> dd($data,$record))
+                        ->action(fn(Cotacao $record, $data) => (new AddItemCotacao($record, $data))->handle())
                         ->form([
                             Select::make('produto_id')
                                 ->label('Item')
@@ -137,11 +138,11 @@ class CotacaoResource extends Resource
                                 ->searchable()
                                 ->relationship('produto', 'descricao'),
                             TextInput::make('quantidade'),
-                            TextInput::make('observacao'),
+                            Textarea::make('observacao'),
                         ])
 
                 ])->label('Ações')
-                
+
             ])
             ->bulkActions([
                 BulkActionGroup::make([
