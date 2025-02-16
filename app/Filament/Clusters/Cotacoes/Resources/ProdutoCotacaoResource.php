@@ -196,9 +196,6 @@ class ProdutoCotacaoResource extends Resource
                                 ->preload()
                                 ->searchable()
                                 ->required(),
-                            TextInput::make('produto_id')
-                                ->readOnly()
-                                ->default(fn(ProdutoCotacao $record) => $record->produto_id),
 
                             TextInput::make('produto')
                                 ->readOnly()
@@ -211,11 +208,11 @@ class ProdutoCotacaoResource extends Resource
                         ->action(
                             function (array $data, ProdutoCotacao $record) {
                                 PropostaCotacao::create([
-                                    'cotacao_id' => $record->cotacao_id,
-                                    'produto_id' => $data['produto_id'],
+                                    'cotacao_id'    => $record->cotacao_id,
+                                    'produto_id'    => $record->produto_id,
                                     'fornecedor_id' => $data['fornecedor'],
-                                    'valor' => $data['valor'],
-                                    'status' => StatusCotacaoEnum::PENDENTE,
+                                    'valor'         => $data['valor'],
+                                    'status'        => StatusCotacaoEnum::PENDENTE,
                                 ]);
                                 $record->update(
                                     [
