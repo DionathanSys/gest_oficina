@@ -18,6 +18,7 @@ use Filament\Tables\Actions\{Action, ActionGroup, BulkActionGroup, DeleteAction,
 use Filament\Tables\Columns\{TextColumn};
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
@@ -142,8 +143,9 @@ class ProdutoCotacaoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('cotacao.descricao')
-                    ->label('Cotação'),
+                // TextColumn::make('cotacao.descricao')
+                //     ->label('Cotação')
+                //     ->toggledHiddenByDefault(false),
 
                 TextColumn::make('produto.descricao')
                     ->label('Item'),
@@ -174,6 +176,13 @@ class ProdutoCotacaoResource extends Resource
                             ->toArray()
                     ])
             ])
+            ->groups([
+                Group::make('cotacao.descricao')
+                    ->label('Cotação')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+            ])
+            ->defaultGroup('cotacao.descricao')
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
