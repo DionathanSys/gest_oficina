@@ -85,6 +85,9 @@ class CotacaoResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('Id')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('descricao')
                     ->label('Descrição')
                     ->searchable(),
