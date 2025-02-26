@@ -3,9 +3,12 @@
 namespace App\Actions\Cotacao;
 
 use App\Enums\StatusCotacaoEnum;
+use App\Filament\Clusters\Cotacoes;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource;
 use App\Models\Cotacao;
 use App\Models\ProdutoCotacao;
 use App\Models\User;
+use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -31,7 +34,9 @@ class AddItemCotacao
         
         $item = ProdutoCotacao::create($this->data);
 
-        $this->notificationSucces();
+        $msg = Auth::user()->name . ' adicionou o produto ' . $item->produto->descricao . ' na cotação ' . $item->cotacao->id;
+
+        $this->notificationSucces($msg);
 
         return $item;
 
@@ -67,7 +72,13 @@ class AddItemCotacao
         Notification::make()
             ->color('succes')
             ->title('Solicitação concluída!')
-            ->body("Item adicionado com sucesso.\n{Auth::user()->name}")
+            ->body($body)
+            ->actions([
+                Action::make('Abrir')
+                    ->button()
+                    ->url(CotacaoResource::getUrl('edit', ['record' => $this->data['cotacao_id']]))
+                    ->openUrlInNewTab(),
+            ])
             ->sendToDatabase(User::find([4, 5]));
     }
 }
