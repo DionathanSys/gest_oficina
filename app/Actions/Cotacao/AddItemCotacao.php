@@ -67,8 +67,7 @@ class AddItemCotacao
         Notification::make()
             ->color('succes')
             ->title('Solicitação concluída!')
-            ->body("Item adicionado com sucesso.")
-            ->body(Auth::user()->name)
+            ->body("Item adicionado com sucesso.\n{Auth::user()->name}")
             ->sendToDatabase(User::find([4, 5]));
     }
 }
