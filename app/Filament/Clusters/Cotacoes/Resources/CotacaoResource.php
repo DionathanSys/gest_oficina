@@ -138,7 +138,8 @@ class CotacaoResource extends Resource
                                 ->searchable()
                                 ->relationship('produto', 'descricao'),
                             TextInput::make('quantidade'),
-                            Textarea::make('observacao'),
+                            Textarea::make('observacao')
+                                ->label('Observação'),
                         ])
 
                 ])->label('Ações')

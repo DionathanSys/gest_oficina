@@ -17,6 +17,8 @@ class ProdutosCotacaoRelationManager extends RelationManager
 {
     protected static string $relationship = 'produtos_cotacao';
 
+    protected static ?string $title = 'Produtos';
+
     public function form(Form $form): Form
     {
         return $form
@@ -57,8 +59,10 @@ class ProdutosCotacaoRelationManager extends RelationManager
                     ->action(fn(array $data) => (new AddItemCotacao($this->ownerRecord, $data))->handle()),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
+                Tables\Actions\DeleteAction::make()
+                    ->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -14,6 +14,9 @@ class PropostasCotacaoRelationManager extends RelationManager
 {
     protected static string $relationship = 'propostas_cotacao';
 
+    protected static ?string $title = 'Propostas';
+
+
     public function form(Form $form): Form
     {
         return $form

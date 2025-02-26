@@ -5,7 +5,9 @@ namespace App\Actions\Cotacao;
 use App\Enums\StatusCotacaoEnum;
 use App\Models\Cotacao;
 use App\Models\ProdutoCotacao;
+use App\Models\User;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AddItemCotacao
@@ -15,9 +17,9 @@ class AddItemCotacao
 
     public function __construct(Cotacao $cotacao, array $data)
     {
-        $this->data = $data;
-        $this->data['cotacao_id'] = $cotacao->id;
-        $this->data['status'] = StatusCotacaoEnum::PENDENTE;
+        $this->data                 = $data;
+        $this->data['cotacao_id']   = $cotacao->id;
+        $this->data['status']       = StatusCotacaoEnum::PENDENTE;
 
     }
 
@@ -65,7 +67,8 @@ class AddItemCotacao
         Notification::make()
             ->color('succes')
             ->title('Solicitação concluída!')
-            ->body($body)
-            ->send();
+            ->body("Item adicionado com sucesso.")
+            ->body(Auth::user()->name)
+            ->sendToDatabase(User::find([4, 5]));
     }
 }
