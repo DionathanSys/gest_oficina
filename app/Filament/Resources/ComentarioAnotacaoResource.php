@@ -6,6 +6,7 @@ use App\Filament\Resources\ComentarioAnotacaoResource\Pages;
 use App\Filament\Resources\ComentarioAnotacaoResource\RelationManagers;
 use App\Models\ComentarioAnotacao;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -21,6 +22,8 @@ class ComentarioAnotacaoResource extends Resource
 
     protected static ?string $navigationGroup = 'Mant.';
 
+    protected static ?string $pluralModelLabel = 'Comentários de Anotações';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -34,8 +37,33 @@ class ComentarioAnotacaoResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('itemManutencao.descricao')
+                    ->searchable()
+                    ->label('Descrição'),
+                Tables\Columns\TextColumn::make('itemManutencao.observacao')
+                    ->searchable()
+                    ->label('Observação'),
+                Tables\Columns\TextColumn::make('comentario')
+                    ->searchable()
+                    ->label('Comentário')
+                    ->wrap(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->searchable()
+                    ->label('Usuário'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->sortable()
+                    ->dateTime('d/m/Y H:i:s')
+                    ->label('Inserido em'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->sortable()
+                    ->dateTime('d/m/Y H:i:s')
+                    ->label('Atualizado em'),
             ])
+            ->groups([
+                Tables\Grouping\Group::make('itemManutencao.descricao')->collapsible(),
+                Tables\Grouping\Group::make('veiculo.placa')->collapsible()
+            ])
+            ->defaultGroup('veiculo.placa')
             ->filters([
                 //
             ])

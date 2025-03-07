@@ -50,32 +50,38 @@ class CotacaoResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('descricao')
+                    ->label('Descrição')
+                    ->autocomplete(false)
                     ->maxLength(255)
                     ->default(null),
 
                 Forms\Components\TextInput::make('setor')
+                    ->autocomplete(false)
                     ->maxLength(255)
-                    ->default('Frota Agro'),
+                    ->default('FROTA AGRO'),
 
                 Forms\Components\Select::make('prioridade')
-                    ->default('Media')
+                    ->default('Baixa')
                     ->options([
-                        'Baixa' => 'Baixa',
-                        'Media' => 'Média',
-                        'Alta' => 'Alta',
+                        'BAIXA' => 'BAIXA',
+                        'MÉDIA' => 'MÉDIA',
+                        'ALTA' => 'ALTA',
                     ])
                     ->required(),
 
                 Forms\Components\Select::make('status')
                     ->options([
-                        'Pendente' => 'Pendente',
-                        'Finalizado' => 'Finalizado',
-                        'Cancelado' => 'Cancelado'
+                        'PENDENTE' => 'PENDENTE',
+                        'FINALIZADO' => 'FINALIZADO',
+                        'CANCELADO' => 'CANCELADO'
                     ])
-                    ->default('Pendente')
+                    ->default('PENDENTE')
                     ->required(),
 
                 Forms\Components\DatePicker::make('data')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
+                    ->closeOnDateSelection()
                     ->default(now())
                     ->required(),
             ]);
@@ -98,14 +104,16 @@ class CotacaoResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado Em')
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado Em')
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -167,7 +175,7 @@ class CotacaoResource extends Resource
     {
         return [
             'index' => Pages\ListCotacaos::route('/'),
-            'create' => Pages\CreateCotacao::route('/create'),
+            // 'create' => Pages\CreateCotacao::route('/create'),
             'edit' => Pages\EditCotacao::route('/{record}/edit'),
         ];
     }

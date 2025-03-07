@@ -5,7 +5,12 @@ namespace App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManag
 use App\Actions\Cotacao\AddItemCotacao;
 use App\Enums\StatusCotacaoEnum;
 use App\Models\Cotacao;
+use App\Models\Parceiro\Fornecedor;
+use App\Models\ProdutoCotacao;
+use App\Models\PropostaCotacao;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
@@ -24,10 +29,12 @@ class ProdutosCotacaoRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\Select::make('produto_id')
+                    ->preload()
                     ->searchable()
                     ->relationship('produto','descricao')
                     ->required(),
                 Forms\Components\TextInput::make('quantidade')
+                    ->default(1)
                     ->numeric()
                     ->required()
                     ->minValue(1),
@@ -63,6 +70,47 @@ class ProdutosCotacaoRelationManager extends RelationManager
                     ->iconButton(),
                 Tables\Actions\DeleteAction::make()
                     ->iconButton(),
+                Tables\Actions\Action::make('nova-proposta')
+                        ->label('Nova Proposta')
+                        ->icon('heroicon-o-plus-circle')
+                        ->iconButton()
+                        ->form([
+                            Select::make('fornecedor')
+                                ->options(Fornecedor::query()->pluck('nome', 'id'))
+                                ->preload()
+                                ->searchable()
+                                ->required(),
+
+                            TextInput::make('produto')
+                                ->readOnly()
+                                ->default(fn(ProdutoCotacao $record) => $record->produto->descricao),
+
+                            TextInput::make('valor')
+                                ->numeric()
+                                ->prefix('R$'),
+                        ])
+                        ->action(
+                            function (array $data, ProdutoCotacao $record) {
+                                PropostaCotacao::create([
+                                    'cotacao_id'    => $record->cotacao_id,
+                                    'produto_id'    => $record->produto_id,
+                                    'fornecedor_id' => $data['fornecedor'],
+                                    'valor'         => $data['valor'],
+                                    'status'        => StatusCotacaoEnum::PENDENTE,
+                                ]);
+                                $record->update(
+                                    [
+                                        'status' => StatusCotacaoEnum::EM_ANDAMENTO
+                                    ]
+                                );
+                                $record->cotacao->update(
+                                    [
+                                        'status' => StatusCotacaoEnum::EM_ANDAMENTO
+                                    ]
+                                );
+                            }
+
+                        ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

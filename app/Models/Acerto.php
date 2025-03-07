@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\MoneyCast;
 use App\Enums\MotivoAjudaEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -60,6 +61,30 @@ class Acerto extends Model
         $calculo = $this->vlr_fechamento + $this->vlr_media + $this->vlr_manutencao + $prSeguranca + $this->valor_ajuda->sum('vlr_ajuda');
         $calculo = $calculo - $this->vlr_diferenca;
         return $calculo;
+    }
+
+    public function salarioLiquido(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                /**
+                 * Salário líquido
+                 * Fechamento + Média + Manutenção + Produtividade + Pr. Seg. - Impostos
+                 * Impostos = INSS + IRRF
+                 * Produtividade = Impostos - Diferença
+                 */
+                
+                $prSeguranca = $this->PrSeguranca->premio ?? 0;
+
+                $calculo = $this->vlr_fechamento 
+                            + $this->vlr_media 
+                            + $this->vlr_manutencao 
+                            + $prSeguranca 
+                            + $this->valor_ajuda->sum('vlr_ajuda');
+
+                return $calculo - $this->vlr_diferenca;
+            }
+        );
     }
 
     // public function getoComplemento()
