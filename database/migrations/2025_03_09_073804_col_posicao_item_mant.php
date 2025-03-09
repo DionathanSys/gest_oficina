@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('itens_manutencao', function (Blueprint $table) {
-            $table->boolean('controle_posicao');
+            $table->boolean('controla_posicao');
+            $table->string('codigo');
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('itens_manutencao', function (Blueprint $table) {
-            $table->dropColumn('controle_posicao');
+            $table->dropColumn('controla_posicao');
+            $table->dropColumn('codigo');
         });
     }
 };

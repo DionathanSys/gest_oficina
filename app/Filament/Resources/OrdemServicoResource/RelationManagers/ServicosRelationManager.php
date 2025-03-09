@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrdemServicoResource\RelationManagers;
 
 use App\Enums\StatusDiversos;
+use App\Filament\Resources\ItemManutencaoResource;
 use App\Models\ItemManutencao;
 use App\Services\OrdemServicoService;
 use Filament\Forms;
@@ -20,18 +21,14 @@ class ServicosRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
-            ->columns(7)
+            ->columns(8)
             ->schema([
-                Forms\Components\Select::make('item_manutencao_id')
-                    ->label('Item Manutenção')
-                    ->relationship('itemManutencao', 'descricao')
-                    ->searchable()
-                    ->preload()
-                    ->required()
-                    ->columnSpan(5),
+                ItemManutencaoResource::getSelectItemFormFiedl()
+                    ->live(true),
                 Forms\Components\TextInput::make('posicao')
+                    ->reactive()
                     ->label('Posição')
-                    ->required(fn(Forms\Get $get) => ItemManutencao::find($get('item_manutencao_id'))->controle_posicao ?? false),
+                    ->required(fn(Forms\Get $get) => ItemManutencao::find($get('item_manutencao_id'))->controla_posicao ?? false),
                 Forms\Components\Textarea::make('observacao')
                     ->label('Observação')
                     ->autocomplete(false)

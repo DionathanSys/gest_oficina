@@ -91,17 +91,7 @@ class AnotacaoVeiculoResource extends Resource
                     })
                     ->default(fn()=> session('prioridade') ?? Prioridade::BAIXA),
 
-                Forms\Components\Select::make('item_manutencao_id')
-                    ->columnSpan(6)
-                    ->relationship('itemManutencao', 'descricao')
-                    ->preload()
-                    ->searchable()
-                    ->default(null)
-                    ->createOptionForm([
-                        ItemManutencaoResource::getDescricaoFormField(),
-                        ItemManutencaoResource::getComplementoFormField(),
-                        ItemManutencaoResource::getAtivoFormField(),
-                    ]),
+                ItemManutencaoResource::getSelectItemFormFiedl(),
                 Forms\Components\TextInput::make('km')
                     ->columnSpan(2)
                     ->numeric(255)
