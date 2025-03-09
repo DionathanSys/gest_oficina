@@ -37,8 +37,7 @@ class OrdemServicoResource extends Resource
                 Grid::make([
                     'default'   => 1,
                     'sm'        => 1,
-                    'md'        => 6,
-                    'lg'        => 8,
+                    'lg'        => 5,
                 ])
                     ->schema([
                         Forms\Components\TextInput::make('nro_ordem')
