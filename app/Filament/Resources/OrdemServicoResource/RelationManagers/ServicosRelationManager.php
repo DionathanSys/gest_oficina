@@ -56,15 +56,13 @@ class ServicosRelationManager extends RelationManager
                         Tables\Columns\TextColumn::make('itemManutencao.descricao')
                             ->label('Item')->grow(false),
                     ]),
-                    Stack::make([
+                    Panel::make([
                         Tables\Columns\TextColumn::make('observacao')
                             ->label('Observação')
-                            ->hiddenFrom('lg')
-                            ->columnSpanFull(),
+                            ,
                         Tables\Columns\SelectColumn::make('status')
                             ->options(StatusDiversos::toSelectArray())
-                            ->hiddenFrom('lg')
-                            ->columnSpanFull(),
+                            ,
                     ])->collapsible(),
 
 
