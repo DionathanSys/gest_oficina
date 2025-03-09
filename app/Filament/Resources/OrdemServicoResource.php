@@ -43,6 +43,7 @@ class OrdemServicoResource extends Resource
                         Forms\Components\TextInput::make('nro_ordem')
                             ->label('Nro.OS'),
                         Forms\Components\Select::make('veiculo_id')
+                            ->placeholder('Placa')
                             ->relationship('veiculo', 'placa')
                             ->searchable()
                             ->preload()
