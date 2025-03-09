@@ -10,6 +10,8 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -41,13 +43,32 @@ class ServicosRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('item_manutencao_id')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('itemManutencao.descricao')
-                    ->label('Item'),
-                Tables\Columns\TextColumn::make('observacao')
-                    ->label('Observação'),
-                Tables\Columns\SelectColumn::make('status')
-                    ->options(StatusDiversos::toSelectArray())
+                // Tables\Columns\TextColumn::make('itemManutencao.descricao')
+                //         ->label('Item')->grow(false),
+                // Tables\Columns\TextColumn::make('observacao')
+                //     ->label('Observação')
+                //     ->visibleFrom('lg')->grow(false),
+                // Tables\Columns\SelectColumn::make('status')
+                //     ->options(StatusDiversos::toSelectArray())
+                //     ->visibleFrom('lg')->grow(false),
+                Tables\Columns\Layout\Split::make([
+                    Stack::make([
+                        Tables\Columns\TextColumn::make('itemManutencao.descricao')
+                            ->label('Item')->grow(false),
+                    ]),
+                    Stack::make([
+                        Tables\Columns\TextColumn::make('observacao')
+                            ->label('Observação')
+                            ->hiddenFrom('lg')
+                            ->columnSpanFull(),
+                        Tables\Columns\SelectColumn::make('status')
+                            ->options(StatusDiversos::toSelectArray())
+                            ->hiddenFrom('lg')
+                            ->columnSpanFull(),
+                    ])->collapsible(),
+
+
+                ])->from('lg')
             ])
             ->filters([
                 //
@@ -60,30 +81,17 @@ class ServicosRelationManager extends RelationManager
                     ->modalHeading('Novo Item de Mant.'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                // Tables\Actions\EditAction::make()
+                //     ->iconButton(),
+                // Tables\Actions\DeleteAction::make()
+                //     ->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->poll('3s')
             ->emptyStateDescription('');
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
