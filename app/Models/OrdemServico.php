@@ -16,4 +16,9 @@ class OrdemServico extends Model
         return $this->belongsTo(Veiculo::class, 'veiculo_id');
     }
 
+    public function itens()
+    {
+        return $this->hasMany(ItemOrdemServico::class, 'ordem_servico_id');
+    }
+
 }

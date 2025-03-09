@@ -6,11 +6,14 @@ use App\Enums\StatusDiversos;
 use App\Enums\StatusOrdemSankhya;
 use App\Filament\Resources\OrdemServicoResource\Pages;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers;
+use App\Filament\Resources\OrdemServicoResource\RelationManagers\ServicosRelationManager;
 use App\Models\OrdemServico;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\ActionsPosition;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -31,35 +34,42 @@ class OrdemServicoResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nro_ordem')
-                    ->label('Nro.OS'),
-                    Forms\Components\Select::make('veiculo_id')
-                        ->relationship('veiculo', 'placa')
-                        ->searchable()
-                        ->preload()
-                        ->label('Veículo'),
-                    Forms\Components\Select::make('tipo_manutencao')
-                        ->options([
-                            'CORRETIVA'     => 'CORRETIVA',
-                            'PREVENTIVA'    => 'PREVENTIVA',
-                            'PREDITIVA'     => 'PREDITIVA',
-                            'SOCORRO'       => 'SOCORRO',
-                        ])
-                        ->default('CORRETIVA')
-                        ->label('Tipo de Manutenção'),
-                    Forms\Components\Select::make('status')
-                        ->options(fn() => StatusDiversos::toSelectArray())
-                        ->default(StatusDiversos::PENDENTE),
-                    Forms\Components\Select::make('status_sankhya')
-                        ->options(fn() => StatusOrdemSankhya::toSelectArray())
-                        ->default(StatusDiversos::PENDENTE),
-                    Forms\Components\DatePicker::make('data_abertura')
-                        ->label('Data de Abertura')
-                        /* ->format('d/m/Y') */
-                        ->default(now()),
-                    Forms\Components\DatePicker::make('data_encerramento')
-                        ->label('Data de Encerramento')
-                        /* ->format('d/m/Y') */,
+                Grid::make([
+                    'default'   => 1,
+                    'sm'        => 1,
+                    'md'        => 6,
+                    'lg'        => 8,
+                ])
+                    ->schema([
+                        Forms\Components\TextInput::make('nro_ordem')
+                            ->label('Nro.OS'),
+                        Forms\Components\Select::make('veiculo_id')
+                            ->relationship('veiculo', 'placa')
+                            ->searchable()
+                            ->preload()
+                            ->label('Veículo'),
+                        Forms\Components\Select::make('tipo_manutencao')
+                            ->options([
+                                'CORRETIVA'     => 'CORRETIVA',
+                                'PREVENTIVA'    => 'PREVENTIVA',
+                                'PREDITIVA'     => 'PREDITIVA',
+                                'SOCORRO'       => 'SOCORRO',
+                            ])
+                            ->default('CORRETIVA')
+                            ->label('Tipo de Manutenção'),
+                        Forms\Components\Select::make('status')
+                            ->options(fn() => StatusDiversos::toSelectArray())
+                            ->default(StatusDiversos::PENDENTE),
+                        Forms\Components\Select::make('status_sankhya')
+                            ->label('Sankhya')
+                            ->options(fn() => StatusOrdemSankhya::toSelectArray())
+                            ->default(StatusDiversos::PENDENTE),
+                        Forms\Components\DatePicker::make('data_abertura')
+                            ->label('Data de Abertura')
+                            ->default(now()),
+                        Forms\Components\DatePicker::make('data_encerramento')
+                            ->label('Data de Encerramento'),
+                    ])
             ]);
     }
 
@@ -67,40 +77,64 @@ class OrdemServicoResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID'),
-                Tables\Columns\TextColumn::make('nro_ordem')
-                    ->label('Nro.OS'),
-                Tables\Columns\TextColumn::make('veiculo.placa'),
-                Tables\Columns\TextColumn::make('tipo_manutencao'),
-                Tables\Columns\TextColumn::make('data_abertura'),
-                Tables\Columns\TextColumn::make('data_encerramento'),
+                Tables\Columns\TextInputColumn::make('nro_ordem')
+                    ->label('Nro.OS')
+                    ->width('1%'),
+                Tables\Columns\TextColumn::make('veiculo.placa')    
+                    ->label('Veículo'),
+                Tables\Columns\TextColumn::make('tipo_manutencao')
+                    ->label('Tipo Mant.'),
+                Tables\Columns\TextColumn::make('data_abertura')
+                    ->label('Dt. Abertura')
+                    ->date('d/m/Y'),
+                Tables\Columns\TextColumn::make('data_encerramento')
+                    ->label('Dt. Encerramento')
+                    ->date('d/m/Y')
+                    ->toggleable(isToggledHiddenByDefault:true),
                 Tables\Columns\TextColumn::make('status'),
-                Tables\Columns\TextColumn::make('status_sankhya'),
+                Tables\Columns\TextColumn::make('status_sankhya')
+                    ->label('Sankhya'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i:s')
-                    ->label('Inserido Em'),
+                    ->label('Inserido Em')
+                    ->toggleable(isToggledHiddenByDefault:true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime('d/m/Y H:i:s')
-                    ->label('Editado Em'),
+                    ->label('Editado Em')
+                    ->toggleable(isToggledHiddenByDefault:true),
+
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make('add_item')
+                        ->label('Adicionar Item')
+                        ->icon('heroicon-o-plus-circle'),
+                    Tables\Actions\Action::make('executar')
+                        ->label('Em Execução')
+                        ->icon('heroicon-o-play'),
+                    Tables\Actions\Action::make('finalizar')
+                        ->label('Finalizar')
+                        ->icon('heroicon-o-check-circle'),
+                ]),
+                    
+            ], ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateDescription('');
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            ServicosRelationManager::class,
         ];
     }
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('ordem_servico_id')->constrained('ordens_servico')->cascadeOnDelete();
             $table->foreignId('item_manutencao_id')->constrained('itens_manutencao');
             $table->string('observacao')->nullable();
+            $table->string('posicao')->nullable();
             $table->string('status');
             $table->timestamps();
         });

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\OrdemServicoResource\Pages;
 
 use App\Filament\Resources\OrdemServicoResource;
+use App\Models\OrdemServico;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -15,7 +16,8 @@ class ListOrdemServicos extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->icon('heroicon-o-plus-circle')
-                ->label('Nova'),
+                ->label('Novo')
+                ->successRedirectUrl(fn(OrdemServico $record) => OrdemServicoResource::getUrl('edit', ['record' => $record->id])),
         ];
     }
 }
