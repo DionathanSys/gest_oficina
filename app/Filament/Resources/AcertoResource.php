@@ -137,8 +137,7 @@ class AcertoResource extends Resource
                     ->copyableState(function (Acerto $record) {
                         return $record->getComplemento();
                     })
-                    ->sortable()
-                /* ->wrap() */,
+                    ->sortable(),
 
                 TextColumn::make('fechamento')
                     ->searchable()
@@ -165,10 +164,8 @@ class AcertoResource extends Resource
 
                 TextColumn::make('produtividade')
                     ->badge(fn(string $state): string => 'succes')
-                    // ->color()
                     ->label('Produtividade')
                     ->state(function (Acerto $record) {
-
                         return 'R$ ' . number_format($record->getProdutividade(), 2, ',', '.');
                     })
                     ->copyable()

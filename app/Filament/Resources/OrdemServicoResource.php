@@ -30,6 +30,8 @@ class OrdemServicoResource extends Resource
 
     protected static ?string $pluralLabel = 'Ordens de Serviço';
 
+    protected static ?string $label = 'Ordem de Serviço';
+
     public static function form(Form $form): Form
     {
         return $form
