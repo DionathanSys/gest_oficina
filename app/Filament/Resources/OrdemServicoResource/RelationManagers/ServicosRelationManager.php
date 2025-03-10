@@ -52,17 +52,32 @@ class ServicosRelationManager extends RelationManager
                         Tables\Columns\TextColumn::make('itemManutencao.descricao')
                             ->label('Item'),
                     ]),
-                ])->from('lg'),
+                ])->from('sm'),
                 Tables\Columns\Layout\Split::make([
+                    Tables\Columns\TextColumn::make('observacao')
+                        ->placeholder('Observações: N/A')
+                        ->label('Observação')
+                            ->visibleFrom('sm'),
+                    Tables\Columns\TextColumn::make('posicao')
+                        ->prefix('Pos. ')
+                        ->placeholder('Posição: N/A')
+                        ->label('Posição')
+                            ->visibleFrom('sm'),
+                    Tables\Columns\SelectColumn::make('status')
+                        ->options(StatusDiversos::toSelectArray())
+                            ->visibleFrom('sm'),
                     Stack::make([
                         Tables\Columns\TextColumn::make('observacao')
+                            ->placeholder('Observações: N/A')
                             ->label('Observação'),
                         Tables\Columns\TextColumn::make('posicao')
+                            ->prefix('Pos. ')
+                            ->placeholder('Posição: N/A')
                             ->label('Posição'),
                         Tables\Columns\SelectColumn::make('status')
                             ->options(StatusDiversos::toSelectArray()),
-                    ]),
-                ])->collapsible()
+                    ])->hiddenFrom('sm')->space(3),
+                ])->from('sm')->collapsible()
             ])
             ->filters([
                 //
