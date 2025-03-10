@@ -77,7 +77,7 @@ class ServicosRelationManager extends RelationManager
                         Tables\Columns\SelectColumn::make('status')
                             ->options(StatusDiversos::toSelectArray()),
                     ])->hiddenFrom('sm')->space(3),
-                ])->from('sm')->collapsible()
+                ])->from('sm')->collapsible(false)
             ])
             ->filters([
                 //
