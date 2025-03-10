@@ -18,7 +18,7 @@ class OrdemServicoService
         if ($ordemServico){
             self::notificaSucceso('Ordem criada', 'Dt. ' . (Carbon::parse($ordemServico->data_abertura))->format('d/m/Y') . ' Placa: '. $ordemServico->veiculo->placa);
         }
-
+        
         return $ordemServico;
     }
 
@@ -51,7 +51,7 @@ class OrdemServicoService
     private static function notificaSucceso(string $title = '', string $body = ''): void
     {
         Notification::make()
-            ->title($title . ' ' . now())
+            ->title($title . ' ' . (Carbon::parse(now()))->format('d/m/Y H:i'))
             ->body($body)
             ->sendToDatabase(User::find(4));
     }
