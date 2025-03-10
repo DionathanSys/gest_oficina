@@ -57,6 +57,8 @@ class ServicosRelationManager extends RelationManager
                     Stack::make([
                         Tables\Columns\TextColumn::make('observacao')
                             ->label('Observação'),
+                        Tables\Columns\TextColumn::make('posicao')
+                            ->label('Posição'),
                         Tables\Columns\SelectColumn::make('status')
                             ->options(StatusDiversos::toSelectArray()),
                     ]),
