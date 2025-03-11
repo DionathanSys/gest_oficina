@@ -86,7 +86,9 @@ class OrdemServicoResource extends Resource
             ->columns([
                 Tables\Columns\TextInputColumn::make('nro_ordem')
                     ->label('Nro.OS')
-                    ->width('1%'),
+                    ->searchable()
+                    ->sortable()
+                    ->width('4%'),
                 Tables\Columns\TextColumn::make('veiculo.placa')    
                     ->label('Veículo'),
                 Tables\Columns\TextColumn::make('km'),
