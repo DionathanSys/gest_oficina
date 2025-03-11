@@ -36,11 +36,11 @@ class ListOrdemServicos extends ListRecords
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::PENDENTE)),
             'concluído' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)),
-            'abrir_ordem' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status_sankhya', StatusOrdemSankhya::PENDENTE)),
-            'encerrar_ordem' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO))
-                                                            ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO]),
+            // 'abrir_ordem' => Tab::make()
+            //     ->modifyQueryUsing(fn (Builder $query) => $query->where('status_sankhya', StatusOrdemSankhya::PENDENTE)),
+            // 'encerrar_ordem' => Tab::make()
+            //     ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO))
+            //                                                 ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO]),
 
         ];
     }
