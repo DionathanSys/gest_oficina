@@ -51,13 +51,13 @@ class OrdemServicoService
 
     public static function encerrarServico(Collection $itens): true
     {
-        dump($itens);
+        
         $itens->each(function (ItemOrdemServico $item) {
             $item->uptade([
                 'status' => StatusDiversos::CONCLUIDO,
             ]);
         });
-        dd($itens);
+        
         return true;
     }
 
