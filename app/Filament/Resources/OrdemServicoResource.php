@@ -137,8 +137,10 @@ class OrdemServicoResource extends Resource
                         return $indicators;
                     })
                     ->form([
-                        DatePicker::make('data_inicio'),
-                        DatePicker::make('data_fim'),
+                        DatePicker::make('data_inicio')
+                            ->label('Dt. Abertura Inicio'),
+                        DatePicker::make('data_fim')
+                            ->label('Dt. Abertura Fim'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -168,8 +170,10 @@ class OrdemServicoResource extends Resource
                         return $indicators;
                     })
                     ->form([
-                        DatePicker::make('data_inicio'),
-                        DatePicker::make('data_fim'),
+                        DatePicker::make('data_inicio')
+                            ->label('Dt. Encerramento Inicio'),
+                        DatePicker::make('data_fim')
+                            ->label('Dt. Encerramento Fim'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
