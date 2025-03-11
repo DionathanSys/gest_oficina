@@ -53,9 +53,10 @@ class OrdemServicoService
     {
         
         $itens->each(function (ItemOrdemServico $item) {
-            $item->uptade([
+            $item->update([
                 'status' => StatusDiversos::CONCLUIDO,
             ]);
+            
         });
         
         return true;
