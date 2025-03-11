@@ -84,6 +84,7 @@ class OrdemServicoResource extends Resource
                     ->width('1%'),
                 Tables\Columns\TextColumn::make('veiculo.placa')    
                     ->label('Veículo'),
+                Tables\Columns\TextColumn::make('km'),
                 Tables\Columns\TextColumn::make('tipo_manutencao')
                     ->label('Tipo Mant.'),
                 Tables\Columns\TextColumn::make('data_abertura')
