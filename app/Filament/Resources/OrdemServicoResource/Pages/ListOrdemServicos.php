@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\OrdemServicoResource\Pages;
 
+use App\Enums\StatusDiversos;
 use App\Enums\StatusOrdemSankhya;
 use App\Filament\Resources\OrdemServicoResource;
 use App\Models\OrdemServico;
@@ -32,9 +33,14 @@ class ListOrdemServicos extends ListRecords
         return [
             'todos' => Tab::make(),
             'pendente' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusOrdemSankhya::PENDENTE)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::PENDENTE)),
             'concluído' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusOrdemSankhya::CONCLUIDO)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)),
+            'abrir_ordem' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status_sankhya', StatusOrdemSankhya::PENDENTE)),
+            'encerrar_ordem' => Tab::make()
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO))
+                                                            ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO]),
 
         ];
     }
