@@ -8,12 +8,15 @@ use App\Filament\Resources\OrdemServicoResource\Pages;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers\ServicosRelationManager;
 use App\Models\OrdemServico;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\ActionsPosition;
+use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -110,7 +113,75 @@ class OrdemServicoResource extends Resource
 
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('veiculo_id')
+                    ->label('Placa')
+                    ->multiple()
+                    ->preload()
+                    ->relationship('veiculo', 'placa'),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(StatusOrdemSankhya::toSelectArray()),
+                Tables\Filters\Filter::make('data_abertura')
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                
+                        if ($data['data_inicio'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Inicio ' . Carbon::parse($data['data_inicio'])->toFormattedDateString())
+                                ->removeField('data_inicio');
+                        }
+                
+                        if ($data['data_fim'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Fim ' . Carbon::parse($data['data_fim'])->toFormattedDateString())
+                                ->removeField('data_fim');
+                        }
+                
+                        return $indicators;
+                    })
+                    ->form([
+                        DatePicker::make('data_inicio'),
+                        DatePicker::make('data_fim'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['data_inicio'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_abertura', '>=', $date)
+                            )
+                            ->when(
+                                $data['data_fim'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_abertura', '<=', $date)
+                            );
+                    }),
+                Tables\Filters\Filter::make('data_encerramento')
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                
+                        if ($data['data_inicio'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Inicio ' . Carbon::parse($data['data_inicio'])->toFormattedDateString())
+                                ->removeField('data_inicio');
+                        }
+                
+                        if ($data['data_fim'] ?? null) {
+                            $indicators[] = Indicator::make('Dt. Fim ' . Carbon::parse($data['data_fim'])->toFormattedDateString())
+                                ->removeField('data_fim');
+                        }
+                
+                        return $indicators;
+                    })
+                    ->form([
+                        DatePicker::make('data_inicio'),
+                        DatePicker::make('data_fim'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['data_inicio'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_encerramento', '>=', $date)
+                            )
+                            ->when(
+                                $data['data_fim'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('data_encerramento', '<=', $date)
+                            );
+                    })
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
