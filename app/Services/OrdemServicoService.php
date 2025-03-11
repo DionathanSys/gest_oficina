@@ -54,7 +54,7 @@ class OrdemServicoService
     {
 
         $ordemServico->update([
-            'status' => StatusOrdemSankhya::ABERTO,
+            'status_sankhya' => StatusOrdemSankhya::ABERTO,
         ]);
 
         return true;
