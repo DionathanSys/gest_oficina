@@ -8,6 +8,7 @@ use App\Models\OrdemServico;
 use App\Models\User;
 use Carbon\Carbon;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Collection;
 
 class OrdemServicoService
 {
@@ -46,6 +47,18 @@ class OrdemServicoService
         }
 
         return $item;
+    }
+
+    public static function encerrarServico(Collection $itens): true
+    {
+        dump($itens);
+        $itens->each(function (ItemOrdemServico $item) {
+            $item->uptade([
+                'status' => StatusDiversos::CONCLUIDO,
+            ]);
+        });
+        dd($itens);
+        return true;
     }
 
     private static function notificaSucceso(string $title = '', string $body = ''): void
