@@ -50,7 +50,8 @@ class OrdemServicoResource extends Resource
                             ->searchable()
                             ->preload()
                             ->label('Veículo'),
-                        Forms\Components\Select::make('km'),
+                        Forms\Components\TextInput::make('km')
+                            ->numeric(),
                         Forms\Components\Select::make('tipo_manutencao')
                             ->options([
                                 'CORRETIVA'     => 'CORRETIVA',
