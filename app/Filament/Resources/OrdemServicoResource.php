@@ -106,7 +106,7 @@ class OrdemServicoResource extends Resource
                     ->date('d/m/Y')
                     ->toggleable(isToggledHiddenByDefault:true),
                 Tables\Columns\SelectColumn::make('status')
-                    ->options(StatusOrdemSankhya::toSelectArray()),
+                    ->options(StatusDiversos::toSelectArray()),
                 Tables\Columns\SelectColumn::make('status_sankhya')
                     ->options(StatusOrdemSankhya::toSelectArray())
                     ->label('Sankhya'),
