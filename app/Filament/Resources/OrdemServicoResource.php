@@ -8,6 +8,7 @@ use App\Filament\Resources\OrdemServicoResource\Pages;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers\ServicosRelationManager;
 use App\Models\OrdemServico;
+use App\Services\OrdemServicoService;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -85,6 +86,9 @@ class OrdemServicoResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextInputColumn::make('nro_ordem')
+                    ->afterStateUpdated(function(OrdemServico $record){
+                        OrdemServicoService::setNroOrdem($record);
+                    })
                     ->label('Nro.OS')
                     ->searchable()
                     ->sortable()
@@ -189,6 +193,7 @@ class OrdemServicoResource extends Resource
                             );
                     })
             ])
+            ->defaultSort('nro_ordem')
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
@@ -202,6 +207,10 @@ class OrdemServicoResource extends Resource
                     Tables\Actions\Action::make('finalizar')
                         ->label('Finalizar')
                         ->icon('heroicon-o-check-circle'),
+                    Tables\Actions\Action::make('finalizar_sankhya')
+                        ->label('Finalizar Sankhya')
+                        ->icon('heroicon-o-check-circle')
+                        ->action(fn(OrdemServico $record) => OrdemServicoService::encerrarOrdemSankhya($record)),
                 ]),
                     
             ], ActionsPosition::BeforeCells)
@@ -210,6 +219,7 @@ class OrdemServicoResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->poll('3s')
             ->emptyStateDescription('');
     }
 

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\StatusDiversos;
+use App\Enums\StatusOrdemSankhya;
 use App\Models\ItemOrdemServico;
 use App\Models\OrdemServico;
 use App\Models\User;
@@ -47,6 +48,23 @@ class OrdemServicoService
         }
 
         return $item;
+    }
+
+    public static function setNroOrdem(OrdemServico $ordemServico): true
+    {
+
+        $ordemServico->update([
+            'status' => StatusOrdemSankhya::ABERTO,
+        ]);
+
+        return true;
+    }
+
+    public static function encerrarOrdemSankhya(OrdemServico $ordemServico): void
+    {
+        $ordemServico->update([
+            'status_sankhya' => StatusOrdemSankhya::CONCLUIDO,
+        ]);
     }
 
     public static function encerrarServico(Collection $itens): true
