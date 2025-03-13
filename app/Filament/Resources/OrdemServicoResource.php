@@ -21,6 +21,7 @@ use Filament\Tables\Filters\Indicator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class OrdemServicoResource extends Resource
 {
@@ -220,6 +221,18 @@ class OrdemServicoResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('atualizar_status')
+                        ->form([
+                            Forms\Components\Select::make('status')
+                                ->options(StatusDiversos::toSelectArray())
+                        ])
+                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusOrdem($ordensServico, StatusDiversos::from($data['status']))),
+                    Tables\Actions\BulkAction::make('atualizar_sankhya')
+                        ->form([
+                            Forms\Components\Select::make('status')
+                                ->options(StatusOrdemSankhya::toSelectArray())
+                        ])
+                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, StatusOrdemSankhya::from($data['status']))),
                 ]),
             ])
             ->poll('3s')

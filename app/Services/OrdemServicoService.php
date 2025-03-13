@@ -60,6 +60,24 @@ class OrdemServicoService
         return true;
     }
 
+    public static function updateStatusOrdem(Collection $ordensServico, StatusDiversos $status)
+    {
+        $ordensServico->each(function(OrdemServico $ordem) use ($status) {
+            $ordem->update([
+                'status' => $status,
+            ]);
+        });
+    }
+    
+    public static function updateStatusSankhya(Collection $ordensServico, StatusOrdemSankhya $status)
+    {
+        $ordensServico->each(function(OrdemServico $ordem) use ($status) {
+            $ordem->update([
+                'status_sankhya' => $status,
+            ]);
+        });
+    }
+
     public static function encerrarOrdemSankhya(OrdemServico $ordemServico): void
     {
         $ordemServico->update([
