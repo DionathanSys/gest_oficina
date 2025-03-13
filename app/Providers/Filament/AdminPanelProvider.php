@@ -25,6 +25,8 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             // ->unsavedChangesAlerts()
+            ->registration()
+            ->passwordReset()
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
             ->brandName('SysSoft | AutoMaster')

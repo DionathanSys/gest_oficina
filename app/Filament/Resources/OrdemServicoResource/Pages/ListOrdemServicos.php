@@ -12,6 +12,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ListOrdemServicos extends ListRecords
 {
@@ -37,17 +38,29 @@ class ListOrdemServicos extends ListRecords
             'concluído' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)),
             'abrir_ordem' => Tab::make()
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status_sankhya', StatusOrdemSankhya::PENDENTE)),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status_sankhya', StatusOrdemSankhya::PENDENTE))
+                ->badge(OrdemServico::query()->where('status_sankhya', StatusOrdemSankhya::PENDENTE)->count())
+                ->badgeColor('info'),
             'encerrar_ordem' => Tab::make()
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)
-                                                            ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO])),
+                                                            ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO]))
+                                                            ->badge(OrdemServico::query()
+                                                                ->where('status', StatusOrdemSankhya::PENDENTE)
+                                                                ->where('status_sankhya', StatusOrdemSankhya::PENDENTE)->count())
+                                                            ->badgeColor('info'),
 
         ];
     }
 
     public function getDefaultActiveTab(): string | int | null
     {
+        if(Auth::user()->name == 'Angelica'){
+            dd('1');
+            return 'abrir_ordem';
+        }
+
         return 'pendente';
+
     }
 
 

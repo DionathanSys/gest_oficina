@@ -195,6 +195,7 @@ class OrdemServicoResource extends Resource
                             );
                     })
             ])
+            ->persistFiltersInSession()
             ->defaultSort('nro_ordem')
             ->actions([
                 Tables\Actions\ActionGroup::make([
