@@ -106,10 +106,12 @@ class OrdemServicoResource extends Resource
                     ->label('Dt. Encerramento')
                     ->date('d/m/Y')
                     ->toggleable(isToggledHiddenByDefault:true),
-                Tables\Columns\SelectColumn::make('status')
-                    ->options(StatusDiversos::toSelectArray()),
-                Tables\Columns\SelectColumn::make('status_sankhya')
-                    ->options(StatusOrdemSankhya::toSelectArray())
+                Tables\Columns\TextColumn::make('status')
+                    // ->options(StatusDiversos::toSelectArray())
+                    ->badge('succecs'),
+                Tables\Columns\TextColumn::make('status_sankhya')
+                    // ->options(StatusOrdemSankhya::toSelectArray())
+                    ->badge('warning')
                     ->label('Sankhya'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('d/m/Y H:i:s')
