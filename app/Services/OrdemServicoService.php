@@ -62,8 +62,9 @@ class OrdemServicoService
 
     public static function updateStatusOrdem(Collection $ordensServico, StatusDiversos $status)
     {
-        $ordensServico->each(function(OrdemServico $ordem) use ($status) {
-            $ordem->update([
+        $ordensServico->each(function($ordem_id) use ($status) {
+
+            OrdemServico::find($ordem_id)->update([
                 'status' => $status,
             ]);
         });
@@ -71,8 +72,10 @@ class OrdemServicoService
     
     public static function updateStatusSankhya(Collection $ordensServico, StatusOrdemSankhya $status)
     {
-        $ordensServico->each(function(OrdemServico $ordem) use ($status) {
-            $ordem->update([
+        dump($ordensServico);
+        $ordensServico->each(function($ordem_id) use ($status) {
+            
+            OrdemServico::find($ordem_id)->update([
                 'status_sankhya' => $status,
             ]);
         });
