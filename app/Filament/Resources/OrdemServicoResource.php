@@ -211,11 +211,11 @@ class OrdemServicoResource extends Resource
                     Tables\Actions\Action::make('finalizar')
                         ->label('Finalizar')
                         ->icon('heroicon-o-check-circle')
-                        ->action(fn(OrdemServico $record) => OrdemServicoService::updateStatusOrdem(collect($record), StatusDiversos::CONCLUIDO)),
+                        ->action(fn(OrdemServico $record) => $record->update(['status' => StatusDiversos::CONCLUIDO])),
                     Tables\Actions\Action::make('finalizar_sankhya')
                         ->label('Finalizar Sankhya')
                         ->icon('heroicon-o-check-circle')
-                        ->action(fn(OrdemServico $record) => OrdemServicoService::updateStatusSankhya(collect($record), StatusOrdemSankhya::CONCLUIDO)),
+                        ->action(fn(OrdemServico $record) => $record->update(['status_sankhya' => StatusOrdemSankhya::CONCLUIDO])),
                 ]),
                     
             ], ActionsPosition::BeforeCells)
@@ -233,7 +233,7 @@ class OrdemServicoResource extends Resource
                         ->form([
                             Forms\Components\Select::make('status')
                                 ->options(StatusOrdemSankhya::toSelectArray())
-                                ->default(StatusOrdemSankhya::CONCLUIDO->value)
+                                ->default(StatusOrdemSankhya::CONCLUIDO)
                         ])
                         ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, StatusOrdemSankhya::from($data['status']))),
                 ]),
