@@ -210,11 +210,12 @@ class OrdemServicoResource extends Resource
                         ->icon('heroicon-o-play'),
                     Tables\Actions\Action::make('finalizar')
                         ->label('Finalizar')
-                        ->icon('heroicon-o-check-circle'),
+                        ->icon('heroicon-o-check-circle')
+                        ->action(fn(OrdemServico $record) => OrdemServicoService::updateStatusOrdem(collect($record), StatusDiversos::CONCLUIDO)),
                     Tables\Actions\Action::make('finalizar_sankhya')
                         ->label('Finalizar Sankhya')
                         ->icon('heroicon-o-check-circle')
-                        ->action(fn(OrdemServico $record) => OrdemServicoService::encerrarOrdemSankhya($record)),
+                        ->action(fn(OrdemServico $record) => OrdemServicoService::updateStatusSankhya(collect($record), StatusOrdemSankhya::CONCLUIDO)),
                 ]),
                     
             ], ActionsPosition::BeforeCells)
@@ -225,12 +226,14 @@ class OrdemServicoResource extends Resource
                         ->form([
                             Forms\Components\Select::make('status')
                                 ->options(StatusDiversos::toSelectArray())
+                                ->default(StatusDiversos::CONCLUIDO)
                         ])
                         ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusOrdem($ordensServico, StatusDiversos::from($data['status']))),
                     Tables\Actions\BulkAction::make('atualizar_sankhya')
                         ->form([
                             Forms\Components\Select::make('status')
                                 ->options(StatusOrdemSankhya::toSelectArray())
+                                ->default(StatusOrdemSankhya::CONCLUIDO)
                         ])
                         ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, StatusOrdemSankhya::from($data['status']))),
                 ]),
