@@ -55,7 +55,6 @@ class ListOrdemServicos extends ListRecords
     public function getDefaultActiveTab(): string | int | null
     {
         if(Auth::user()->name == 'Angelica'){
-            dd('1');
             return 'abrir_ordem';
         }
 
