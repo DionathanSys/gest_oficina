@@ -45,8 +45,8 @@ class ListOrdemServicos extends ListRecords
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusDiversos::CONCLUIDO)
                                                             ->whereIn('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO]))
                                                             ->badge(OrdemServico::query()
-                                                                ->where('status', StatusOrdemSankhya::PENDENTE)
-                                                                ->where('status_sankhya', StatusOrdemSankhya::PENDENTE)->count())
+                                                                ->where('status', StatusOrdemSankhya::CONCLUIDO)
+                                                                ->where('status_sankhya', [StatusOrdemSankhya::PENDENTE, StatusOrdemSankhya::ABERTO])->count())
                                                             ->badgeColor('info'),
 
         ];
