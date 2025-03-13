@@ -106,6 +106,8 @@ class OrdemServicoResource extends Resource
                     ->label('Dt. Encerramento')
                     ->date('d/m/Y')
                     ->toggleable(isToggledHiddenByDefault:true),
+                Tables\Columns\TextColumn::make('itens_count')->counts('itens')
+                    ->label('Qtd. Serviços'),
                 Tables\Columns\TextColumn::make('status')
                     // ->options(StatusDiversos::toSelectArray())
                     ->badge('succecs'),
