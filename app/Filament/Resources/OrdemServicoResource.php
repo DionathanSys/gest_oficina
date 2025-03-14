@@ -72,7 +72,7 @@ class OrdemServicoResource extends Resource
                         Forms\Components\Select::make('status_sankhya')
                             ->label('Sankhya')
                             ->options(fn() => StatusOrdemSankhya::toSelectArray())
-                            ->default(StatusDiversos::PENDENTE),
+                            ->default(StatusOrdemSankhya::PENDENTE),
                         Forms\Components\DatePicker::make('data_abertura')
                             ->label('Data de Abertura')
                             ->default(now()),

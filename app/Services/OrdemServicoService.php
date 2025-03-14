@@ -14,7 +14,7 @@ use Illuminate\Support\Collection;
 class OrdemServicoService
 {
     public static function create(array $data): OrdemServico
-    {
+    {   dd($data);
         $ordemServico = OrdemServico::create($data);
         
         if ($ordemServico){
