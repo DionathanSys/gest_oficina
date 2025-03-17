@@ -48,6 +48,8 @@ class OrdemServicoResource extends Resource
                 ])
                     ->schema([
                         Forms\Components\TextInput::make('nro_ordem')
+                            ->reactive()
+                            ->afterStateUpdated(fn(Forms\Set $set) => $set('status_sankhya', StatusOrdemSankhya::ABERTO))
                             ->label('Nro.OS'),
                         Forms\Components\Select::make('veiculo_id')
                             ->placeholder('Placa')
@@ -90,6 +92,7 @@ class OrdemServicoResource extends Resource
                     ->afterStateUpdated(function(OrdemServico $record){
                         OrdemServicoService::setNroOrdem($record);
                     })
+                    
                     ->label('Nro.OS')
                     ->searchable()
                     ->sortable()
