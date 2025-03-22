@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\StatusDiversos;
 use App\Enums\StatusOrdemSankhya;
 use App\Filament\Resources\ItemOrdemServicoResource\Pages;
 use App\Filament\Resources\ItemOrdemServicoResource\RelationManagers;
@@ -61,6 +62,10 @@ class ItemOrdemServicoResource extends Resource
                     ->sortable()
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault:true),
+                Tables\Columns\TextColumn::make('ordemServico.data_ordem')
+                    ->label('Dt Ordem')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault:true),
                 Tables\Columns\TextColumn::make('veiculo.placa')
                     ->label('Placa')
                     ->sortable()
@@ -90,7 +95,10 @@ class ItemOrdemServicoResource extends Resource
                     ->preload()
                     ->relationship('veiculo', 'placa'),
                 Tables\Filters\SelectFilter::make('status')
-                    ->options(StatusOrdemSankhya::toSelectArray()),
+                    ->options(StatusDiversos::toSelectArray())
+                    ->multiple()
+                    ->preload()
+                    ->relationship('ordemServico','status'),
                 Tables\Filters\Filter::make('data_abertura')
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
@@ -117,11 +125,11 @@ class ItemOrdemServicoResource extends Resource
                         return $query
                             ->when(
                                 $data['data_inicio'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('data_abertura', '>=', $date)
+                                fn(Builder $query, $date): Builder => $query->whereHas('ordemServico', fn($q) => $q->whereDate('data_abertura', '>=', $date))
                             )
                             ->when(
                                 $data['data_fim'],
-                                fn(Builder $query, $date): Builder => $query->whereDate('data_abertura', '<=', $date)
+                                fn(Builder $query, $date): Builder => $query->whereHas('ordemServico', fn($q) => $q->whereDate('data_abertura', '<=', $date))
                             );
                     }),
                 Tables\Filters\Filter::make('data_encerramento')
@@ -178,6 +186,8 @@ class ItemOrdemServicoResource extends Resource
                     ->label('Nro. Ordem'),
                 Tables\Grouping\Group::make('itemManutencao.descricao')
                     ->label('Item'),
+                Tables\Grouping\Group::make('ordemServico.data_ordem')
+                    ->label('Dt Ordem'),
             ])
             ->defaultGroup('ordemServico.nro_ordem');
     }
