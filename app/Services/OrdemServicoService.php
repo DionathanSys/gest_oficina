@@ -87,7 +87,6 @@ class OrdemServicoService
 
     public static function encerrarServico(Collection $itens): true
     {
-        
         $itens->each(function (ItemOrdemServico $item) {
             $item->update([
                 'status' => StatusDiversos::CONCLUIDO,
