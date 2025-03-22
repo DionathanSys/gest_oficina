@@ -97,8 +97,7 @@ class ItemOrdemServicoResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->options(StatusDiversos::toSelectArray())
                     ->multiple()
-                    ->preload()
-                    ->relationship('ordemServico','status'),
+                    ->preload(),
                 Tables\Filters\Filter::make('data_abertura')
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
