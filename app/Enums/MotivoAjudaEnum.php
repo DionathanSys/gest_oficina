@@ -12,6 +12,7 @@ enum MotivoAjudaEnum: string
     case FERISTA = 'Ref. Ferista';
     case QUEBRA_CAMINHAO = 'Ref. Quebra de caminhão';
     case TREINAMENTO_MOTORISTA = 'Ref. Treinamento de motorista';
+    case MOTORISTA_EM_TREINAMENTO = 'Ref. motorista em treinamento';
 
     public function getOptions(): string
     {
@@ -24,6 +25,7 @@ enum MotivoAjudaEnum: string
             self::FERISTA => 'Ref. Ferista',
             self::QUEBRA_CAMINHAO => 'Ref. Quebra de caminhão',
             self::TREINAMENTO_MOTORISTA => 'Ref. Treinamento de motorista',
+            self::MOTORISTA_EM_TREINAMENTO => 'Ref. motorista em treinamento',
         };
     }
 
