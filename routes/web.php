@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ImportController;
+use App\Models\Acerto;
 use App\Models\MotoristaViagem;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -10,8 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
-   
-        return view('Protocolo.modelo');
+
+    $a = Acerto::find(618);
+    dd($a->getComplemento());
+        // return view('Protocolo.modelo');
 });
 
 Route::get('/agro/viagem/import', [ImportController::class, 'index'])->name('file.import');
