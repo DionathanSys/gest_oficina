@@ -18,6 +18,7 @@ use Filament\Tables\Actions\{Action, ActionGroup, BulkActionGroup, DeleteAction,
 use Filament\Tables\Columns\{TextColumn};
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,8 +29,6 @@ class ProdutoCotacaoResource extends Resource
     protected static ?string $model = ProdutoCotacao::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    protected static ?string $navigationGroup = 'Cotações';
 
     protected static ?string $navigationLabel = 'Itens';
 
@@ -144,8 +143,9 @@ class ProdutoCotacaoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('cotacao.descricao')
-                    ->label('Cotação'),
+                // TextColumn::make('cotacao.descricao')
+                //     ->label('Cotação')
+                //     ->toggledHiddenByDefault(false),
 
                 TextColumn::make('produto.descricao')
                     ->label('Item'),
@@ -176,6 +176,13 @@ class ProdutoCotacaoResource extends Resource
                             ->toArray()
                     ])
             ])
+            ->groups([
+                Group::make('cotacao.descricao')
+                    ->label('Cotação')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+            ])
+            ->defaultGroup('cotacao.descricao')
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
@@ -189,9 +196,6 @@ class ProdutoCotacaoResource extends Resource
                                 ->preload()
                                 ->searchable()
                                 ->required(),
-                            TextInput::make('produto_id')
-                                ->readOnly()
-                                ->default(fn(ProdutoCotacao $record) => $record->produto_id),
 
                             TextInput::make('produto')
                                 ->readOnly()
@@ -204,11 +208,11 @@ class ProdutoCotacaoResource extends Resource
                         ->action(
                             function (array $data, ProdutoCotacao $record) {
                                 PropostaCotacao::create([
-                                    'cotacao_id' => $record->cotacao_id,
-                                    'produto_id' => $data['produto_id'],
+                                    'cotacao_id'    => $record->cotacao_id,
+                                    'produto_id'    => $record->produto_id,
                                     'fornecedor_id' => $data['fornecedor'],
-                                    'valor' => $data['valor'],
-                                    'status' => StatusCotacaoEnum::PENDENTE,
+                                    'valor'         => $data['valor'],
+                                    'status'        => StatusCotacaoEnum::PENDENTE,
                                 ]);
                                 $record->update(
                                     [

@@ -29,8 +29,6 @@ class PropostaCotacaoResource extends Resource
     
     protected static ?string $navigationLabel = 'Propostas';
 
-    protected static ?string $navigationGroup = 'Cotações';
-
     protected static ?string $label = 'Propostas Cotações';
 
     protected static SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

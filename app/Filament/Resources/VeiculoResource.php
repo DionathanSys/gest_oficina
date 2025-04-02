@@ -24,6 +24,8 @@ class VeiculoResource extends Resource
 
     protected static ?string $navigationLabel = 'Veículos';
 
+    protected static ?string $navigationGroup = 'Mant.';
+
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
@@ -63,6 +65,7 @@ class VeiculoResource extends Resource
             ->filters([
                 //
             ])
+            ->paginated(false)
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

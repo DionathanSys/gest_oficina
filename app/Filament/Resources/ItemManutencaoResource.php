@@ -86,14 +86,24 @@ class ItemManutencaoResource extends Resource
         ];
     }
 
+    public static function getCodigoFormField(): Forms\Components\TextInput
+    {
+        return Forms\Components\TextInput::make('codigo')
+            ->label('Código')
+            ->autocomplete(false)
+            ->required()
+            ->numeric();
+    }
+
     public static function getDescricaoFormField(): Forms\Components\TextInput
     {
         return Forms\Components\TextInput::make('descricao')
             ->label('Descrição')
-                ->autocomplete(false)
+            ->autocomplete(false)
             ->required()
             ->maxLength(200);
     }
+
     public static function getComplementoFormField(): Forms\Components\TextInput
     {
         return Forms\Components\TextInput::make('complemento')
@@ -105,5 +115,36 @@ class ItemManutencaoResource extends Resource
         return Forms\Components\Toggle::make('ativo')
             ->default(true)  
             ->required();
+    }
+    
+    public static function getControlaPosicaoFormField(): Forms\Components\Toggle
+    {
+        return Forms\Components\Toggle::make('controla_posicao')
+            ->default(false)  
+            ->required();
+    }
+
+    public static function getSelectItemFormFiedl(): Forms\Components\Select
+    {
+        return Forms\Components\Select::make('item_manutencao_id')
+                    ->columnSpan(6)
+                    ->relationship('itemManutencao', 'descricao')
+                    ->preload()
+                    ->searchable()
+                    ->default(null)
+                    ->createOptionForm([
+                        self::getCodigoFormField(),
+                        self::getDescricaoFormField(),
+                        self::getComplementoFormField(),
+                        self::getAtivoFormField(),
+                        self::getControlaPosicaoFormField(),
+                    ])
+                    ->editOptionForm([
+                        self::getCodigoFormField(),
+                        self::getDescricaoFormField(),
+                        self::getComplementoFormField(),
+                        self::getAtivoFormField(),
+                        self::getControlaPosicaoFormField(),
+                    ]);
     }
 }

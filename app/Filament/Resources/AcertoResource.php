@@ -131,14 +131,13 @@ class AcertoResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('motorista')
-                    ->limit(10)
+                    ->limit(20)
                     ->searchable()
                     ->copyable()
                     ->copyableState(function (Acerto $record) {
                         return $record->getComplemento();
                     })
-                    ->sortable()
-                /* ->wrap() */,
+                    ->sortable(),
 
                 TextColumn::make('fechamento')
                     ->searchable()
@@ -165,10 +164,8 @@ class AcertoResource extends Resource
 
                 TextColumn::make('produtividade')
                     ->badge(fn(string $state): string => 'succes')
-                    // ->color()
                     ->label('Produtividade')
                     ->state(function (Acerto $record) {
-
                         return 'R$ ' . number_format($record->getProdutividade(), 2, ',', '.');
                     })
                     ->copyable()

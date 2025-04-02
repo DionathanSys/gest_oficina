@@ -24,8 +24,14 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+<<<<<<< HEAD
             ->unsavedChangesAlerts()
             ->databaseNotifications()
+=======
+            // ->unsavedChangesAlerts()
+            ->registration()
+            ->passwordReset()
+>>>>>>> ebc4fadfc2b2c003ffd17581d36856643091e6e0
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarCollapsibleOnDesktop()
             ->brandName('SysSoft | AutoMaster')
@@ -59,6 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->databaseNotifications();
     }
 }

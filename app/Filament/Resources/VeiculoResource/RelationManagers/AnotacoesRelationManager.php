@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\VeiculoResource\RelationManagers;
 
 use App\Enums\{Prioridade, StatusDiversos, TipoAnotacao};
+use App\Filament\Resources\AnotacaoVeiculoResource;
 use App\Filament\Resources\ItemManutencaoResource;
+use App\Models\AnotacaoVeiculo;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -11,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Components\Tab;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AnotacoesRelationManager extends RelationManager
@@ -92,12 +95,18 @@ class AnotacoesRelationManager extends RelationManager
             ->recordTitleAttribute('id')
             ->modifyQueryUsing(fn($query) => $query->with('veiculo', 'itemManutencao'))
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                    // ->url(fn(AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]))
+                    // ->openUrlInNewTab()
+                    ,
                 Tables\Columns\TextColumn::make('itemmanutencao.descricao')
+                    ->searchable()
                     ->label('Item'),
                 Tables\Columns\TextColumn::make('observacao')
+                    ->searchable()
                     ->label('Observação'),
                 Tables\Columns\TextColumn::make('data_referencia')
+                    ->sortable()
                     ->label('Data Ref.')
                     ->date('d/m/Y'),
                 Tables\Columns\SelectColumn::make('tipo_anotacao')
@@ -147,11 +156,30 @@ class AnotacoesRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
+            ->recordUrl(
+                fn (AnotacaoVeiculo $record) => AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id])
+                )
             ->defaultSort('data_referencia', 'desc')
             ->groups([
-                'tipo_anotacao',
-                'prioridade',
-                'status'
+                Group::make('tipo_anotacao')
+                    ->label('Tipo Anotação')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('Prioridade')
+                    ->label('Prioridade')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('status')
+                    ->label('Status')
+                    ->titlePrefixedWithLabel(false)
+                    ->collapsible(),
+
+                Group::make('data_referencia')
+                    ->label('Data Referência')
+                    ->collapsible()
+                    ->date('d/m/Y'),
             ])
             ->defaultGroup('tipo_anotacao');
     }

@@ -25,10 +25,4 @@ class ListAcertos extends ListRecords
         ];
     }
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            StatsOverview::make(),
-        ];
-    }
 }

@@ -2,12 +2,18 @@
 
 namespace App\Filament\Clusters\Cotacoes\Resources;
 
+use App\Actions\Cotacao\AddItemCotacao;
+use App\Enums\StatusCotacaoEnum;
 use App\Filament\Clusters\Cotacoes;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\Pages;
 use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers\ProdutosCotacaoRelationManager;
+use App\Filament\Clusters\Cotacoes\Resources\CotacaoResource\RelationManagers\PropostasCotacaoRelationManager;
 use App\Models\Cotacao;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
@@ -18,6 +24,7 @@ use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -29,8 +36,6 @@ class CotacaoResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationLabel = 'Cotações';
-
-    protected static ?string $navigationGroup = 'Cotações';
 
     protected static ?int $navigationSort = null;
 
@@ -45,32 +50,38 @@ class CotacaoResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('descricao')
+                    ->label('Descrição')
+                    ->autocomplete(false)
                     ->maxLength(255)
                     ->default(null),
 
                 Forms\Components\TextInput::make('setor')
+                    ->autocomplete(false)
                     ->maxLength(255)
-                    ->default('Frota Agro'),
+                    ->default('FROTA AGRO'),
 
                 Forms\Components\Select::make('prioridade')
-                    ->default('Media')
+                    ->default('Baixa')
                     ->options([
-                        'Baixa' => 'Baixa',
-                        'Media' => 'Média',
-                        'Alta' => 'Alta',
+                        'BAIXA' => 'BAIXA',
+                        'MÉDIA' => 'MÉDIA',
+                        'ALTA' => 'ALTA',
                     ])
                     ->required(),
 
                 Forms\Components\Select::make('status')
                     ->options([
-                        'Pendente' => 'Pendente',
-                        'Finalizado' => 'Finalizado',
-                        'Cancelado' => 'Cancelado'
-                        ])
-                    ->default('Pendente')
+                        'PENDENTE' => 'PENDENTE',
+                        'FINALIZADO' => 'FINALIZADO',
+                        'CANCELADO' => 'CANCELADO'
+                    ])
+                    ->default('PENDENTE')
                     ->required(),
 
                 Forms\Components\DatePicker::make('data')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
+                    ->closeOnDateSelection()
                     ->default(now())
                     ->required(),
             ]);
@@ -80,6 +91,9 @@ class CotacaoResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('Id')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('descricao')
                     ->label('Descrição')
                     ->searchable(),
@@ -90,44 +104,57 @@ class CotacaoResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('data')
-                    ->date()
+                    ->date('d/m/Y')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Criado Em')
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Atualizado Em')
+                    ->dateTime('d/m/Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options(function () {
+                        return collect(StatusCotacaoEnum::cases())
+                            ->mapWithKeys(fn($status) => [$status->value => $status->value])
+                            ->toArray();
+                    })
+                    ->multiple()
+                    ->default([StatusCotacaoEnum::PENDENTE->value, StatusCotacaoEnum::EM_ANDAMENTO->value])
             ])
+            ->persistFiltersInSession()
             ->actions([
                 ActionGroup::make([
                     EditAction::make(),
                     DeleteAction::make(),
                     Action::make('Fechar')
                         ->icon('heroicon-o-lock-closed')
-                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Fechado']) ),
+                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Fechado'])),
                     Action::make('Reabrir')
                         ->icon('heroicon-o-lock-open')
-                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Pendente']) ),
+                        ->action(fn(Cotacao $record) => $record->update(['status' => 'Pendente'])),
                     Action::make('Item')
                         ->icon('heroicon-o-plus')
-                        ->action(fn(Cotacao $record ,$data)=> dd($data,$record))
+                        ->action(fn(Cotacao $record, $data) => (new AddItemCotacao($record, $data))->handle())
                         ->form([
                             Select::make('produto_id')
                                 ->label('Item')
-                                // ->required()
+                                ->required()
                                 ->preload()
                                 ->searchable()
-                                ->relationship('produto', 'descricao')
+                                ->relationship('produto', 'descricao'),
+                            TextInput::make('quantidade'),
+                            Textarea::make('observacao')
+                                ->label('Observação'),
                         ])
 
                 ])->label('Ações')
-                
+
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -139,7 +166,8 @@ class CotacaoResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ProdutosCotacaoRelationManager::class,
+            PropostasCotacaoRelationManager::class,
         ];
     }
 
@@ -148,7 +176,7 @@ class CotacaoResource extends Resource
         return [
             'index' => Pages\ListCotacaos::route('/'),
             // 'create' => Pages\CreateCotacao::route('/create'),
-            // 'edit' => Pages\EditCotacao::route('/{record}/edit'),
+            'edit' => Pages\EditCotacao::route('/{record}/edit'),
         ];
     }
 }

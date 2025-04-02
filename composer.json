@@ -11,6 +11,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^2.2",
         "filament/filament": "^3.2",
+        "guava/filament-modal-relation-managers": "^1.1",
         "josespinal/filament-record-navigation": "^2.0",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
