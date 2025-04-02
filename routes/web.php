@@ -3,11 +3,8 @@
 use App\Filament\Resources\AnotacaoVeiculoResource;
 use App\Filament\Resources\VeiculoResource;
 use App\Http\Controllers\ImportController;
-<<<<<<< HEAD
 use App\Models\Acerto;
-=======
 use App\Models\AnotacaoVeiculo;
->>>>>>> ebc4fadfc2b2c003ffd17581d36856643091e6e0
 use App\Models\MotoristaViagem;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -18,18 +15,6 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('/', function () {
 
-<<<<<<< HEAD
-    $a = Acerto::find(618);
-    dd($a->getComplemento());
-        // return view('Protocolo.modelo');
-=======
-        $var = AnotacaoVeiculo::all()->first();
-        // dd($var);
-        return redirect(AnotacaoVeiculoResource::getUrl());
-
-        // AnotacaoVeiculoResource::getUrl('edit', ['record' => $record->id]);
-
->>>>>>> ebc4fadfc2b2c003ffd17581d36856643091e6e0
 });
 
 Route::get('/agro/viagem/import', [ImportController::class, 'index'])->name('file.import');
