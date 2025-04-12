@@ -30,7 +30,7 @@ class EditOrdemServico extends EditRecord
                     $this->record,
                     $data['data_encerramento'] ?? now(),
                 ))
-                ->after(fn() => redirect()->route(OrdemServicoResource::getUrl('edit', ['record' => $this->record->id]))),
+                ->after(fn() => redirect(OrdemServicoResource::getUrl('edit', ['record' => $this->record->id]))),
         ];
     }
 }
