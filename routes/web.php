@@ -22,7 +22,7 @@ Route::get('/agro/viagem/import', [ImportController::class, 'index'])->name('fil
 Route::post('/agro/viagem/store', [ImportController::class, 'store'])->name('file.store');
 
 Route::get('/ajuste', function(){
-        $registros = MotoristaViagem::where('dupla', '!=', null)->get();
+        $registros = MotoristaViagem::where('dupla', '!=', null)->limit(10)->get();
         // dd($registros);
         $data = $registros->each(function($registro){
                 // dd($registro);
@@ -33,6 +33,6 @@ Route::get('/ajuste', function(){
                 unset($registro->updated_at);
                 unset($registro->id);
         });
-
+        dd($data);
         DB::table('motoristas_viagem')->insert($data->toArray());
 });

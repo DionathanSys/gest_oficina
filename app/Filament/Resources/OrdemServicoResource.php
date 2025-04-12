@@ -92,12 +92,12 @@ class OrdemServicoResource extends Resource
                     ->afterStateUpdated(function(OrdemServico $record){
                         OrdemServicoService::setNroOrdem($record);
                     })
-                    
+
                     ->label('Nro.OS')
                     ->searchable()
                     ->sortable()
                     ->width('4%'),
-                Tables\Columns\TextColumn::make('veiculo.placa')    
+                Tables\Columns\TextColumn::make('veiculo.placa')
                     ->label('Veículo'),
                 Tables\Columns\TextColumn::make('km'),
                 Tables\Columns\TextColumn::make('tipo_manutencao')
@@ -139,17 +139,17 @@ class OrdemServicoResource extends Resource
                 Tables\Filters\Filter::make('data_abertura')
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
-                
+
                         if ($data['data_inicio'] ?? null) {
                             $indicators[] = Indicator::make('Dt. Inicio ' . Carbon::parse($data['data_inicio'])->toFormattedDateString())
                                 ->removeField('data_inicio');
                         }
-                
+
                         if ($data['data_fim'] ?? null) {
                             $indicators[] = Indicator::make('Dt. Fim ' . Carbon::parse($data['data_fim'])->toFormattedDateString())
                                 ->removeField('data_fim');
                         }
-                
+
                         return $indicators;
                     })
                     ->form([
@@ -172,17 +172,17 @@ class OrdemServicoResource extends Resource
                 Tables\Filters\Filter::make('data_encerramento')
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
-                
+
                         if ($data['data_inicio'] ?? null) {
                             $indicators[] = Indicator::make('Dt. Inicio ' . Carbon::parse($data['data_inicio'])->toFormattedDateString())
                                 ->removeField('data_inicio');
                         }
-                
+
                         if ($data['data_fim'] ?? null) {
                             $indicators[] = Indicator::make('Dt. Fim ' . Carbon::parse($data['data_fim'])->toFormattedDateString())
                                 ->removeField('data_fim');
                         }
-                
+
                         return $indicators;
                     })
                     ->form([
@@ -224,7 +224,7 @@ class OrdemServicoResource extends Resource
                         ->icon('heroicon-o-check-circle')
                         ->action(fn(OrdemServico $record) => $record->update(['status_sankhya' => StatusOrdemSankhya::CONCLUIDO])),
                 ]),
-                    
+
             ], ActionsPosition::BeforeCells)
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -242,7 +242,7 @@ class OrdemServicoResource extends Resource
                                 ->options(StatusOrdemSankhya::toSelectArray())
                                 ->default(StatusOrdemSankhya::CONCLUIDO)
                         ])
-                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, StatusOrdemSankhya::from($data['status']))),
+                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, dd(StatusOrdemSankhya::from($data['status'])))),
                 ]),
             ])
             ->poll('3s')
