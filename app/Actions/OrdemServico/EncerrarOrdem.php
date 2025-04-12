@@ -21,14 +21,16 @@ class EncerrarOrdem
             return false;
         }
 
-        $ordemServico->each(function ($item) {
+        $ordemServico->itens->each(function ($item) {
+            // dump('antes', $item);
             $item->update(
                 [
                     'status' => StatusDiversos::CONCLUIDO
                 ]
             );
+            // dump('depois', $item);
         });
-
+        // dd('fim');
         $ordemServico->update([
             'status' => StatusDiversos::CONCLUIDO,
             'data_encerramento' => $dataEncerramento ?? now(),
