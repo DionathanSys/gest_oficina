@@ -240,9 +240,9 @@ class OrdemServicoResource extends Resource
                         ->form([
                             Forms\Components\Select::make('status')
                                 ->options(StatusOrdemSankhya::toSelectArray())
-                                ->default(StatusOrdemSankhya::CONCLUIDO)
+                                ->default(StatusOrdemSankhya::CONCLUIDO->value)
                         ])
-                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, dd(StatusOrdemSankhya::from($data['status'])))),
+                        ->action(fn(Collection $ordensServico, array $data) => OrdemServicoService::updateStatusSankhya($ordensServico, StatusOrdemSankhya::from($data['status']))),
                 ]),
             ])
             ->poll('3s')
