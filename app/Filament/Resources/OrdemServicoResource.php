@@ -6,6 +6,7 @@ use App\Enums\StatusDiversos;
 use App\Enums\StatusOrdemSankhya;
 use App\Filament\Resources\OrdemServicoResource\Pages;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers;
+use App\Filament\Resources\OrdemServicoResource\RelationManagers\ComentariosRelationManager;
 use App\Filament\Resources\OrdemServicoResource\RelationManagers\ServicosRelationManager;
 use App\Models\OrdemServico;
 use App\Services\OrdemServicoService;
@@ -255,6 +256,7 @@ class OrdemServicoResource extends Resource
     {
         return [
             ServicosRelationManager::class,
+            ComentariosRelationManager::class,
         ];
     }
 
