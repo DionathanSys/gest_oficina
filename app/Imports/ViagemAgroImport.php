@@ -37,9 +37,9 @@ class ViagemAgroImport
             $motoristas = Motorista::whereIn('codigo_sankhya', $data->pluck(8)->merge($data->pluck(11))->filter()->unique())->get()->keyBy('codigo_sankhya');
 
             $data->each(function($row) use($motoristas) {
-                
+
                 $dataViagem = DateTime::createFromFormat('m/d/Y', $row[2]);
-                
+
                 if ($dataViagem){
 
                     $viagem = (new ViagemAgro())->create([
@@ -55,7 +55,7 @@ class ViagemAgroImport
                         'local' => $row[20],
                         'vlr_cte' => str_replace(',', '', $row[16]),
                         'vlr_nfs' => str_replace(',', '', $row[17]),
-    
+
                     ]);
 
                     $frete = str_replace(',', '', $row[14]);;
@@ -73,6 +73,10 @@ class ViagemAgroImport
                     $motorista_1 = $motoristas->get($row[8]);
                     $motorista_2 = $row[11] ? $motoristas->get($row[11]) : null;
 
+                    if (!$motorista_1) {
+                        dd('motorista 1 não encontrado', $row[8]);
+                    }
+
                     (new MotoristaViagem())->create(array_merge($info, [
                         'motorista_id' => $motorista_1->id,
                         'motorista' => $motorista_1->nome,
@@ -81,6 +85,10 @@ class ViagemAgroImport
                     ]));
 
                     if ($row[11]) {
+                        dump('motorista 2', $row[11]);
+                        if(!$motorista_2->id){
+                            dd('motorista 2 não encontrado', $row[8]);
+                        }
 
                         (new MotoristaViagem())->create(array_merge($info, [
                             'motorista_id' => $motorista_2->id,
@@ -101,7 +109,7 @@ class ViagemAgroImport
 
         //     if ($data){
         //         $model = new ViagemAgro();
-            
+
         //         $viagem = $model->create([
         //             'referencia' => $this->referencia,
         //             'fechamento' => $this->fechamento,
@@ -117,18 +125,18 @@ class ViagemAgroImport
         //             'vlr_nfs' => str_replace(',', '', $row[17]),
 
         //         ]);
-                
+
         //         $motorista = Motorista::where('codigo_sankhya', $row[8])->first();
-                
+
         //         $dupla = null;
-                
+
         //         if ($row[11]) {
         //             $dupla = Motorista::where('codigo_sankhya', $row[11])->first();
         //         }
-                
+
         //         $frete = str_replace(',', '', $row[14]);;
         //         $comissao = (float) $row[10];
-                
+
         //         $motorista_viagem = new MotoristaViagem();
         //         $motorista_viagem->create([
         //             'fechamento' => $this->fechamento,
@@ -145,7 +153,7 @@ class ViagemAgroImport
 
                 // dd('nota '.$row[6], 'frete '.$frete,'comissao '.$comissao,'calculo '.$frete * ($comissao / 100));
             // }
-            
+
         // }
 
         // echo 'Finalizado';

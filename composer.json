@@ -16,7 +16,8 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "opcodesio/log-viewer": "^3.15",
-        "phpoffice/phpspreadsheet": "^2.2"
+        "phpoffice/phpspreadsheet": "^2.2",
+        "spatie/pdf-to-text": "^1.54"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
