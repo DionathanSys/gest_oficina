@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('indicadores', function (Blueprint $table) {
+        Schema::create('gestor_indicador', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            $table->decimal('peso', 3, 0)->default(0);
-            $table->string('tipo');
+            $table->foreignId('gestor_id')->constrained('gestores')->cascadeOnDelete();
+            $table->foreignId('indicador_id')->constrained('indicadores')->cascadeOnDelete();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('indicadores');
+        Schema::dropIfExists('gestor_indicador');
     }
 };

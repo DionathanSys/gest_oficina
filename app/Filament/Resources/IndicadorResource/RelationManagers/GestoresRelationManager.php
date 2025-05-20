@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\GestorResource\RelationManagers;
+namespace App\Filament\Resources\IndicadorResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -10,17 +10,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IndicadoresRelationManager extends RelationManager
+class GestoresRelationManager extends RelationManager
 {
-    protected static string $relationship = 'indicadores';
+    protected static string $relationship = 'gestores';
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->required()
-                    ->maxLength(255),
+
             ]);
     }
 
@@ -29,27 +27,30 @@ class IndicadoresRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('descricao')
-                    ->label('Descrição'),
-                Tables\Columns\TextColumn::make('peso')
-                    ->label('Peso'),
+                Tables\Columns\TextColumn::make('id')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('unidade'),
+                Tables\Columns\TextColumn::make('setor'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make(),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                Tables\Actions\DetachAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
+                Tables\Actions\DetachAction::make()
+                    ->iconButton(),
                 // Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make(),
+                    Tables\Actions\DetachBulkAction::make()
+                        ->iconButton(),
                     // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

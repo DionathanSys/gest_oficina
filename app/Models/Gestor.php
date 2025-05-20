@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Gestor extends Model
 {
@@ -11,9 +12,9 @@ class Gestor extends Model
 
     protected $table = 'gestores';
 
-    public function indicadores()
+    public function indicadors()
     {
-        return $this->hasMany(Indicador::class, 'gestor_id');
+        return $this->belongsToMany(Indicador::class, 'gestor_indicador', 'gestor_id', 'indicador_id');
     }
 
     public function resultadoIndicador()

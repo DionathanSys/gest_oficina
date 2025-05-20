@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\GestorResource\Pages;
 use App\Filament\Resources\GestorResource\RelationManagers;
 use App\Filament\Resources\GestorResource\RelationManagers\IndicadoresRelationManager;
+use App\Filament\Resources\GestorResource\RelationManagers\ResultadoIndicadorRelationManager;
 use App\Models\Gestor;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -84,6 +85,7 @@ class GestorResource extends Resource
     {
         return [
             IndicadoresRelationManager::class,
+            ResultadoIndicadorRelationManager::class,
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\IndicadorResource\Pages;
 use App\Filament\Resources\IndicadorResource\RelationManagers;
+use App\Filament\Resources\IndicadorResource\RelationManagers\GestoresRelationManager;
 use App\Models\Indicador;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -40,7 +41,7 @@ class IndicadorResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('peso')
                     ->required()
-                    ->columnSpan(1)
+                    ->columnSpan(2)
                     ->numeric()
                     ->default(0),
                 Forms\Components\Select::make('tipo')
@@ -51,13 +52,13 @@ class IndicadorResource extends Resource
                         'COLETIVO' => 'COLETIVO',
                     ])
                     ->default('INDIVIDUAL'),
-                Forms\Components\Select::make('gestor_id')
+                Forms\Components\CheckboxList::make('gestores')
                     ->label('Gestor')
-                    ->columnSpan(4)
-                    ->relationship('gestor', 'nome')
-                    ->preload()
-                    ->searchable()
-                    ->required(),
+                    ->columns(4)
+                    ->columnSpanFull()
+                    ->columnStart(1)
+                    ->bulkToggleable()
+                    ->relationship('gestores', 'nome'),
             ]);
     }
 
@@ -72,7 +73,9 @@ class IndicadorResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tipo'),
-                Tables\Columns\TextColumn::make('gestor.nome')
+                Tables\Columns\TextColumn::make('gestores.nome')
+                    ->limitList(1)
+                    ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -90,6 +93,11 @@ class IndicadorResource extends Resource
             ->filters([
                 //
             ])
+            // ->groups([
+            //     Tables\Grouping\Group::make('gestor.nome')
+            //         ->label('Gestor'),
+            // ])
+            // ->defaultGroup('gestor.nome')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -103,7 +111,7 @@ class IndicadorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            GestoresRelationManager::class,
         ];
     }
 
@@ -111,7 +119,7 @@ class IndicadorResource extends Resource
     {
         return [
             'index' => Pages\ListIndicadors::route('/'),
-            'create' => Pages\CreateIndicador::route('/create'),
+            // 'create' => Pages\CreateIndicador::route('/create'),
             'edit' => Pages\EditIndicador::route('/{record}/edit'),
         ];
     }

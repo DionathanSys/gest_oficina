@@ -5,6 +5,7 @@ use App\Filament\Resources\VeiculoResource;
 use App\Http\Controllers\ImportController;
 use App\Models\Acerto;
 use App\Models\AnotacaoVeiculo;
+use App\Models\Indicador;
 use App\Models\MotoristaViagem;
 use Illuminate\Support\Facades\Route;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -159,3 +160,8 @@ Route::post('/upload-pdf', function (\Illuminate\Http\Request $request) {
     return $response;
 
 })->name('upload.pdf');
+
+Route::get('/teste', function () {
+    $indicador = Indicador::with('gestores')->find(3);
+    dd($indicador);
+});
