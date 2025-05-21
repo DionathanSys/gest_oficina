@@ -45,7 +45,8 @@ class IndicatorsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('descricao')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('id')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('descricao')
                     ->label('Descrição'),
                 Tables\Columns\TextColumn::make('peso'),
@@ -78,6 +79,8 @@ class IndicatorsRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DetachBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading('Sem registros')
+            ->emptyStateDescription('Clique em "+ Indicador" ou "Vincular" para adicionar um indicador.');
     }
 }

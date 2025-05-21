@@ -70,6 +70,6 @@ class ManagersRelationManager extends RelationManager
                 ]),
             ])
             ->emptyStateHeading('Sem registros')
-            ->emptyStateDescription('Clique em "Novo Gestor" ou "Vincular" para adicionar um gestor a este indicador.');
+            ->emptyStateDescription('Clique em "+ Gestor" ou "Vincular" para adicionar um gestor a este indicador.');
     }
 }

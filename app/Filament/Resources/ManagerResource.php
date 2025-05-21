@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ManagerResource\Pages;
 use App\Filament\Resources\ManagerResource\RelationManagers;
+use App\Filament\Resources\ManagerResource\RelationManagers\IndicatorResultsRelationManager;
 use App\Filament\Resources\ManagerResource\RelationManagers\IndicatorsRelationManager;
 use App\Models\Manager;
 use Filament\Forms;
@@ -96,6 +97,7 @@ class ManagerResource extends Resource
     public static function getRelations(): array
     {
         return [
+            IndicatorResultsRelationManager::class,
             IndicatorsRelationManager::class,
         ];
     }
