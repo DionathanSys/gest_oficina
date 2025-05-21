@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('gestor_indicador', function (Blueprint $table) {
+        Schema::create('indicator_manager', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gestor_id')->constrained('gestores')->cascadeOnDelete();
-            $table->foreignId('indicador_id')->constrained('indicadores')->cascadeOnDelete();
+            $table->foreignId('manager_id')->constrained('managers')->cascadeOnDelete();
+            $table->foreignId('indicator_id')->constrained('indicators')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gestor_indicador');
+        Schema::dropIfExists('indicator_manager');
     }
 };

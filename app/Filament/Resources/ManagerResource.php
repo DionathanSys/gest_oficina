@@ -2,11 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GestorResource\Pages;
-use App\Filament\Resources\GestorResource\RelationManagers;
-use App\Filament\Resources\GestorResource\RelationManagers\IndicadoresRelationManager;
-use App\Filament\Resources\GestorResource\RelationManagers\ResultadoIndicadorRelationManager;
-use App\Models\Gestor;
+use App\Filament\Resources\ManagerResource\Pages;
+use App\Filament\Resources\ManagerResource\RelationManagers;
+use App\Filament\Resources\ManagerResource\RelationManagers\IndicatorsRelationManager;
+use App\Models\Manager;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,33 +14,39 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class GestorResource extends Resource
+class ManagerResource extends Resource
 {
-    protected static ?string $model = Gestor::class;
+    protected static ?string $model = Manager::class;
 
-    protected static ?string $navigationGroup = 'Gestores';
-
-    protected static ?string $navigationLabel = 'Gestores';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $pluralModelLabel = 'Gestores';
+
+    protected static ?string $pluralLabel = 'Gestores';
 
     protected static ?string $label = 'Gestor';
 
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(12)
+            ->columns(4)
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                    ->columnSpan(4)
+                    ->columns(6)
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('unidade')
-                    ->columnSpan(3)
-                    ->maxLength(255),
+                Forms\Components\Select::make('unidade')
+                    ->columns(3)
+                    ->options([
+                        'CATANDUVAS'    => 'Catanduvas',
+                        'CONCORDIA'     => 'Concórdia',
+                        'CHAPECO'       => 'Chapecó',
+                        'RIO VERDE'     => 'Rio Verde',
+                    ]),
                 Forms\Components\TextInput::make('setor')
-                    ->columnSpan(3)
+                    ->columns(3)
                     ->maxLength(255),
+
             ]);
     }
 
@@ -49,6 +54,9 @@ class GestorResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('nome')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('unidade')
@@ -56,14 +64,17 @@ class GestorResource extends Resource
                 Tables\Columns\TextColumn::make('setor')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Criado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Atualizado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Deletado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -72,7 +83,8 @@ class GestorResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -84,17 +96,16 @@ class GestorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            IndicadoresRelationManager::class,
-            ResultadoIndicadorRelationManager::class,
+            IndicatorsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGestors::route('/'),
-            'create' => Pages\CreateGestor::route('/create'),
-            'edit' => Pages\EditGestor::route('/{record}/edit'),
+            'index' => Pages\ListManagers::route('/'),
+            'create' => Pages\CreateManager::route('/create'),
+            'edit' => Pages\EditManager::route('/{record}/edit'),
         ];
     }
 }

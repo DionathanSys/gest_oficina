@@ -2,10 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\IndicadorResource\Pages;
-use App\Filament\Resources\IndicadorResource\RelationManagers;
-use App\Filament\Resources\IndicadorResource\RelationManagers\GestoresRelationManager;
-use App\Models\Indicador;
+use App\Filament\Resources\IndicatorResource\Pages;
+use App\Filament\Resources\IndicatorResource\RelationManagers;
+use App\Filament\Resources\IndicatorResource\RelationManagers\ManagersRelationManager;
+use App\Models\Indicator;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,20 +14,17 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IndicadorResource extends Resource
+class IndicatorResource extends Resource
 {
-    protected static ?string $model = Indicador::class;
+    protected static ?string $model = Indicator::class;
 
-    protected static ?string $navigationGroup = 'Indicadores';
-
-    protected static ?string $navigationLabel = 'Indicadores';
-
-    protected static ?string $label = 'Indicador';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $pluralModelLabel = 'Indicadores';
 
-    protected static ?string $pluralLabel = 'pluralLabel';
+    protected static ?string $pluralLabel = 'Indicadores';
 
+    protected static ?string $label = 'Indicador';
 
     public static function form(Form $form): Form
     {
@@ -35,30 +32,23 @@ class IndicadorResource extends Resource
             ->columns(12)
             ->schema([
                 Forms\Components\TextInput::make('descricao')
+                    ->columnSpan(5)
                     ->label('Descrição')
-                    ->columnSpan(4)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('peso')
+                    ->columnSpan(1)
                     ->required()
-                    ->columnSpan(2)
                     ->numeric()
                     ->default(0),
                 Forms\Components\Select::make('tipo')
-                    ->required()
-                    ->columnSpan(2)
+                    ->columnSpan(3)
                     ->options([
-                        'INDIVIDUAL' => 'INDIVIDUAL',
-                        'COLETIVO' => 'COLETIVO',
+                        'COLETIVO' => 'Coletivo',
+                        'INDIVIDUAL' => 'Individual',
                     ])
-                    ->default('INDIVIDUAL'),
-                Forms\Components\CheckboxList::make('gestores')
-                    ->label('Gestor')
-                    ->columns(4)
-                    ->columnSpanFull()
-                    ->columnStart(1)
-                    ->bulkToggleable()
-                    ->relationship('gestores', 'nome'),
+                    ->default('INDIVIDUAL')
+                    ->required(),
             ]);
     }
 
@@ -67,25 +57,22 @@ class IndicadorResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')
-                    ->label('Descrição')
-                    ->searchable(),
+                    ->label('Descrição'),
                 Tables\Columns\TextColumn::make('peso')
-                    ->numeric()
-                    ->sortable(),
+                    ->numeric(),
                 Tables\Columns\TextColumn::make('tipo'),
-                Tables\Columns\TextColumn::make('gestores.nome')
-                    ->limitList(1)
-                    ->badge()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Criado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Atualizado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
+                    ->label('Deletado em')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -93,11 +80,6 @@ class IndicadorResource extends Resource
             ->filters([
                 //
             ])
-            // ->groups([
-            //     Tables\Grouping\Group::make('gestor.nome')
-            //         ->label('Gestor'),
-            // ])
-            // ->defaultGroup('gestor.nome')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -111,16 +93,16 @@ class IndicadorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            GestoresRelationManager::class,
+            ManagersRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListIndicadors::route('/'),
-            // 'create' => Pages\CreateIndicador::route('/create'),
-            'edit' => Pages\EditIndicador::route('/{record}/edit'),
+            'index' => Pages\ListIndicators::route('/'),
+            'create' => Pages\CreateIndicator::route('/create'),
+            'edit' => Pages\EditIndicator::route('/{record}/edit'),
         ];
     }
 }

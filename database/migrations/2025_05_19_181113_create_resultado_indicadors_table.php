@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('resultados_indicador', function (Blueprint $table) {
+        Schema::create('indicator_result', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('gestor_id')->constrained('gestores')->cascadeOnDelete();
-            $table->foreignId('indicador_id')->constrained('indicadores')->cascadeOnDelete();
+            $table->foreignId('manager_id')->constrained('managers')->cascadeOnDelete();
+            $table->foreignId('indicator_id')->constrained('indicators')->cascadeOnDelete();
             $table->date('periodo');
             $table->string('resultado');    //! string numero oq vai ser
             $table->decimal('pontuacao_obtida', 3, 0)->default(0);
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('resultados_indicador');
+        Schema::dropIfExists('indicator_result');
     }
 };
