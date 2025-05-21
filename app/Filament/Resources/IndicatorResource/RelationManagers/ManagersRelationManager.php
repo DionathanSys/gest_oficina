@@ -16,7 +16,7 @@ class ManagersRelationManager extends RelationManager
 {
     protected static string $relationship = 'managers';
 
-    protected static ?string $title = 'Gestores';
+    protected static bool $isLazy = false;
 
     public function form(Form $form): Form
     {
@@ -27,6 +27,7 @@ class ManagersRelationManager extends RelationManager
     {
         return $table
             ->recordTitleAttribute('nome')
+            ->heading('Gestores')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -67,6 +68,8 @@ class ManagersRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DetachBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading('Sem registros')
+            ->emptyStateDescription('Clique em "Novo Gestor" ou "Vincular" para adicionar um gestor a este indicador.');
     }
 }

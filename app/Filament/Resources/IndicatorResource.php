@@ -37,7 +37,7 @@ class IndicatorResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('peso')
-                    ->columnSpan(1)
+                    ->columnSpan(2)
                     ->required()
                     ->numeric()
                     ->default(0),

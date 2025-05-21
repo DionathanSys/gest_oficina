@@ -17,6 +17,8 @@ class IndicatorsRelationManager extends RelationManager
 
     protected static ?string $title = 'Indicadores';
 
+    protected static bool $isLazy = false;
+
     public function form(Form $form): Form
     {
         return $form
@@ -41,7 +43,7 @@ class IndicatorsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('id')
+            ->recordTitleAttribute('descricao')
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('descricao')

@@ -19,6 +19,8 @@ class ServicosRelationManager extends RelationManager
 {
     protected static string $relationship = 'itens';
 
+    protected static bool $isLazy = false;
+
     public function form(Form $form): Form
     {
         return $form
