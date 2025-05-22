@@ -69,7 +69,11 @@ class IndicatorResultsRelationManager extends RelationManager
                         $data['manager_id'] = $this->ownerRecord->id;
                         return $model::create($data);
                     })
-                    ->after(fn(IndicatorResult $record) => CreateRegistroResultadoIndicadorAction::exec($record)),
+                    ->after(function(IndicatorResult $record) {
+                        if($record->indicator->tipo == 'COLETIVO'){
+                            CreateRegistroResultadoIndicadorAction::exec($record);
+                        }
+                    }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

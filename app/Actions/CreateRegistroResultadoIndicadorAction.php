@@ -8,22 +8,22 @@ class CreateRegistroResultadoIndicadorAction
 {
     public static function exec(IndicatorResult $record)
     {
-        dump($record->manager_id);
-
+        dump('record', $record);
         $managers = $record->indicator->managers;
-
+        dump('managers', $managers);
         $managers->each(function ($manager) use ($record) {
             if($manager->id != $record->manager_id){
-                $indicatorResult = $record->replicate();
-                $indicatorResult->manager_id = $manager->id;
-                $indicatorResult->save();
-                dump($manager->id);
-                return;
+                dump('manager diferente', $manager->nome);
+                $data = $record->toArray();
+                $data['manager_id'] = $manager->id;
+                dump('indicatorResult', $data);
+                $d = IndicatorResult::create($data);
+                dd($d);
             }
         });
 
-        dd($managers);
+        $managers->load('indicatorResults');
 
-        return \App\Models\IndicatorResult::create($record);
+        dd($managers);
     }
 }
