@@ -67,6 +67,9 @@ class IndicatorResultsRelationManager extends RelationManager
                     ->form(fn(Forms\Form $form) => IndicatorResultResource::form($form->columns(7)))
                     ->using(function (array $data, string $model): Model {
                         $data['manager_id'] = $this->ownerRecord->id;
+                        if($data['resultado'] == 'NAO_ATENDIDO'){
+                            $data['pontuacao_obtida'] = 0;
+                        }
                         return $model::create($data);
                     })
                     ->after(function(IndicatorResult $record) {
