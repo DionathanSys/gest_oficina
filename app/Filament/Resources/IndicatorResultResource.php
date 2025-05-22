@@ -81,7 +81,7 @@ class IndicatorResultResource extends Resource
                     ->label('Descrição'),
                 Tables\Columns\TextColumn::make('pontuacao_obtida')
                     ->label('Peso')
-                    ->summarize(Sum::make()),
+                    ->summarize(Sum::make()->label('Total')),
                 Tables\Columns\TextColumn::make('manager.nome')
                     ->label('Gestor'),
                 Tables\Columns\TextColumn::make('periodo')
@@ -93,6 +93,7 @@ class IndicatorResultResource extends Resource
             ->filters([
                 //
             ])
+
             ->defaultSort('periodo', 'desc')
             ->groups([
                 Tables\Grouping\Group::make('indicator.descricao')
