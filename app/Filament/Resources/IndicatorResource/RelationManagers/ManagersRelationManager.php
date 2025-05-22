@@ -59,8 +59,8 @@ class ManagersRelationManager extends RelationManager
 
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->iconButton(),
+                // Tables\Actions\EditAction::make()
+                //     ->iconButton(),
                 Tables\Actions\DetachAction::make()
                     ->iconButton(),
             ])
