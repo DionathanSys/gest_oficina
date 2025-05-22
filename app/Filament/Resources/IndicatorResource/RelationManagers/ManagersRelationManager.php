@@ -40,11 +40,11 @@ class ManagersRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->label('Gestor')
-                    ->icon('heroicon-o-plus')
-                    ->form(fn(Forms\Form $form) => ManagerResource::form($form))
-                    ->modalHeading('Novo Gestor'),
+                // Tables\Actions\CreateAction::make()
+                //     ->label('Gestor')
+                //     ->icon('heroicon-o-plus')
+                //     ->form(fn(Forms\Form $form) => ManagerResource::form($form))
+                //     ->modalHeading('Novo Gestor'),
 
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()

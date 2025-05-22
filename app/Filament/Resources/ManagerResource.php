@@ -30,14 +30,14 @@ class ManagerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->columns(4)
+            ->columns(6)
             ->schema([
                 Forms\Components\TextInput::make('nome')
-                    ->columns(6)
+                    ->columnSpan(6)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('unidade')
-                    ->columns(3)
+                    ->columnSpan(3)
                     ->options([
                         'CATANDUVAS'    => 'Catanduvas',
                         'CONCORDIA'     => 'Concórdia',
@@ -45,7 +45,7 @@ class ManagerResource extends Resource
                         'RIO VERDE'     => 'Rio Verde',
                     ]),
                 Forms\Components\TextInput::make('setor')
-                    ->columns(3)
+                    ->columnSpan(3)
                     ->maxLength(255),
 
             ]);
