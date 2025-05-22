@@ -60,7 +60,6 @@ class IndicatorResultsRelationManager extends RelationManager
             ])
             ->groupingSettingsInDropdownOnDesktop()
             ->defaultSort('periodo', 'desc')
-            ->defaultGroup('periodo')
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->label('Resultado')
