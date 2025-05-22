@@ -96,9 +96,11 @@ class IndicatorResultResource extends Resource
             ->defaultSort('periodo', 'desc')
             ->groups([
                 Tables\Grouping\Group::make('indicator.descricao')
-                    ->label('Indicador'),
+                    ->label('Indicador')
+                    ->collapsible(),
                 Tables\Grouping\Group::make('manager.nome')
-                    ->label('Indicador'),
+                    ->label('Indicador')
+                    ->collapsible(),
                 Tables\Grouping\Group::make('periodo')
                     ->label('Período')
                     ->getTitleFromRecordUsing(fn(IndicatorResult $record) => Carbon::parse($record->periodo)->format('m/Y')),
