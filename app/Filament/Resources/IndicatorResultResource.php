@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -78,17 +79,31 @@ class IndicatorResultResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('indicator.descricao')
                     ->label('Descrição'),
+                Tables\Columns\TextColumn::make('pontuacao_obtida')
+                    ->label('Peso')
+                    ->summarize(Sum::make()),
                 Tables\Columns\TextColumn::make('manager.nome')
                     ->label('Gestor'),
                 Tables\Columns\TextColumn::make('periodo')
                     ->label('Período')
-                    ->date(),
+                    ->date('d/m/Y'),
                 Tables\Columns\TextColumn::make('resultado')
                     ->label('Resultado'),
             ])
             ->filters([
                 //
             ])
+            ->defaultSort('periodo', 'desc')
+            ->groups([
+                Tables\Grouping\Group::make('indicator.descricao')
+                    ->label('Indicador'),
+                Tables\Grouping\Group::make('manager.nome')
+                    ->label('Indicador'),
+                Tables\Grouping\Group::make('periodo')
+                    ->label('Período')
+                    ->getTitleFromRecordUsing(fn(IndicatorResult $record) => Carbon::parse($record->periodo)->format('m/Y')),
+            ])
+            ->defaultGroup('manager.nome')
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
@@ -96,7 +111,8 @@ class IndicatorResultResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->poll('3s');
     }
 
     public static function getRelations(): array

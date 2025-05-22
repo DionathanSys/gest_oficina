@@ -4,7 +4,9 @@ namespace App\Filament\Resources\ManagerResource\RelationManagers;
 
 use App\Actions\CreateRegistroResultadoIndicadorAction;
 use App\Filament\Resources\IndicatorResultResource;
+use App\Models\Indicator;
 use App\Models\IndicatorResult;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -64,7 +66,51 @@ class IndicatorResultsRelationManager extends RelationManager
                     ->label('Resultado')
                     ->icon('heroicon-o-plus')
                     ->modalHeading('Novo Resultado')
-                    ->form(fn(Forms\Form $form) => IndicatorResultResource::form($form->columns(7)))
+                    ->form(function(Forms\Form $form) {
+                        return [
+                        Forms\Components\Select::make('indicator_id')
+                            ->options(Indicator::query()
+                                ->whereHas('managers', function (Builder $query) {
+                                    $query->where('manager_id', $this->ownerRecord->id);
+                                })
+                                ->pluck('descricao', 'id'))
+                            ->columnSpan(7)
+                            ->searchable()
+                            ->preload()
+                            ->label('Indicador')
+                            ->required()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                if($state){
+                                    $indicator = Indicator::find($state);
+                                    $set('pontuacao_obtida', $indicator->peso ?? 0);
+                                    return;
+                                }
+                                $set('pontuacao_obtida', 0);
+                            }),
+                        Forms\Components\DatePicker::make('periodo')
+                            ->columnStart(1)
+                            ->columnSpan(2)
+                            ->label('Período')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
+                            ->default(Carbon::now()->subMonth()->startOfMonth())
+                            ->required(),
+                        Forms\Components\Select::make('resultado')
+                            ->columnSpan(3)
+                            ->options([
+                                'ATENDIDO'      => 'Atendido',
+                                'NAO_ATENDIDO'  => 'Não Atendido',
+                            ])
+                            ->default('NAO_ATENDIDO'),
+                        Forms\Components\TextInput::make('pontuacao_obtida')
+                            ->columnSpan(2)
+                            ->readOnly()
+                            ->label('Peso')
+                            ->reactive()
+                            ->numeric(),
+                            ];
+                    })
                     ->using(function (array $data, string $model): Model {
                         $data['manager_id'] = $this->ownerRecord->id;
                         if($data['resultado'] == 'NAO_ATENDIDO'){
