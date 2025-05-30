@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Database\Eloquent\Builder;
@@ -96,15 +97,19 @@ class IndicatorResultsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('indicator.descricao')
                     ->label('Indicador'),
+                Tables\Columns\TextColumn::make('indicator.tipo')
+                    ->label('Tipo'),
                 Tables\Columns\TextColumn::make('periodo')
                     ->label('Período')
-                    ->date('d/m/Y'),
+                    ->date('d/m/Y')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('resultado')
                     ->label('Resultado'),
                 Tables\Columns\TextColumn::make('peso')
                     ->label('Peso'),
                 Tables\Columns\TextColumn::make('pontuacao_obtida')
-                    ->label('Pontuação Obtida'),
+                    ->label('Pontuação Obtida')
+                    ->summarize(Sum::make()),
             ])
             ->filters([
                 //
@@ -112,10 +117,13 @@ class IndicatorResultsRelationManager extends RelationManager
             ->groups([
                 Tables\Grouping\Group::make('indicator.descricao')
                     ->label('Indicador'),
+                Tables\Grouping\Group::make('indicator.tipo')
+                    ->label('Tipo'),
                 Tables\Grouping\Group::make('periodo')
                     ->label('Período')
                     ->getTitleFromRecordUsing(fn(IndicatorResult $record) => \Carbon\Carbon::parse($record->periodo)->format('m/Y')),
             ])
+            ->defaultGroup('indicator.tipo')
             ->groupingSettingsInDropdownOnDesktop()
             ->defaultSort('periodo', 'desc')
             ->headerActions([

@@ -163,6 +163,13 @@ Route::post('/upload-pdf', function (\Illuminate\Http\Request $request) {
 })->name('upload.pdf');
 
 Route::get('/teste', function () {
-    $indicador = Indicator::all();
-    ds($indicador);
+    $manager = \App\Models\Manager::find(1);
+    ds($manager)->label('Gestor');
+
+    ds($manager->indicatorResults)->label('Resultados dos Indicadores');
+
+    ds($manager->pontuacaoIndividual)->label('Pontuação Individual');
+    ds($manager->pontuacaoColetiva)->label('Pontuação coletiva');
+
+
 });

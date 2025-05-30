@@ -47,6 +47,14 @@ class ManagerResource extends Resource
                 Forms\Components\TextInput::make('setor')
                     ->columnSpan(2)
                     ->maxLength(255),
+                Forms\Components\TextInput::make('pontuacao_obtida')
+                    ->label('Pontuação obtida')
+                    ->columnSpan(2)
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('pontuacao_maxima')
+                    ->label('Pontuação máxima')
+                    ->columnSpan(2)
+                    ->maxLength(255),
 
             ]);
     }
@@ -64,6 +72,10 @@ class ManagerResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('setor')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('pontuacao_obtida')
+                    ->label('Pontuação obtida'),
+                Tables\Columns\TextColumn::make('pontuacao_maxima')
+                    ->label('Pontuação máxima'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
                     ->dateTime()

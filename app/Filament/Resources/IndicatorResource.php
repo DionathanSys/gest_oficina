@@ -32,17 +32,20 @@ class IndicatorResource extends Resource
             ->columns(12)
             ->schema([
                 Forms\Components\TextInput::make('descricao')
-                    ->columnSpan(5)
                     ->label('Descrição')
+                    ->autocomplete(false)
+                    ->columnSpan(5)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('meta')
-                    ->columnSpan(2)
                     ->label('Meta')
+                    ->autocomplete(false)
+                    ->columnSpan(2)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('peso')
                     ->columnSpan(2)
+                    ->autocomplete(false)
                     ->required()
                     ->numeric()
                     ->default(0),
@@ -54,7 +57,8 @@ class IndicatorResource extends Resource
                         'TRIMESTRAL'    => 'Trimestral',
                         'SEMESTRAL'     => 'Semestral',
                         'ANUAL'         => 'Anual',
-                    ]),
+                    ])
+                    ->default('MENSAL'),
                 Forms\Components\Select::make('tipo')
                     ->columnSpan(3)
                     ->options([

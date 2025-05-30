@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('indicators', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
-            $table->decimal('peso', 3, 0)->default(0);
+            $table->decimal('peso', 3, 2)->default(0);
             $table->string('tipo');
             $table->string('periodicidade');
             $table->string('meta')->nullable();
