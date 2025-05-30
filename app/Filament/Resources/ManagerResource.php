@@ -47,14 +47,7 @@ class ManagerResource extends Resource
                 Forms\Components\TextInput::make('setor')
                     ->columnSpan(2)
                     ->maxLength(255),
-                Forms\Components\TextInput::make('pontuacao_obtida')
-                    ->label('Pontuação obtida')
-                    ->columnSpan(2)
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('pontuacao_maxima')
-                    ->label('Pontuação máxima')
-                    ->columnSpan(2)
-                    ->maxLength(255),
+
 
             ]);
     }
