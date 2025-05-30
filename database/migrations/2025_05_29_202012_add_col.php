@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('indicators', function (Blueprint $table) {
-            $table->string('peridiocidade')->default('MENSAL')->after('peso');
+            $table->string('periodicidade')->default('MENSAL')->after('peso'); 
+        });
+
+        Schema::create('indicator_result', function (Blueprint $table) {
+            $table->decimal('peso', 3, 0)->default(0)->after('resultado');
         });
     }
 
@@ -22,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('indicators', function (Blueprint $table) {
-            $table->dropColumn('peridiocidade');
+            $table->dropColumn('periodicidade'); 
         });
     }
 };

@@ -22,8 +22,11 @@ class IndicatorsRelationManager extends RelationManager
     public function form(Form $form): Form
     {
         return $form
+            ->columns(3)
             ->schema([
                 Forms\Components\TextInput::make('descricao')
+                    ->label('Descrição')
+                    ->columnSpanFull()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('peso')
@@ -32,11 +35,19 @@ class IndicatorsRelationManager extends RelationManager
                     ->default(0),
                 Forms\Components\Select::make('tipo')
                     ->options([
-                        'COLETIVO' => 'Coletivo',
-                        'INDIVIDUAL' => 'Individual',
+                        'COLETIVO'      => 'Coletivo',
+                        'INDIVIDUAL'    => 'Individual',
                     ])
                     ->default('INDIVIDUAL')
                     ->required(),
+                Forms\Components\Select::make('periodicidade')
+                    ->required()
+                    ->options([
+                        'MENSAL'        => 'Mensal',
+                        'TRIMESTRAL'    => 'Trimestral',
+                        'SEMESTRAL'     => 'Semestral',
+                        'ANUAL'         => 'Anual',
+                    ]),
             ]);
     }
 
