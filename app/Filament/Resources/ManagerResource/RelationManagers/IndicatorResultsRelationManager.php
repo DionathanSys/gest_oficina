@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\ManagerResource\RelationManagers;
 
-use App\Actions\CreateRegistroResultadoIndicadorAction;
+use App\Actions\Indicators\CreateRegistroResultadoIndicadorAction;
 use App\Filament\Resources\IndicatorResultResource;
 use App\Models\Indicator;
 use App\Models\IndicatorResult;

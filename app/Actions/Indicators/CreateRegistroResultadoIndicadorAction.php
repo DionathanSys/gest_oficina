@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Indicators;
 
 use App\Models\IndicatorResult;
 

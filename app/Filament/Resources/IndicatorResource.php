@@ -41,11 +41,20 @@ class IndicatorResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
+                Forms\Components\Select::make('peridiocidade')
+                    ->columnSpan(2)
+                    ->required()
+                    ->options([
+                        'MENSAL'        => 'Mensal',
+                        'TRIMESTRAL'    => 'Trimestral',
+                        'SEMESTRAL'     => 'Semestral',
+                        'ANUAL'         => 'Anual',
+                    ]),
                 Forms\Components\Select::make('tipo')
                     ->columnSpan(3)
                     ->options([
-                        'COLETIVO' => 'Coletivo',
-                        'INDIVIDUAL' => 'Individual',
+                        'COLETIVO'      => 'Coletivo',
+                        'INDIVIDUAL'    => 'Individual',
                     ])
                     ->default('INDIVIDUAL')
                     ->required(),

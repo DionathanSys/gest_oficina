@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+use function Livewire\before;
+
 class ManagersRelationManager extends RelationManager
 {
     protected static string $relationship = 'managers';
