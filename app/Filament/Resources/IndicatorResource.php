@@ -34,7 +34,7 @@ class IndicatorResource extends Resource
                 Forms\Components\TextInput::make('descricao')
                     ->label('Descrição')
                     ->autocomplete(false)
-                    ->columnSpan(5)
+                    ->columnSpan(4)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('meta')
@@ -60,7 +60,7 @@ class IndicatorResource extends Resource
                     ])
                     ->default('MENSAL'),
                 Forms\Components\Select::make('tipo')
-                    ->columnSpan(3)
+                    ->columnSpan(2)
                     ->options([
                         'COLETIVO'      => 'Coletivo',
                         'INDIVIDUAL'    => 'Individual',
