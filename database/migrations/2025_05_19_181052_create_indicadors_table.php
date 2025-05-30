@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('descricao');
             $table->decimal('peso', 3, 0)->default(0);
             $table->string('tipo');
+            $table->string('periodicidade');
+            $table->string('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

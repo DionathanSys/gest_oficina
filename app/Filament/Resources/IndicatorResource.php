@@ -41,7 +41,7 @@ class IndicatorResource extends Resource
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\Select::make('peridiocidade')
+                Forms\Components\Select::make('periodicidade')
                     ->columnSpan(2)
                     ->required()
                     ->options([
