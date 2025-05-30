@@ -13,7 +13,6 @@ class CreateIndicator extends CreateRecord
 
      protected function afterCreate(): void
     {
-        ds($this->record);
         if($this->record->tipo === 'COLETIVO') {
             $data['descricao'] = 'Resultado Coletivo';
             VincularIndicadorColetivoAction::execute($this->record);
