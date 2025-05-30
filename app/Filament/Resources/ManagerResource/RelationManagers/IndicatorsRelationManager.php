@@ -52,8 +52,7 @@ class IndicatorsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('peso'),
                 Tables\Columns\TextColumn::make('tipo'),
                 Tables\Columns\TextColumn::make('periodicidade')
-                    ->label('Periodicidade')
-                    ->formatStateUsing(fn ($state) => $state ? $state->descricao : 'N/A'),
+                    ->label('Periodicidade'),
             ])
             ->filters([
                 //
