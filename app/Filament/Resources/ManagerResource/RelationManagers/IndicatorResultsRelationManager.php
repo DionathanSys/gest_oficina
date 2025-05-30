@@ -63,8 +63,9 @@ class IndicatorResultsRelationManager extends RelationManager
                 Forms\Components\Select::make('resultado')
                     ->columnSpan(2)
                     ->options([
-                        'ATENDIDO'      => 'Atendido',
-                        'NAO_ATENDIDO'  => 'Não Atendido',
+                        'ATENDIDO'              => 'Atendido',
+                        'ATENDIDO_PARCIALMENTE' => 'Atendido Parcialmente',
+                        'NAO_ATENDIDO'          => 'Não Atendido',
                     ])
                     ->default('NAO_ATENDIDO'),
                 Forms\Components\TextInput::make('pontuacao_obtida')

@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('indicator_id')->constrained('indicators')->cascadeOnDelete();
             $table->date('periodo');
             $table->string('resultado');
-            $table->string('periodicidade');
             $table->decimal('peso', 3, 0)->default(0);
             $table->decimal('pontuacao_obtida', 3, 0)->default(0);
             $table->timestamps();

@@ -33,7 +33,9 @@ class ManagersRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('nome'),
+                Tables\Columns\TextColumn::make('nome')
+                    ->url(fn($record) => ManagerResource::getUrl('edit', ['record' => $record->manager_id]))
+                    ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('unidade'),
                 Tables\Columns\TextColumn::make('setor'),
 
