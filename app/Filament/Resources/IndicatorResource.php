@@ -37,7 +37,7 @@ class IndicatorResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('meta')
-                    ->columnSpan(5)
+                    ->columnSpan(2)
                     ->label('Meta')
                     ->required()
                     ->maxLength(255),

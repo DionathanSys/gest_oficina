@@ -36,7 +36,7 @@ class IndicatorResultsRelationManager extends RelationManager
                             $query->where('manager_id', $this->ownerRecord->id);
                         })
                         ->pluck('descricao', 'id'))
-                    ->columnSpanFull()
+                    ->columnSpan(6)
                     ->searchable()
                     ->preload()
                     ->label('Indicador')
@@ -47,12 +47,17 @@ class IndicatorResultsRelationManager extends RelationManager
                             $indicator = Indicator::find($state);
                             $set('pontuacao_obtida', 0);
                             $set('peso', $indicator->peso ?? 0);
+                            $set('periodicidade', $indicator->periodicidade ?? null);
                             return;
                         }
+                        $set('periodicidade', null);
                         $set('pontuacao_obtida', 0);
+                        $set('peso', 0);
                     }),
+                Forms\Components\TextInput::make('periodicidade')
+                    ->columnSpan(2)
+                    ->readOnly(),
                 Forms\Components\DatePicker::make('periodo')
-                    ->columnStart(1)
                     ->columnSpan(2)
                     ->label('Período')
                     ->native(false)
@@ -123,6 +128,7 @@ class IndicatorResultsRelationManager extends RelationManager
                         if ($data['resultado'] == 'NAO_ATENDIDO') {
                             $data['pontuacao_obtida'] = 0;
                         }
+                        unset($data['periodicidade']);
                         return $model::create($data);
                     })
                     ->after(function (IndicatorResult $record) {
@@ -133,7 +139,20 @@ class IndicatorResultsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->iconButton(),
+                    ->iconButton()
+                    // ->mutateRecordDataUsing(function (array $data): array {
+                    //     $data['periodicidade'] = ;
+
+                    //     return $data;
+                    // })
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['manager_id'] = $this->ownerRecord->id;
+                        if ($data['resultado'] == 'NAO_ATENDIDO') {
+                            $data['pontuacao_obtida'] = 0;
+                        }
+                        unset($data['periodicidade']);
+                        return $data;
+                    }),
                 Tables\Actions\DeleteAction::make()
                     ->iconButton(),
             ])
