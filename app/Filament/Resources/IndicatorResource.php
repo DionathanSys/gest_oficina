@@ -119,7 +119,7 @@ class IndicatorResource extends Resource
     {
         return [
             'index' => Pages\ListIndicators::route('/'),
-            'create' => Pages\CreateIndicator::route('/create'),
+            // 'create' => Pages\CreateIndicator::route('/create'),
             'edit' => Pages\EditIndicator::route('/{record}/edit'),
         ];
     }

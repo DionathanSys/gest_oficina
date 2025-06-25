@@ -6,6 +6,7 @@ use App\Filament\Resources\IndicatorResource;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,34 +22,7 @@ class IndicatorsRelationManager extends RelationManager
 
     public function form(Form $form): Form
     {
-        return $form
-            ->columns(3)
-            ->schema([
-                Forms\Components\TextInput::make('descricao')
-                    ->label('Descrição')
-                    ->columnSpanFull()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('peso')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                Forms\Components\Select::make('tipo')
-                    ->options([
-                        'COLETIVO'      => 'Coletivo',
-                        'INDIVIDUAL'    => 'Individual',
-                    ])
-                    ->default('INDIVIDUAL')
-                    ->required(),
-                Forms\Components\Select::make('periodicidade')
-                    ->required()
-                    ->options([
-                        'MENSAL'        => 'Mensal',
-                        'TRIMESTRAL'    => 'Trimestral',
-                        'SEMESTRAL'     => 'Semestral',
-                        'ANUAL'         => 'Anual',
-                    ]),
-            ]);
+        return IndicatorResource::form($form);
     }
 
     public function table(Table $table): Table
@@ -57,13 +31,20 @@ class IndicatorsRelationManager extends RelationManager
             ->recordTitleAttribute('descricao')
             ->columns([
                 Tables\Columns\TextColumn::make('id')
+                    ->width('1%')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('descricao')
-                    ->label('Descrição'),
-                Tables\Columns\TextColumn::make('peso'),
-                Tables\Columns\TextColumn::make('tipo'),
+                    ->label('Descrição')
+                    ->width('1%'),
+                Tables\Columns\TextColumn::make('peso')
+                    ->label('Peso')
+                    ->width('1%')
+                    ->numeric(),
+                Tables\Columns\TextColumn::make('tipo')
+                    ->width('1%'),
                 Tables\Columns\TextColumn::make('periodicidade')
-                    ->label('Periodicidade'),
+                    ->label('Periodicidade')
+                    ->width('1%'),
             ])
             ->filters([
                 //
@@ -90,7 +71,7 @@ class IndicatorsRelationManager extends RelationManager
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DetachBulkAction::make(),
+                    // Tables\Actions\DetachBulkAction::make(),
                 ]),
             ])
             ->emptyStateHeading('Sem registros')
